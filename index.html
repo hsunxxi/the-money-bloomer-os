@@ -275,6 +275,16 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
       <div class="section">
         <div class="section-title"><span class="dot"></span><h2>五大模組健康度</h2></div>
         <div class="grid grid-5" id="healthGrid"></div>
+        <div class="card-soft" style="margin-top:10px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;" id="detailToggle">
+            <b style="font-size:13px;">🔍 查看計算明細（每一項怎麼算出來的）</b>
+            <span id="detailToggleIcon">▾ 展開</span>
+          </div>
+          <div id="detailPanel" style="display:none; margin-top:12px;">
+            <p style="font-size:12px; color:var(--ink-soft); margin-top:0;">每個模組的 % = 已完成的具體項目數 ÷ 該模組全部項目數，<b>沒有任何隱藏的起始分數或加權</b>。「基礎事實」是已經確定完成/未完成的既有狀態；「獨立項目」可直接在這裡勾選；「月曆任務」請到【月曆目標】頁面勾選，這裡會同步顯示。</p>
+            <div id="detailContent"></div>
+          </div>
+        </div>
       </div>
 
       <div class="section">
@@ -284,6 +294,14 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
           <div class="card"><div class="kpi-num">3</div><div class="kpi-label">已建立社群帳號（IG/Threads/YT）</div><span class="badge badge-amber">內容尚未系統化發布</span></div>
           <div class="card"><div class="kpi-num">7</div><div class="kpi-label">Lead Magnet PDF 頁數（已完成）</div><span class="badge badge-green">可立即上線</span></div>
           <div class="card"><div class="kpi-num" id="asset_manychat">50%</div><div class="kpi-label">ManyChat 自動化建置進度</div><span class="badge badge-amber" id="asset_manychat_badge">需於 7 月完成</span></div>
+        </div>
+        <div class="card-soft" style="margin-top:10px;">
+          <label class="field">✏️ 直接輸入目前實際 Email 名單數（打開 MailerLite 後台看真實數字，貼過來即可，會蓋過月曆勾選估算值）</label>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input type="number" id="emailManualInput" placeholder="例：1,250" style="max-width:200px;">
+            <button class="tabbtn" id="emailManualSave">儲存</button>
+            <button class="tabbtn" id="emailManualClear">清除（改回用勾選估算）</button>
+          </div>
         </div>
       </div>
 
@@ -928,6 +946,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
           <button class="tabbtn" data-sub="qa-email">Email Funnel</button>
           <button class="tabbtn" data-sub="qa-mc">ManyChat</button>
           <button class="tabbtn" data-sub="qa-loop">QA 閉環設計</button>
+          <button class="tabbtn" data-sub="qa-inspire">💡 靈感來源</button>
         </div>
 
         <div class="subpanel active" id="qa-content">
@@ -997,6 +1016,29 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
             <tr><td>6</td><td>「怎麼看財報？」</td><td>簡答一個切入點+財報課連結</td><td>詢問是否想深入學</td><td>財報課招生素材</td></tr>
             <tr><td>7</td><td>「CFP在幹嘛？」</td><td>分享備考進度+財務規劃的價值</td><td>邀請訂閱CFP筆記Newsletter</td><td>CFP內容系列</td></tr>
           </table></div>
+        </div>
+
+        <div class="subpanel" id="qa-inspire">
+          <div class="callout" style="margin-bottom:14px;">💡 這裡存你自己看到、想參考的別人貼文。<b>只存標題、連結、你自己寫的重點筆記</b>，不會也不建議整段複製貼上別人的原文（一方面尊重原作者著作權，一方面你自己重寫過的版本才會有你的口吻和框架）。資料存在此瀏覽器本機。</div>
+          <div class="card-soft" style="margin-bottom:16px;">
+            <h4 style="margin-top:0;">➕ 新增一則靈感</h4>
+            <div class="grid grid-2" style="margin-bottom:10px;">
+              <div>
+                <label class="field">標題（例：這則IG貼文的核心觀點）</label>
+                <input type="text" id="insTitle" placeholder="例：用「機票超賣」比喻資產配置">
+              </div>
+              <div>
+                <label class="field">來源連結</label>
+                <input type="text" id="insLink" placeholder="貼上IG/Threads/文章網址">
+              </div>
+            </div>
+            <label class="field">你看到的重點筆記（用自己的話摘要，不要整段複製）</label>
+            <textarea id="insNote" rows="3" placeholder="例：用生活化比喻解釋抽象金融概念，開頭用提問句抓注意力…" style="width:100%; font-family:'Inter',sans-serif; font-size:13px; border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:10px;"></textarea>
+            <label class="field">我的修改版本（把它改成 The Money Bloomer 的口吻）</label>
+            <textarea id="insMyVersion" rows="4" placeholder="套用你的框架、你的品牌語氣，寫出屬於你自己的版本…" style="width:100%; font-family:'Inter',sans-serif; font-size:13px; border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:10px;"></textarea>
+            <button class="nav-final" id="insAdd" style="margin:0; padding:9px 18px;"><span class="txt">＋ 儲存這則靈感</span></button>
+          </div>
+          <div id="insList"></div>
         </div>
       </div>
     </div>
@@ -1088,7 +1130,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0704" data-module="content"> 7/17前排好出國期間全部內容排程</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0705" data-module="compliance"> 套用Disclaimer模板到所有內容/產品頁</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0706" data-module="none"> 📚 CFP科目1考試</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0707" data-module="brand"> Email名單達成 300</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0707" data-module="content"> Email名單達成 300</label></li>
             </ul>
             <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：300</span> <span class="badge badge-gold">收入目標：3-5萬</span></div>
           </div>
@@ -1100,7 +1142,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0803" data-module="product"> 旗艦課錄製與講義製作啟動</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0804" data-module="content"> Blog正式啟動週更</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0805" data-module="compliance"> 依法遵矩陣修改旗艦課/資產配置課文案</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0806" data-module="brand"> Email名單達成 1,000</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0806" data-module="content"> Email名單達成 1,000</label></li>
             </ul>
             <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：1,000</span> <span class="badge badge-gold">收入目標：5-8萬</span></div>
           </div>
@@ -1110,7 +1152,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0901" data-module="revenue"> 🚀 9/1 旗艦課 Early Bird 開賣（限50名/7天）</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0902" data-module="revenue"> 9/8 正式開賣</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0903" data-module="none"> CFP科目2讀書啟動</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0904" data-module="brand"> Email名單達成 1,800</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0904" data-module="content"> Email名單達成 1,800</label></li>
             </ul>
             <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：1,800</span> <span class="badge badge-gold">收入目標：25-40萬</span></div>
           </div>
@@ -1120,7 +1162,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1001" data-module="product"> 旗艦課第一梯開課</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1002" data-module="product"> 10/1 財報課上線</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1003" data-module="revenue"> B2B開發：主動聯繫3家企業窗口</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-1004" data-module="brand"> Email名單達成 2,300</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1004" data-module="content"> Email名單達成 2,300</label></li>
             </ul>
             <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：2,300</span> <span class="badge badge-gold">收入目標：8-12萬</span></div>
           </div>
@@ -1130,7 +1172,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1101" data-module="revenue"> 財富流工作坊第2場</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1102" data-module="content"> 年末回顧內容系列策劃</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1103" data-module="none"> CFP科目2複習衝刺</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-1104" data-module="brand"> Email名單達成 2,700</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1104" data-module="content"> Email名單達成 2,700</label></li>
             </ul>
             <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：2,700</span> <span class="badge badge-gold">收入目標：6-10萬</span></div>
           </div>
@@ -1140,7 +1182,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1201" data-module="content"> 年末總結內容＋隔年目標公開分享</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1202" data-module="none"> CFP科目2考試</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1203" data-module="none"> Year1成效總結＋Year2規劃</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-1204" data-module="brand"> Email名單達成 3,000</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1204" data-module="content"> Email名單達成 3,000</label></li>
             </ul>
             <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：3,000</span> <span class="badge badge-gold">收入目標：8-13萬</span></div>
           </div>
@@ -1403,13 +1445,34 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
 </div>
 
 <script>
-// ---- Module health bars ----
-const moduleBaseline = {
-  brand:{name:'品牌定位', pct:60, note:'方向明確，需文件化'},
-  product:{name:'產品階梯', pct:40, note:'需依法遵重整'},
-  revenue:{name:'收入系統', pct:15, note:'尚無實際收入'},
-  compliance:{name:'法遵基礎', pct:20, note:'尚未做風險審查'},
-  content:{name:'內容/名單', pct:35, note:'Email 名單=0'}
+// ---- Module health: 100% 由具體項目清單算出，沒有任何隱藏起始分數 ----
+const moduleNames = {
+  brand:'品牌定位', product:'產品階梯', revenue:'收入系統', compliance:'法遵基礎', content:'內容/名單'
+};
+// 每個模組的「基礎事實」：auto=true 代表已確定完成的既有事實（不可改）；auto=false 代表可在這裡直接勾選的獨立項目
+const moduleFoundational = {
+  brand: [
+    {id:'f-brand-vision', label:'Vision/Mission/品牌定位/差異化已文件化', auto:true},
+    {id:'f-brand-audience', label:'目標客群與核心痛點已定義', auto:true},
+    {id:'f-brand-moat', label:'品牌護城河分析完成', auto:true},
+    {id:'f-brand-social', label:'IG/Threads/YouTube帳號已建立', auto:true},
+    {id:'f-brand-visual', label:'品牌視覺識別（Logo/色彩/字體）建立', auto:false},
+    {id:'f-brand-tone', label:'品牌語氣/寫作風格指南文件化', auto:false},
+    {id:'f-brand-proof', label:'累積3個以上使用者口碑/case study', auto:false}
+  ],
+  product: [
+    {id:'f-product-leadmagnet', label:'Lead Magnet PDF 7頁內容完成', auto:true}
+  ],
+  revenue: [],
+  compliance: [
+    {id:'f-comp-riskmatrix', label:'法遵風險矩陣分析完成，高風險產品決議暫緩上線', auto:true},
+    {id:'f-comp-lawyer', label:'正式諮詢金融法規律師一次（VIP社群/ICT課上線前）', auto:false}
+  ],
+  content: [
+    {id:'f-content-social', label:'IG/Threads/YouTube帳號已建立', auto:true},
+    {id:'f-content-mailerlite', label:'MailerLite帳號建立完成', auto:true},
+    {id:'f-content-form', label:'Lead Magnet表單建立完成', auto:true}
+  ]
 };
 function colorFor(pct){ if(pct>=60) return 'var(--green)'; if(pct>=35) return 'var(--amber)'; return 'var(--red)'; }
 
@@ -1422,47 +1485,121 @@ const emailMilestones = [
   {id:'y1-0707', val:300},{id:'y1-0806', val:1000},{id:'y1-0904', val:1800},
   {id:'y1-1004', val:2300},{id:'y1-1104', val:2700},{id:'y1-1204', val:3000}
 ];
+function getManualEmail(){
+  try{
+    const v = localStorage.getItem('tmb_email_manual');
+    if(v!==null && v!==''){ return Number(v); }
+  }catch(e){}
+  return null;
+}
+
+const emailManualInput = document.getElementById('emailManualInput');
+const emailManualSave = document.getElementById('emailManualSave');
+const emailManualClear = document.getElementById('emailManualClear');
+if(emailManualSave){
+  const existing = getManualEmail();
+  if(existing!==null && emailManualInput) emailManualInput.value = existing;
+  emailManualSave.addEventListener('click', ()=>{
+    const v = emailManualInput.value.trim();
+    if(v===''){ return; }
+    try{ localStorage.setItem('tmb_email_manual', v); }catch(e){}
+    recalcAll();
+  });
+  emailManualClear.addEventListener('click', ()=>{
+    try{ localStorage.removeItem('tmb_email_manual'); }catch(e){}
+    emailManualInput.value='';
+    recalcAll();
+  });
+}
+
+const detailToggleBtn = document.getElementById('detailToggle');
+if(detailToggleBtn){
+  detailToggleBtn.addEventListener('click', ()=>{
+    const panel = document.getElementById('detailPanel');
+    const icon = document.getElementById('detailToggleIcon');
+    const open = panel.style.display!=='none';
+    panel.style.display = open? 'none':'block';
+    icon.textContent = open? '▾ 展開':'▴ 收合';
+    if(!open) renderDetail();
+  });
+}
+
+function calendarItemsForModule(mod){
+  return Array.from(document.querySelectorAll('.mod-check[data-module="'+mod+'"]'));
+}
+
+function renderDetail(){
+  const wrap = document.getElementById('detailContent');
+  if(!wrap) return;
+  wrap.innerHTML = Object.keys(moduleNames).map(k=>{
+    const foundational = moduleFoundational[k];
+    const calItems = calendarItemsForModule(k);
+    const calDone = calItems.filter(cb=>cb.checked).length;
+    const foundDone = foundational.filter(f=>f.auto || isChecked(f.id)).length;
+    const total = foundational.length + calItems.length;
+    const done = foundDone + calDone;
+    const pct = total? Math.round(done/total*100) : 0;
+    const rows = foundational.map(f=>`
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0;">
+        <input type="checkbox" ${f.auto?'checked disabled':(isChecked(f.id)?'checked':'')} data-foundational="${f.id}" ${f.auto?'':'class="foundational-check"'} style="width:14px;height:14px;">
+        <span style="font-size:12.5px;${f.auto?'color:var(--ink-faint);':''}">${f.label}${f.auto?'（既有事實，恆定完成）':''}</span>
+      </div>`).join('');
+    return `<div class="card" style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h4 style="margin:0;">${moduleNames[k]}</h4>
+        <span class="badge" style="background:${colorFor(pct)};color:#fff;">${done}/${total} = ${pct}%</span>
+      </div>
+      <div style="margin-top:8px;">${rows || '<span style="font-size:12px;color:var(--ink-faint);">（無基礎事實項目）</span>'}</div>
+      ${calItems.length? `<div style="font-size:12px;color:var(--ink-soft);margin-top:8px;padding-top:8px;border-top:1px solid var(--line);">月曆執行任務：${calDone}/${calItems.length} 已完成 — 請至【月曆目標(1-3年)】頁面勾選，這裡會自動同步</div>`:''}
+    </div>`;
+  }).join('');
+  wrap.querySelectorAll('.foundational-check').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      setChecked(cb.dataset.foundational, cb.checked);
+      renderDetail();
+      recalcAll();
+    });
+  });
+}
 
 function recalcAll(){
   const checks = document.querySelectorAll('.mod-check');
   // restore state
   checks.forEach(cb=>{ cb.checked = isChecked(cb.dataset.id); });
 
-  // module ratios
-  const totals = {brand:0,product:0,revenue:0,compliance:0,content:0};
-  const done = {brand:0,product:0,revenue:0,compliance:0,content:0};
-  checks.forEach(cb=>{
-    const mod = cb.dataset.module;
-    if(mod && mod!=='none' && totals.hasOwnProperty(mod)){
-      totals[mod]++;
-      if(cb.checked) done[mod]++;
-    }
-  });
   const healthGrid = document.getElementById('healthGrid');
   if(healthGrid){
-    healthGrid.innerHTML = Object.keys(moduleBaseline).map(k=>{
-      const base = moduleBaseline[k];
-      const ratio = totals[k] ? done[k]/totals[k] : 0;
-      const pct = Math.round(base.pct + ratio*(100-base.pct));
+    healthGrid.innerHTML = Object.keys(moduleNames).map(k=>{
+      const foundational = moduleFoundational[k];
+      const calItems = calendarItemsForModule(k);
+      const calDone = calItems.filter(cb=>cb.checked).length;
+      const foundDone = foundational.filter(f=>f.auto || isChecked(f.id)).length;
+      const total = foundational.length + calItems.length;
+      const done = foundDone + calDone;
+      const pct = total? Math.round(done/total*100) : 0;
       return `<div class="card">
-        <h4>${base.name}</h4>
+        <h4>${moduleNames[k]}</h4>
         <div class="kpi-num" style="font-size:22px;color:${colorFor(pct)}">${pct}%</div>
         <div class="hbar"><div class="hbar-fill" style="width:${pct}%;background:${colorFor(pct)}"></div></div>
-        <div style="font-size:11.5px;color:var(--ink-soft);margin-top:6px;">${totals[k]?`已完成${done[k]}/${totals[k]}項執行任務`:base.note}</div>
+        <div style="font-size:11.5px;color:var(--ink-soft);margin-top:6px;">${done}/${total} 項具體項目已完成</div>
       </div>`;
     }).join('');
   }
+  const detailPanel = document.getElementById('detailPanel');
+  if(detailPanel && detailPanel.style.display!=='none') renderDetail();
 
-  // Email milestone -> asset card
+  // Email -> asset card (manual override takes priority over milestone estimate)
+  const manualEmail = getManualEmail();
   let latestEmail = 0;
   emailMilestones.forEach(m=>{ if(isChecked(m.id) && m.val>latestEmail) latestEmail = m.val; });
+  const displayEmail = manualEmail!==null ? manualEmail : latestEmail;
   const assetEmail = document.getElementById('asset_email');
   const assetEmailBadge = document.getElementById('asset_email_badge');
   if(assetEmail){
-    assetEmail.textContent = latestEmail.toLocaleString('en-US');
-    if(latestEmail===0){ assetEmailBadge.textContent='尚未開始收集'; assetEmailBadge.className='badge badge-red'; assetEmailBadge.id='asset_email_badge'; }
-    else if(latestEmail<1800){ assetEmailBadge.textContent='累積中'; assetEmailBadge.className='badge badge-amber'; assetEmailBadge.id='asset_email_badge'; }
-    else{ assetEmailBadge.textContent='穩定成長'; assetEmailBadge.className='badge badge-green'; assetEmailBadge.id='asset_email_badge'; }
+    assetEmail.textContent = displayEmail.toLocaleString('en-US');
+    if(displayEmail===0){ assetEmailBadge.textContent='尚未開始收集'; assetEmailBadge.className='badge badge-red'; assetEmailBadge.id='asset_email_badge'; }
+    else if(displayEmail<1800){ assetEmailBadge.textContent=manualEmail!==null?'手動輸入':'累積中'; assetEmailBadge.className='badge badge-amber'; assetEmailBadge.id='asset_email_badge'; }
+    else{ assetEmailBadge.textContent=manualEmail!==null?'手動輸入':'穩定成長'; assetEmailBadge.className='badge badge-green'; assetEmailBadge.id='asset_email_badge'; }
   }
 
   // ManyChat -> asset card
@@ -1752,6 +1889,62 @@ if(ringsGroup){
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href=url; a.download='money_bloomer_journal.txt'; a.click();
     URL.revokeObjectURL(url);
+  });
+  render();
+})();
+
+// ---- Inspiration board ----
+(function(){
+  const listEl = document.getElementById('insList');
+  const addBtn = document.getElementById('insAdd');
+  if(!listEl || !addBtn) return;
+  const KEY = 'tmb_inspirations';
+  function load(){
+    try{ const raw = localStorage.getItem(KEY); return raw? JSON.parse(raw) : []; }catch(e){ return []; }
+  }
+  function save(arr){ try{ localStorage.setItem(KEY, JSON.stringify(arr)); }catch(e){} }
+  function esc(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+
+  function render(){
+    const items = load().sort((a,b)=>b.createdAt-a.createdAt);
+    if(items.length===0){
+      listEl.innerHTML = `<div class="callout" style="color:var(--ink-faint);">還沒有存任何靈感，上面新增第一則吧。</div>`;
+      return;
+    }
+    listEl.innerHTML = items.map(it=>`
+      <div class="card" style="margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+          <h4 style="margin:0;">${esc(it.title)||'（未命名）'}</h4>
+          <button class="tabbtn" data-del="${it.id}" style="flex-shrink:0; color:var(--red); border-color:var(--red);">刪除</button>
+        </div>
+        ${it.link?`<div style="margin:6px 0;"><a href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.link)}</a></div>`:''}
+        ${it.note?`<div class="card-soft" style="margin-top:8px;"><b style="font-size:12px;color:var(--ink-soft);">重點筆記</b><p style="font-size:13px;margin:4px 0 0 0;white-space:pre-wrap;">${esc(it.note)}</p></div>`:''}
+        ${it.myVersion?`<div class="card-soft" style="margin-top:8px;background:var(--sage-bg);"><b style="font-size:12px;color:var(--forest);">我的修改版本</b><p style="font-size:13px;margin:4px 0 0 0;white-space:pre-wrap;">${esc(it.myVersion)}</p></div>`:''}
+      </div>`).join('');
+    listEl.querySelectorAll('[data-del]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(!confirm('確定要刪除這則靈感嗎？')) return;
+        const id = btn.dataset.del;
+        save(load().filter(x=>String(x.id)!==id));
+        render();
+      });
+    });
+  }
+
+  addBtn.addEventListener('click', ()=>{
+    const title = document.getElementById('insTitle').value.trim();
+    const link = document.getElementById('insLink').value.trim();
+    const note = document.getElementById('insNote').value.trim();
+    const myVersion = document.getElementById('insMyVersion').value.trim();
+    if(!title && !link && !note && !myVersion){ alert('至少填一項再儲存喔'); return; }
+    const items = load();
+    items.push({ id: Date.now(), title, link, note, myVersion, createdAt: Date.now() });
+    save(items);
+    document.getElementById('insTitle').value='';
+    document.getElementById('insLink').value='';
+    document.getElementById('insNote').value='';
+    document.getElementById('insMyVersion').value='';
+    render();
   });
   render();
 })();
