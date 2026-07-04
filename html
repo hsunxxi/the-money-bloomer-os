@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Money Bloomer — 一人公司商業作業系統</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF;
+  --bg-soft:#F7F6F1;
+  --bg-card:#FFFFFF;
+  --ink:#1C1C1E;
+  --ink-soft:#5B5C53;
+  --ink-faint:#9A9B8F;
+  --line:#E6E3D8;
+  --forest:#1B4332;
+  --forest-deep:#0F2A1F;
+  --sage:#74A98C;
+  --sage-bg:#EAF3EC;
+  --gold:#B8892B;
+  --gold-bg:#FBF1DA;
+  --cream:#FBF9F4;
+  --green:#2D6A4F;
+  --green-bg:#E7F3EC;
+  --amber:#B8892B;
+  --amber-bg:#FCF1DA;
+  --red:#B3413A;
+  --red-bg:#FBE7E5;
+  --blue:#3A5A8C;
+  --blue-bg:#E9EFF6;
+  --shadow: 0 1px 2px rgba(28,28,30,0.04), 0 6px 20px rgba(28,28,30,0.06);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:15px;
+  line-height:1.6;
+}
+h1,h2,h3,h4{font-family:'Fraunces',serif; color:var(--forest-deep); margin:0 0 8px 0; font-weight:600;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:var(--forest);}
+
+/* ---------- Layout ---------- */
+.app{display:flex; min-height:100vh;}
+.sidebar{
+  width:248px; flex-shrink:0;
+  background:var(--forest-deep);
+  color:#EFEADF;
+  padding:22px 14px 24px 14px;
+  position:sticky; top:0; height:100vh; overflow-y:auto; overflow-x:hidden;
+  transition:width .22s ease, padding .22s ease;
+}
+.sidebar-toggle{
+  position:absolute; top:20px; right:-13px; width:26px; height:26px; border-radius:50%;
+  background:var(--sage); border:2px solid var(--forest-deep); color:var(--forest-deep);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px; font-weight:900;
+  z-index:20; transition:transform .22s ease; box-shadow:0 2px 6px rgba(0,0,0,0.25);
+}
+.app.collapsed .sidebar{ width:60px; padding-left:8px; padding-right:8px; }
+.app.collapsed .sidebar-toggle{ transform:rotate(180deg); }
+.app.collapsed .brand .name span.txt,
+.app.collapsed .brand .tag,
+.app.collapsed .nav-group-label,
+.app.collapsed .nav-btn span:not(.num),
+.app.collapsed .nav-final span.txt{ display:none; }
+.nav-final .icon-only{ display:none; font-size:18px; }
+.app.collapsed .nav-final .icon-only{ display:inline; }
+.app.collapsed .brand{ text-align:center; padding-left:0; padding-right:0; }
+.app.collapsed .nav-btn{ justify-content:center; padding:9px 0; }
+.app.collapsed .nav-btn .num{ width:auto; }
+.app.collapsed .nav-final{ padding:11px 4px; font-size:16px; }
+.app.collapsed .main{ margin-left:0; }
+.brand{padding:4px 10px 18px 10px; border-bottom:1px solid rgba(255,255,255,0.12); margin-bottom:14px; position:relative;}
+.brand .name{font-family:'Fraunces',serif; color:#fff; font-size:19px; font-weight:700; letter-spacing:0.2px;}
+.brand .tag{color:#9FC4AC; font-size:11.5px; margin-top:4px; letter-spacing:0.3px;}
+.nav-group-label{color:#7FA98F; font-size:10.5px; letter-spacing:1.2px; text-transform:uppercase; margin:16px 10px 6px 10px; font-weight:600; white-space:nowrap;}
+.nav-btn{
+  display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+  background:transparent; border:none; color:#D9E5DC; padding:9px 10px; border-radius:8px;
+  font-size:13.3px; cursor:pointer; margin-bottom:2px; font-family:'Inter',sans-serif; white-space:nowrap;
+}
+.nav-btn .num{
+  font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#6E9A80; width:16px; flex-shrink:0;
+}
+.nav-btn:hover{background:rgba(255,255,255,0.06); color:#fff;}
+.nav-btn.active{background:var(--sage); color:var(--forest-deep); font-weight:700;}
+.nav-btn.active .num{color:var(--forest-deep);}
+.nav-final{
+  margin-top:16px; background:var(--gold); color:#3A2B08; font-weight:800;
+  padding:11px 12px; border-radius:9px; text-align:center; cursor:pointer; font-size:13px;
+  box-shadow:0 3px 10px rgba(184,137,43,0.35); letter-spacing:0.2px; white-space:nowrap; overflow:hidden;
+}
+.nav-final:hover{filter:brightness(1.05);}
+
+.main{flex:1; min-width:0; padding:30px 40px 80px 40px; max-width:1180px;}
+.panel{display:none;}
+.panel.active{display:block; animation:fade .25s ease;}
+@keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+.page-head{margin-bottom:22px; padding-bottom:16px; border-bottom:2px solid var(--line);}
+.eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--sage); letter-spacing:1.5px; text-transform:uppercase; font-weight:600;}
+.page-head h1{font-size:28px; margin-top:4px;}
+.page-sub{color:var(--ink-soft); font-size:14px; max-width:760px;}
+
+/* ---------- Cards / grid ---------- */
+.grid{display:grid; gap:14px;}
+.grid-2{grid-template-columns:1fr 1fr;}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+.grid-5{grid-template-columns:repeat(5,1fr);}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr;}}
+
+.card{
+  background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:18px 20px;
+  box-shadow:var(--shadow);
+}
+.card h3{font-size:15px; margin-bottom:8px;}
+.card h4{font-size:13.5px; color:var(--forest); margin-bottom:6px;}
+.card-soft{background:var(--bg-soft); border:1px solid var(--line); border-radius:12px; padding:16px 18px;}
+
+.section{margin-bottom:34px;}
+.section-title{display:flex; align-items:center; gap:10px; margin-bottom:14px;}
+.section-title .dot{width:8px; height:8px; border-radius:50%; background:var(--forest);}
+.section-title h2{font-size:19px; margin:0;}
+
+/* ---------- badges / tags ---------- */
+.badge{display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; font-family:'IBM Plex Mono',monospace;}
+.badge-green{background:var(--green-bg); color:var(--green);}
+.badge-amber{background:var(--amber-bg); color:var(--amber);}
+.badge-red{background:var(--red-bg); color:var(--red);}
+.badge-blue{background:var(--blue-bg); color:var(--blue);}
+.badge-gold{background:var(--gold-bg); color:var(--gold);}
+.badge-forest{background:var(--sage-bg); color:var(--forest);}
+.tag{display:inline-block; padding:2px 9px; border-radius:6px; font-size:11px; background:var(--bg-soft); color:var(--ink-soft); border:1px solid var(--line); margin:0 4px 4px 0;}
+
+/* ---------- table ---------- */
+table{width:100%; border-collapse:collapse; font-size:13px;}
+th{background:var(--forest-deep); color:#fff; text-align:left; padding:9px 10px; font-weight:600; font-size:11.5px; letter-spacing:0.3px; text-transform:uppercase;}
+td{padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:nth-child(even) td{background:var(--bg-soft);}
+.tbl-wrap{overflow-x:auto; border-radius:10px; border:1px solid var(--line);}
+.tbl-wrap table{min-width:640px;}
+
+/* ---------- progress bar (module health) ---------- */
+.hbar{height:9px; border-radius:6px; background:var(--line); overflow:hidden; margin-top:8px;}
+.hbar-fill{height:100%; border-radius:6px;}
+.kpi-num{font-family:'IBM Plex Mono',monospace; font-size:26px; font-weight:700; color:var(--forest-deep);}
+.kpi-label{font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px;}
+
+/* ---------- flow / roadmap svg wrap ---------- */
+.svg-wrap{width:100%; overflow-x:auto; background:var(--bg-soft); border-radius:12px; padding:16px; border:1px solid var(--line);}
+
+/* ---------- misc ---------- */
+.callout{border-left:4px solid var(--forest); background:var(--sage-bg); padding:12px 16px; border-radius:0 10px 10px 0; font-size:13.5px;}
+.callout.warn{border-left-color:var(--red); background:var(--red-bg);}
+.callout.gold{border-left-color:var(--gold); background:var(--gold-bg);}
+ul.tight{margin:6px 0; padding-left:18px;}
+ul.tight li{margin-bottom:4px;}
+.check-list{list-style:none !important; padding-left:0 !important;}
+.check-list li{margin-bottom:6px;}
+.check-list label{display:flex; align-items:flex-start; gap:7px; cursor:pointer;}
+.check-list input[type=checkbox]{margin-top:2px; width:15px; height:15px; accent-color:var(--forest); cursor:pointer; flex-shrink:0;}
+.check-list label:has(input:checked){ color:var(--ink-faint); text-decoration:line-through; }
+.two-col{columns:2; column-gap:22px;}
+.two-col p, .two-col li{break-inside:avoid;}
+
+.tabbtn-row{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;}
+.tabbtn{padding:7px 14px; border-radius:8px; border:1px solid var(--line); background:#fff; font-size:12.5px; cursor:pointer; font-weight:600; color:var(--ink-soft);}
+.tabbtn.active{background:var(--forest); color:#fff; border-color:var(--forest);}
+.subpanel{display:none;}
+.subpanel.active{display:block;}
+
+footer.note{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:11.5px; color:var(--ink-faint);}
+input[type=number], input[type=text], input[type=range]{font-family:'IBM Plex Mono',monospace;}
+input[type=number], input[type=text]{border:1px solid var(--line); border-radius:6px; padding:6px 8px; width:100%; font-size:13px;}
+label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:3px; text-transform:uppercase; letter-spacing:0.3px;}
+.calc-out{background:var(--forest-deep); color:#fff; border-radius:12px; padding:18px 20px;}
+.calc-out .kpi-num{color:#fff;}
+.calc-out .kpi-label{color:#9FC4AC;}
+
+.cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:6px;}
+.cal-cell{border:1px solid var(--line); border-radius:8px; min-height:64px; padding:5px; font-size:11px; cursor:pointer; background:#fff;}
+.cal-cell:hover{border-color:var(--forest); background:var(--sage-bg);}
+.cal-cell .d{font-family:'IBM Plex Mono',monospace; font-weight:700; color:var(--ink-soft); font-size:11px;}
+.cal-cell.has-entry{background:var(--gold-bg); border-color:var(--gold);}
+.cal-dow{font-size:10.5px; text-align:center; color:var(--ink-faint); font-weight:700; text-transform:uppercase;}
+
+/* ---------- Journal modal ---------- */
+.journal-overlay{
+  display:none; position:fixed; inset:0; background:rgba(15,42,31,0.55); z-index:100;
+  align-items:center; justify-content:center; padding:20px;
+}
+.journal-overlay.open{ display:flex; }
+.journal-modal{
+  background:#fff; border-radius:16px; width:100%; max-width:560px; max-height:88vh;
+  display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.35);
+}
+.journal-modal-head{
+  display:flex; align-items:flex-start; justify-content:space-between; padding:18px 22px 14px 22px;
+  border-bottom:1px solid var(--line);
+}
+.journal-close{ background:var(--bg-soft); border:none; border-radius:50%; width:30px; height:30px; cursor:pointer; font-size:14px; color:var(--ink-soft); }
+.journal-modal-body{ padding:18px 22px; overflow-y:auto; flex:1; }
+.jm-section{ margin-bottom:20px; }
+.jm-section h4{ font-size:13px; margin-bottom:8px; color:var(--forest); }
+.jm-gratitude{ display:block; width:100%; margin-bottom:8px; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:13px; font-family:'Inter',sans-serif; }
+.journal-modal-foot{
+  display:flex; align-items:center; justify-content:space-between; padding:14px 22px; border-top:1px solid var(--line);
+}
+#jmChecklist{ list-style:none; padding-left:0; margin:0; }
+#jmChecklist li{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+#jmChecklist li input[type=checkbox]{ width:15px; height:15px; accent-color:var(--forest); flex-shrink:0; }
+#jmChecklist li .jm-item-text{ flex:1; font-size:13px; }
+#jmChecklist li .jm-item-del{ background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:13px; }
+#jmChecklist li.jm-done .jm-item-text{ color:var(--ink-faint); text-decoration:line-through; }
+</style>
+</head>
+<body>
+<div class="app" id="appRoot">
+  <div class="sidebar">
+    <div class="sidebar-toggle" id="sidebarToggle" title="收合/展開側邊欄">‹</div>
+    <div class="brand">
+      <div class="name">🌱 <span class="txt">The Money Bloomer</span></div>
+      <div class="tag">一人公司商業作業系統 · v1.0</div>
+    </div>
+    <div class="nav-group-label">策略核心</div>
+    <button class="nav-btn active" data-tab="overview" title="總覽 Dashboard"><span class="num">00</span><span>總覽 Dashboard</span></button>
+    <button class="nav-btn" data-tab="brand" title="品牌 Blueprint"><span class="num">01</span><span>品牌 Blueprint</span></button>
+    <button class="nav-btn" data-tab="bizmodel" title="商業模式 BMC"><span class="num">02</span><span>商業模式 BMC</span></button>
+    <button class="nav-btn" data-tab="revenue" title="收入模型與試算"><span class="num">03</span><span>收入模型與試算</span></button>
+    <button class="nav-btn" data-tab="risk" title="法遵 Compliance"><span class="num">04</span><span>法遵 Compliance</span></button>
+    <div class="nav-group-label">產品與服務</div>
+    <button class="nav-btn" data-tab="ladder" title="產品階梯設計"><span class="num">05</span><span>產品階梯設計</span></button>
+    <button class="nav-btn" data-tab="tax" title="公司與稅務"><span class="num">06</span><span>公司與稅務</span></button>
+    <button class="nav-btn" data-tab="cfp" title="CFP 整合"><span class="num">07</span><span>CFP 整合</span></button>
+    <button class="nav-btn" data-tab="qa" title="社群 QA 系統"><span class="num">08</span><span>社群 QA 系統</span></button>
+    <div class="nav-group-label">執行系統</div>
+    <button class="nav-btn" data-tab="roadmap" title="10 年 Roadmap"><span class="num">09</span><span>10 年 Roadmap</span></button>
+    <button class="nav-btn" data-tab="monthly" title="月曆目標(1-3年)"><span class="num">10</span><span>月曆目標(1-3年)</span></button>
+    <button class="nav-btn" data-tab="dailyos" title="Daily OS"><span class="num">11</span><span>Daily OS</span></button>
+    <div class="nav-final" data-tab="final" title="Final Decision Summary"><span class="txt">🎯 Final Decision Summary</span><span class="icon-only">🎯</span></div>
+  </div>
+
+  <div class="main" id="mainArea">
+    <!-- PANELS INSERTED BELOW -->
+
+    <!-- ============ 00 OVERVIEW ============ -->
+    <div class="panel active" id="panel-overview">
+      <div class="page-head">
+        <div class="eyebrow">Phase 0 · Executive Overview</div>
+        <h1>The Money Bloomer 策略總覽</h1>
+        <div class="page-sub">創辦人 Amanda ｜ 起始日 2026/07/01 ｜ 一人公司，財經教育品牌。本頁是整份系統的儀表板入口 — 從這裡可以看到品牌現況、五大模組健康度、以及完整策略地圖。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>策略地圖 Strategy Map</h2></div>
+        <div class="svg-wrap">
+<svg viewBox="0 0 1080 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:Inter,sans-serif;">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9A9B8F"/></marker>
+  </defs>
+  <g font-size="10.5" text-anchor="middle">
+    __STRATEGY_NODES__
+  </g>
+</svg>
+        </div>
+        <div class="callout" style="margin-top:10px;">目前進度：<b>Phase 1-2（藍圖 + 商業模式）已透過本報告完成規劃</b>；Amanda 實際執行進度在 <b>Phase 3 起步階段</b>（帳號建立完成、Lead Magnet 完成 7 頁、e-book 大綱未定）。下一步是照第 05 頁「產品階梯設計」把 e-book 上架。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>五大模組健康度</h2></div>
+        <div class="grid grid-5" id="healthGrid"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>品牌資產現況</h2></div>
+        <div class="grid grid-4">
+          <div class="card"><div class="kpi-num" id="asset_email">0</div><div class="kpi-label">Email 名單數</div><div style="margin-top:6px;"><span class="badge badge-red" id="asset_email_badge">尚未開始收集</span></div></div>
+          <div class="card"><div class="kpi-num">3</div><div class="kpi-label">已建立社群帳號（IG/Threads/YT）</div><span class="badge badge-amber">內容尚未系統化發布</span></div>
+          <div class="card"><div class="kpi-num">7</div><div class="kpi-label">Lead Magnet PDF 頁數（已完成）</div><span class="badge badge-green">可立即上線</span></div>
+          <div class="card"><div class="kpi-num" id="asset_manychat">50%</div><div class="kpi-label">ManyChat 自動化建置進度</div><span class="badge badge-amber" id="asset_manychat_badge">需於 7 月完成</span></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>產品階梯總覽（詳見 05）</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>層級</th><th>產品</th><th>價格</th><th>法遵狀態</th><th>建議時程</th></tr>
+          <tr><td>免費</td><td>Lead Magnet《看新聞做投資的框架》</td><td>免費</td><td><span class="badge badge-green">🟢 可立即做</span></td><td>2026/07/05 上線</td></tr>
+          <tr><td>入門</td><td>e-book《如何分析總體經濟》</td><td>NT$499</td><td><span class="badge badge-green">🟢 可立即做</span></td><td>2026/07/18 上架</td></tr>
+          <tr><td>體驗</td><td>財富流體驗工作坊</td><td>NT$800 / NT$1,500</td><td><span class="badge badge-green">🟢 可立即做</span></td><td>2026/08 起每月 1 場</td></tr>
+          <tr><td>核心</td><td>財報課（重新命名）</td><td>NT$3,000-4,500（暫定）</td><td><span class="badge badge-green">🟢 修改文案後可做</span></td><td>2026/10 上架</td></tr>
+          <tr><td>旗艦</td><td>《用 MBA 眼光選股》（改為框架課）</td><td>NT$9,999 Early Bird / NT$12,999</td><td><span class="badge badge-amber">🟡 需重新包裝</span></td><td>2026/09/01 Early Bird</td></tr>
+          <tr><td>旗艦</td><td>資產配置課（去個人化）</td><td>NT$5,000-7,000（暫定）</td><td><span class="badge badge-amber">🟡 需重新包裝</span></td><td>2027 Q1</td></tr>
+          <tr><td>訂閱</td><td>Bloom Club 教育社群（重新定位）</td><td>NT$599-999/月</td><td><span class="badge badge-red">🔴 需大幅修改才可推</span></td><td>2027 Q1 後評估</td></tr>
+          <tr><td>高單價</td><td>ICT 系統交易課</td><td>待定</td><td><span class="badge badge-red">🔴 暫緩</span></td><td>需 6 個月穩定績效後</td></tr>
+          <tr><td>顧問</td><td>CFP 財務規劃諮詢</td><td>NT$3,000-8,000/場（暫定）</td><td><span class="badge badge-green">🟢 取得證照後可做</span></td><td>FPAT 完成後（預估 2027-2028）</td></tr>
+          <tr><td>B2B</td><td>企業財商培訓</td><td>NT$30,000+</td><td><span class="badge badge-green">🟢 可做（用工作坊框架）</span></td><td>2026 Q4 起主動開發</td></tr>
+        </table></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>收入系統快照（詳見 03）</h2></div>
+        <div class="grid grid-4">
+          <div class="card"><div class="kpi-num">40-60萬</div><div class="kpi-label">Year 1 收入目標（Base Case，NT$）</div></div>
+          <div class="card"><div class="kpi-num">300-500萬</div><div class="kpi-label">Year 3 收入目標（Base Case，NT$）</div></div>
+          <div class="card"><div class="kpi-num">800-1200萬</div><div class="kpi-label">Year 5 收入目標（Base Case，NT$）</div></div>
+          <div class="card"><div class="kpi-num">2000萬+</div><div class="kpi-label">Year 10 收入目標（Base Case，NT$）</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>法遵基礎快照（詳見 04）</h2></div>
+        <div class="grid grid-3">
+          <div class="card" style="border-left:5px solid var(--red);"><b style="color:var(--red);">🔴 最高風險</b><p style="margin:6px 0 0 0; font-size:13px;">VIP 付費社群若做成「即時喊單」= 涉及未經許可投顧業務。ICT 交易課若宣稱績效 = 涉及績效保證。兩者本季<b>不上架</b>。</p></div>
+          <div class="card" style="border-left:5px solid var(--amber);"><b style="color:var(--amber);">🟡 中度風險</b><p style="margin:6px 0 0 0; font-size:13px;">旗艦課／資產配置課／個股分析／Live Q&A — 只要不給「明確買賣建議」或「個人化配置比例」即可安全進行。</p></div>
+          <div class="card" style="border-left:5px solid var(--green);"><b style="color:var(--green);">🟢 低風險</b><p style="margin:6px 0 0 0; font-size:13px;">Lead Magnet、e-book（總經框架）、財報課（分析方法論）、工作坊、Notion/Excel 工具 — 皆為方法論教育，可立即執行。</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 01 BRAND ============ -->
+    <div class="panel" id="panel-brand">
+      <div class="page-head">
+        <div class="eyebrow">Phase 1 · Business Blueprint</div>
+        <h1>品牌藍圖 — The Money Bloomer 是一間什麼樣的公司？</h1>
+        <div class="page-sub">定位：<b>「用 MBA 邏輯，讀懂總體經濟」的財經教育品牌</b> — 不是明牌型網紅，是思維框架教育者。核心主張：教方法論，不報明牌。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>品牌定位 4 要素</h2></div>
+        <div class="grid grid-4">
+          <div class="card" style="border-top:4px solid var(--forest);"><h4>Vision 願景</h4><p style="font-size:13px;">讓每個台灣理財小白，都能用 MBA 邏輯看懂市場、建立終身受用的財務決策框架。</p></div>
+          <div class="card" style="border-top:4px solid var(--sage);"><h4>Mission 使命</h4><p style="font-size:13px;">用「Why 驅動總經分析 + MBA 商業思維 + 小白轉譯」把複雜市場邏輯變成可執行的個人財務系統。</p></div>
+          <div class="card" style="border-top:4px solid var(--gold);"><h4>Core Values 核心價值</h4><ul class="tight" style="font-size:12.5px;"><li>邏輯先於情緒</li><li>教育優先於銷售</li><li>透明優於話術</li><li>長期優於短期</li></ul></div>
+          <div class="card" style="border-top:4px solid var(--blue);"><h4>品牌人格</h4><p style="font-size:13px;">理性分析師 + 耐心老師 + 誠實朋友。<br><span class="badge badge-red" style="margin-top:6px;">不做：喊單型意見領袖</span></p></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>品牌定位矩陣（差異化座標）</h2></div>
+        <div class="svg-wrap">
+          <svg viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:640px;height:auto;">
+            <line x1="60" y1="30" x2="60" y2="380" stroke="#C9C6B8" stroke-width="1.5"/>
+            <line x1="60" y1="380" x2="600" y2="380" stroke="#C9C6B8" stroke-width="1.5"/>
+            <text x="330" y="408" text-anchor="middle" font-size="12" fill="#5B5C53" font-family="Inter">情緒 / 明牌驅動 → 邏輯 / 框架驅動</text>
+            <text x="30" y="200" text-anchor="middle" font-size="12" fill="#5B5C53" font-family="Inter" transform="rotate(-90 30 200)">單點資訊 → 系統化教育</text>
+            <!-- competitor dots (illustrative categories, no real brand names) -->
+            <circle cx="150" cy="330" r="9" fill="#B3413A" opacity="0.75"/><text x="150" y="352" text-anchor="middle" font-size="10.5" fill="#5B5C53" font-family="Inter">個股明牌型網紅</text>
+            <circle cx="200" cy="150" r="9" fill="#B8892B" opacity="0.8"/><text x="200" y="135" text-anchor="middle" font-size="10.5" fill="#5B5C53" font-family="Inter">傳統理財課程平台</text>
+            <circle cx="470" cy="260" r="9" fill="#3A5A8C" opacity="0.8"/><text x="470" y="282" text-anchor="middle" font-size="10.5" fill="#5B5C53" font-family="Inter">總經新聞媒體</text>
+            <circle cx="530" cy="90" r="16" fill="#1B4332"/><text x="530" y="65" text-anchor="middle" font-size="12" fill="#1B4332" font-weight="700" font-family="Inter">The Money Bloomer</text>
+          </svg>
+        </div>
+        <div class="callout">定位座標：<b>高邏輯框架 × 高系統化教育</b>。這是目前台灣財經內容市場的空白象限 — 多數帳號在「情緒/單點」或「明牌/資訊」象限，少有人同時做到「MBA框架 + 系統化課程」。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>護城河詳細解析</h2></div>
+        <div class="grid grid-2">
+          <div class="card"><h4>① 獨特方法論（Why 驅動總經框架）</h4><p style="font-size:13px;">競爭對手可以複製「內容主題」，但不易複製「思考框架」。框架需要長期驗證 + 教學轉譯能力，是時間累積的能力護城河。<br><span class="badge badge-forest" style="margin-top:6px;">複製難度：高</span></p></div>
+          <div class="card"><h4>② Email 名單（私有流量資產）</h4><p style="font-size:13px;">IG/Threads 演算法隨時可能改變觸及率，Email 名單是唯一 100% 由 Amanda 擁有、不受平台演算法影響的資產。<b>這是最優先要建立的資產，目前是 0，必須立刻啟動。</b><br><span class="badge badge-red" style="margin-top:6px;">現況：極弱，需立即補強</span></p></div>
+          <div class="card"><h4>③ CFP 證照信任背書</h4><p style="font-size:13px;">證照建立「專業可信度」，是財經內容賽道少數可被驗證的差異化，也是進入 Advisory 高單價服務的合法門票。<br><span class="badge badge-amber" style="margin-top:6px;">狀態：備考中，2026/07 第一科</span></p></div>
+          <div class="card"><h4>④ 內容 SEO 資產複利</h4><p style="font-size:13px;">Blog + YouTube 長期累積會形成搜尋流量護城河，越早開始，複利效果越大，晚做成本越高（追趕曲線陡）。<br><span class="badge badge-red" style="margin-top:6px;">現況：尚未啟動 Blog / SEO</span></p></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>內容飛輪 → 商業飛輪 連動圖</h2></div>
+        <div class="svg-wrap">
+          <svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+            <!-- content flywheel (left circle) -->
+            <circle cx="230" cy="190" r="150" fill="none" stroke="#74A98C" stroke-width="2" stroke-dasharray="4 4"/>
+            <text x="230" y="45" text-anchor="middle" font-size="13" font-weight="700" fill="#1B4332" font-family="Fraunces, serif">內容飛輪</text>
+            <g font-size="11" fill="#1C1C1E" font-family="Inter" text-anchor="middle">
+              <text x="230" y="70">① 每週固定發布</text>
+              <text x="360" y="150">② 累積觸及 &amp; 信任</text>
+              <text x="340" y="290">③ 導流 Lead Magnet</text>
+              <text x="130" y="290">④ Email 名單增長</text>
+              <text x="100" y="150">⑤ 內容再利用成產品素材</text>
+            </g>
+            <!-- arrows around circle (approx) -->
+            <path d="M230,75 A150,150 0 0,1 355,155" fill="none" stroke="#74A98C" stroke-width="2" marker-end="url(#arrow)"/>
+            <path d="M355,155 A150,150 0 0,1 335,285" fill="none" stroke="#74A98C" stroke-width="2" marker-end="url(#arrow)"/>
+            <path d="M335,285 A150,150 0 0,1 135,285" fill="none" stroke="#74A98C" stroke-width="2" marker-end="url(#arrow)"/>
+            <path d="M135,285 A150,150 0 0,1 105,155" fill="none" stroke="#74A98C" stroke-width="2" marker-end="url(#arrow)"/>
+            <path d="M105,155 A150,150 0 0,1 225,76" fill="none" stroke="#74A98C" stroke-width="2" marker-end="url(#arrow)"/>
+
+            <!-- connector -->
+            <line x1="380" y1="190" x2="470" y2="190" stroke="#B8892B" stroke-width="3" marker-end="url(#arrow)"/>
+            <text x="425" y="178" text-anchor="middle" font-size="10.5" fill="#B8892B" font-weight="700" font-family="IBM Plex Mono, monospace">名單=信任資產</text>
+
+            <!-- commercial flywheel (right circle) -->
+            <circle cx="740" cy="190" r="150" fill="none" stroke="#B8892B" stroke-width="2" stroke-dasharray="4 4"/>
+            <text x="740" y="45" text-anchor="middle" font-size="13" font-weight="700" fill="#1B4332" font-family="Fraunces, serif">商業飛輪</text>
+            <g font-size="11" fill="#1C1C1E" font-family="Inter" text-anchor="middle">
+              <text x="740" y="70">① e-book 測試付費意願</text>
+              <text x="870" y="150">② 中價課程建立利潤</text>
+              <text x="850" y="290">③ Membership 建立現金流</text>
+              <text x="640" y="290">④ Advisory/B2B 高單價</text>
+              <text x="610" y="150">⑤ 口碑&amp;案例反哺內容飛輪</text>
+            </g>
+            <path d="M740,75 A150,150 0 0,1 865,155" fill="none" stroke="#B8892B" stroke-width="2" marker-end="url(#arrow)"/>
+            <path d="M865,155 A150,150 0 0,1 845,285" fill="none" stroke="#B8892B" stroke-width="2" marker-end="url(#arrow)"/>
+            <path d="M845,285 A150,150 0 0,1 645,285" fill="none" stroke="#B8892B" stroke-width="2" marker-end="url(#arrow)"/>
+            <path d="M645,285 A150,150 0 0,1 615,155" fill="none" stroke="#B8892B" stroke-width="2" marker-end="url(#arrow)"/>
+            <path d="M615,155 A150,150 0 0,1 735,76" fill="none" stroke="#B8892B" stroke-width="2" marker-end="url(#arrow)"/>
+            <line x1="650" y1="300" x2="350" y2="300" stroke="#1B4332" stroke-width="2" stroke-dasharray="3 3" marker-end="url(#arrow)"/>
+            <text x="500" y="320" text-anchor="middle" font-size="10.5" fill="#1B4332" font-weight="700" font-family="IBM Plex Mono, monospace">案例&amp;口碑回饋內容</text>
+          </svg>
+        </div>
+        <div class="callout gold">關鍵連動點：內容飛輪產出「信任」，透過 <b>Email 名單</b>轉換成商業飛輪的燃料；商業飛輪產出的「學員成果與案例」再回饋成內容素材 — 這是複利循環的核心，也是為什麼 Email 名單必須是 2026 年 7 月的第一優先。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>目標客群 &amp; 核心痛點</h2></div>
+        <div class="grid grid-2">
+          <div class="card"><h4>目標客群</h4><p style="font-size:13px;">25-40 歲、有穩定收入但投資知識薄弱的上班族／小資族／內容型創業者，渴望「系統性理解」而非「零散資訊」。</p></div>
+          <div class="card"><h4>核心痛點</h4><ul class="tight" style="font-size:13px;"><li>看不懂新聞為何影響股價</li><li>不知道如何選股 / 看懂公司</li><li>害怕被割韭菜、不敢進場</li><li>沒有財務規劃方法論，只能東拼西湊</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 02 BUSINESS MODEL ============ -->
+    <div class="panel" id="panel-bizmodel">
+      <div class="page-head">
+        <div class="eyebrow">Phase 1 · Business Model（投資人等級報告）</div>
+        <h1>商業模式 — Business Model Canvas</h1>
+        <div class="page-sub">The Money Bloomer 的商業模式本質：<b>「教育信任漏斗」（Education Trust Funnel）</b> — 用免費內容建立信任 → 用低價產品驗證付費意願 → 用中高價課程創造利潤 → 用訂閱建立現金流穩定度 → 用顧問/B2B 建立高毛利天花板。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>Business Model Canvas（完整九宮格）</h2></div>
+        <div class="grid" style="grid-template-columns:repeat(5,1fr); grid-template-rows:repeat(2,auto);">
+          <div class="card-soft" style="grid-row:1/3;"><h4>🤝 Key Partners</h4><ul class="tight" style="font-size:12px;"><li>MailerLite / ManyChat（自動化）</li><li>金融小編/協編（未來）</li><li>企業HR/教育訓練窗口（B2B）</li><li>其他財經KOL（互推）</li><li>CFP師資社群（未來考照人脈）</li></ul></div>
+          <div class="card-soft"><h4>⚙️ Key Activities</h4><ul class="tight" style="font-size:12px;"><li>每週 7 篇內容產出</li><li>課程/教材開發</li><li>Email/ManyChat 自動化維運</li><li>CFP 備考</li><li>社群互動與 QA</li></ul></div>
+          <div class="card-soft" style="grid-column:3; grid-row:1/3;"><h4 style="color:var(--forest);">💎 Value Proposition</h4><p style="font-size:12.5px;"><b>教你釣魚的方法，而不是給你魚。</b></p><ul class="tight" style="font-size:12px;"><li>MBA 商業思維 × 總經邏輯框架</li><li>小白轉譯，降低理解門檻</li><li>方法論可複製，非單次明牌</li><li>CFP 專業背書的長期信任</li></ul></div>
+          <div class="card-soft"><h4>❤️ Customer Relationship</h4><ul class="tight" style="font-size:12px;"><li>內容型信任建立（非銷售話術）</li><li>Email 個人化培育</li><li>社群陪伴式學習</li><li>1:1 Advisory（高單價層）</li></ul></div>
+          <div class="card-soft" style="grid-row:1/3;"><h4>🧩 Key Resources</h4><ul class="tight" style="font-size:12px;"><li>Amanda 本人（知識IP）</li><li>方法論框架（可教材化）</li><li>Email 名單資產</li><li>內容庫（可再利用）</li><li>CFP 證照（未來）</li></ul></div>
+          <div class="card-soft"><h4>📣 Channels</h4><ul class="tight" style="font-size:12px;"><li>IG / Threads（觸及與信任）</li><li>YouTube（深度內容/SEO）</li><li>Blog（SEO長期資產）</li><li>Newsletter（轉換主戰場）</li><li>ManyChat（自動導流）</li></ul></div>
+          <div class="card-soft"><h4>👥 Customer Segments</h4><ul class="tight" style="font-size:12px;"><li>理財小白 / 投資初學者</li><li>內容型創業者</li><li>企業內訓窗口（B2B, 後期）</li></ul></div>
+          <div class="card-soft" style="grid-column:1/3;"><h4>💰 Cost Structure</h4><p style="font-size:12px;">主要成本：Amanda 時間（機會成本最大）、工具訂閱費（MailerLite/ManyChat/剪輯軟體）、平台費（金流/課程平台）、CFP 考照費用、未來外包（剪輯/客服）。<b>初期為低固定成本結構，適合一人公司。</b></p></div>
+          <div class="card-soft" style="grid-column:3/6;"><h4>📈 Revenue Streams</h4><p style="font-size:12px;">e-book／工作坊／課程（一次性）＋ Membership（訂閱）＋ Advisory／B2B（高單價）＋ 聯盟行銷/業配（後期，需嚴審法遵）。詳見第 03 頁。</p></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>商業模式運作邏輯（Funnel Logic）</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>階段</th><th>機制</th><th>目標轉換率</th><th>KPI</th></tr>
+          <tr><td>① 免費內容吸引</td><td>週更 7 篇內容建立觸及與信任</td><td>觸及→追蹤 3-5%</td><td>IG+Threads 週觸及 ≥ 15,000</td></tr>
+          <tr><td>② Lead Magnet 換信箱</td><td>PDF《看新聞做投資的框架》</td><td>追蹤→Email 3-6%</td><td>7月底 Email 名單 ≥ 300</td></tr>
+          <tr><td>③ Email 培育信任</td><td>7 封 Nurture Sequence（見 08）</td><td>開信率 35-45%</td><td>點擊率 ≥ 5%</td></tr>
+          <tr><td>④ e-book 測試付費意願</td><td>NT$499 低摩擦入門產品</td><td>名單→購買 3-8%</td><td>7月底售出 ≥ 60 本</td></tr>
+          <tr><td>⑤ 低價產品成交</td><td>工作坊 NT$800-1,500</td><td>名單→報名 2-5%</td><td>8月 1 場 ≥ 15 人</td></tr>
+          <tr><td>⑥ 中高價課程建立利潤</td><td>財報課／旗艦課／資產配置課</td><td>暖名單→購買 5-12%</td><td>9月 Early Bird ≥ 30 人</td></tr>
+          <tr><td>⑦ Membership 建立 Recurring</td><td>教育社群（重新定位後）</td><td>學員→訂閱 10-20%</td><td>2027 Q1 目標 100 會員</td></tr>
+          <tr><td>⑧ CFP/Advisory 高單價</td><td>財務健檢／VIP諮詢</td><td>不適用（一對一）</td><td>證照後每月 8-12 場</td></tr>
+          <tr><td>⑨ B2B 企業場成長引擎</td><td>企業財商培訓 NT$30,000+</td><td>不適用（B2B業務）</td><td>2026 Q4 起每季 ≥ 1 場</td></tr>
+        </table></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>商業模式自我審核（Self-Audit）</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>檢查項目</th><th>現況判定</th><th>修正動作</th></tr>
+          <tr><td>收益來源過度集中？</td><td><span class="badge badge-red">是</span> 目前 100% 依賴 Amanda 一對多內容+課程</td><td>Year2起加入B2B與Advisory分散來源</td></tr>
+          <tr><td>過度依賴 IG/Threads？</td><td><span class="badge badge-red">是</span> 尚無Email/SEO資產</td><td><b>本月起優先建立Email清單與Blog SEO</b></td></tr>
+          <tr><td>無 Recurring Revenue？</td><td><span class="badge badge-amber">部分</span> Membership規劃中但需法遵重整</td><td>延後至2027 Q1並重新定位為教育社群</td></tr>
+          <tr><td>產品間無升級路徑？</td><td><span class="badge badge-green">否</span> 已設計免費→低→中→高階梯</td><td>維持並持續優化轉換率</td></tr>
+          <tr><td>低價產品太多、高價不足？</td><td><span class="badge badge-amber">部分</span></td><td>優先把旗艦課與資產配置課做扎實，提高高單價佔比</td></tr>
+          <tr><td>法律風險過高？</td><td><span class="badge badge-red">是</span> VIP社群/ICT課原始設計風險高</td><td>依第04頁全面修正定位與文案</td></tr>
+          <tr><td>太依賴Amanda個人時間？</td><td><span class="badge badge-red">是</span> 一人公司天生限制</td><td>Year2起將內容SOP化，外包剪輯/客服</td></tr>
+          <tr><td>缺乏可累積資產？</td><td><span class="badge badge-amber">部分</span> 內容累積中但無SEO/Email</td><td>本月啟動Blog與Email雙資產</td></tr>
+          <tr><td>缺乏護城河？</td><td><span class="badge badge-green">否</span> 方法論+CFP+資產具差異化潛力</td><td>持續強化，避免被同質化</td></tr>
+        </table></div>
+        <div class="callout warn" style="margin-top:12px;"><b>修正後結論：</b>原始商業模式的最大缺口是「<b>Email 名單=0</b>」與「<b>VIP社群/交易課法遵風險過高</b>」。本系統已將這兩點列為 7 月最優先修正項目，詳見 Final Decision Summary。</div>
+      </div>
+    </div>
+
+    <!-- ============ 03 REVENUE ============ -->
+    <div class="panel" id="panel-revenue">
+      <div class="page-head">
+        <div class="eyebrow">Phase 1 · Revenue Model</div>
+        <h1>收入模型與試算</h1>
+        <div class="page-sub">收入公式：流量 → Email 名單 → 開信率 → 點擊率 → 轉換率 → 客單價 → 復購率 → 退費率 → 毛利率。下方提供互動試算機，可自行調整假設值。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>1 / 3 / 5 / 10 年收入目標（NT$）</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>期間</th><th>Worst Case</th><th>Base Case</th><th>Best Case</th><th>關鍵假設</th></tr>
+          <tr><td><b>Year 1</b>（2026/07-2027/06）</td><td>20萬</td><td>40-60萬</td><td>90萬</td><td>Email 名單 3,000；旗艦課 30人；e-book 300本</td></tr>
+          <tr><td><b>Year 3</b></td><td>150萬</td><td>300-500萬</td><td>800萬</td><td>Email 名單 20,000；Membership 100人；B2B 4場</td></tr>
+          <tr><td><b>Year 5</b></td><td>400萬</td><td>800-1200萬</td><td>2000萬</td><td>CFP Advisory 上線；團隊3-5人；B2B規模化</td></tr>
+          <tr><td><b>Year 10</b></td><td>1000萬</td><td>2000萬+</td><td>5000萬+</td><td>英語/華語圈擴展；多產品線；品牌授權可能性</td></tr>
+        </table></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>收入來源結構（Revenue Streams）</h2></div>
+        <div class="grid grid-3">
+          <div class="card"><h4>一次性產品</h4><ul class="tight" style="font-size:12.5px;">
+            <li>e-book NT$499</li><li>Mini/財報課 NT$3,000-4,500</li><li>旗艦課 NT$9,999-12,999</li><li>資產配置課 NT$5,000-7,000</li><li>Workshop NT$800-1,500</li></ul></div>
+          <div class="card"><h4>Recurring / 訂閱</h4><ul class="tight" style="font-size:12.5px;">
+            <li>教育社群 NT$599-999/月（2027起）</li><li>未來：進階訂閱課程更新</li></ul>
+            <span class="badge badge-amber">現金流穩定度來源，需晚一點但要盡快建立</span></div>
+          <div class="card"><h4>高單價 / B2B</h4><ul class="tight" style="font-size:12.5px;">
+            <li>CFP 財務健檢 NT$3,000-8,000</li><li>VIP Consulting（證照後）</li><li>企業培訓 NT$30,000+</li></ul>
+            <span class="badge badge-forest">毛利率最高，是長期利潤引擎</span></div>
+        </div>
+        <div class="callout" style="margin-top:12px;">⚠️ <b>Affiliate / 業配 / 廣告收入</b>：可作為補充收入，但需嚴格審查合作對象（不可推廣未受監管投資平台/高風險金融商品），且需明確揭露「業配/合作」標示（公平交易法要求）。<b>投資收入/交易收入不建議列為品牌營收來源</b>——這是 Amanda 個人資產配置的結果，不應與品牌收入混為一談，否則會產生「用個人績效包裝品牌信任」的法遵風險。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>互動收入試算機 Revenue Calculator</h2></div>
+        <div class="grid grid-2">
+          <div class="card">
+            <h4>假設輸入</h4>
+            <label class="field">Email 名單數</label>
+            <input type="range" id="rc_list" min="0" max="30000" value="3000" step="100" style="width:100%;">
+            <div class="mono" id="rc_list_v" style="font-size:12px;color:var(--ink-soft);">3,000</div>
+            <label class="field" style="margin-top:10px;">開信率 (%)</label>
+            <input type="range" id="rc_open" min="10" max="60" value="40" style="width:100%;">
+            <div class="mono" id="rc_open_v" style="font-size:12px;color:var(--ink-soft);">40%</div>
+            <label class="field" style="margin-top:10px;">點擊率 CTR (%)</label>
+            <input type="range" id="rc_ctr" min="1" max="15" value="5" style="width:100%;">
+            <div class="mono" id="rc_ctr_v" style="font-size:12px;color:var(--ink-soft);">5%</div>
+            <label class="field" style="margin-top:10px;">轉換率 (%，點擊→購買)</label>
+            <input type="range" id="rc_cvr" min="1" max="30" value="8" style="width:100%;">
+            <div class="mono" id="rc_cvr_v" style="font-size:12px;color:var(--ink-soft);">8%</div>
+            <label class="field" style="margin-top:10px;">平均客單價 (NT$)</label>
+            <input type="range" id="rc_aov" min="499" max="15000" value="6000" step="100" style="width:100%;">
+            <div class="mono" id="rc_aov_v" style="font-size:12px;color:var(--ink-soft);">NT$6,000</div>
+            <label class="field" style="margin-top:10px;">退費率 (%)</label>
+            <input type="range" id="rc_refund" min="0" max="20" value="5" style="width:100%;">
+            <div class="mono" id="rc_refund_v" style="font-size:12px;color:var(--ink-soft);">5%</div>
+          </div>
+          <div class="calc-out">
+            <div style="font-size:11.5px;color:#9FC4AC;text-transform:uppercase;letter-spacing:0.5px;">單次 Email Campaign 預估</div>
+            <div class="kpi-num" id="rc_buyers" style="margin-top:6px;">—</div>
+            <div class="kpi-label">預估購買人數</div>
+            <div class="kpi-num" id="rc_revenue" style="margin-top:16px;">—</div>
+            <div class="kpi-label">單次活動預估營收（已扣退費）</div>
+            <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.15); font-size:12px; color:#D9E5DC;">
+              計算式：名單 × 開信率 × 點擊率 × 轉換率 = 購買人數；購買人數 × 客單價 × (1-退費率) = 淨營收。<br>
+              假設每月執行 2 次同等級銷售活動 → <span id="rc_monthly" class="mono" style="font-weight:700;color:#fff;">—</span> /月
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>單位經濟 Unit Economics（旗艦課範例）</h2></div>
+        <div class="grid grid-4">
+          <div class="card"><div class="kpi-num" style="font-size:20px;">NT$9,999</div><div class="kpi-label">Early Bird 客單價</div></div>
+          <div class="card"><div class="kpi-num" style="font-size:20px;">~90%</div><div class="kpi-label">數位產品毛利率</div></div>
+          <div class="card"><div class="kpi-num" style="font-size:20px;">NT$300-800</div><div class="kpi-label">單一買家獲客成本（時間+工具攤提）</div></div>
+          <div class="card"><div class="kpi-num" style="font-size:20px;">10-13x</div><div class="kpi-label">預估 LTV / CAC 比</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 04 RISK & COMPLIANCE ============ -->
+    <div class="panel" id="panel-risk">
+      <div class="page-head">
+        <div class="eyebrow">Phase 2 · Risk &amp; Compliance（台灣法規為主）</div>
+        <h1>法遵 Compliance — 風險矩陣</h1>
+        <div class="page-sub">主要相關法規：<span class="tag">證券投資信託及顧問法</span><span class="tag">金融消費者保護法</span><span class="tag">消費者保護法</span><span class="tag">公平交易法（廣告不實）</span><span class="tag">個人資料保護法</span><span class="tag">著作權法</span>。核心紅線：<b>不得從事未經許可之個別化投資顧問業務、不得保證收益、不得誤導性績效宣稱。</b></div>
+      </div>
+
+      <div class="callout warn">⚠️ <b>本頁為一般性法遵教育整理，非正式法律意見。</b>正式推出「VIP付費社群」「ICT交易課」「CFP諮詢」前，建議實際諮詢證券法規/金融法律專業律師做個案確認。</div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>完整風險矩陣 Risk Matrix</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>產品/內容</th><th>風險等級</th><th>主要風險</th><th>可做內容</th><th>禁止內容</th><th>是否可立即推出</th></tr>
+          <tr><td>Lead Magnet PDF</td><td><span class="badge badge-green">🟢低</span></td><td>幾乎無風險</td><td>看新聞分析框架、名詞解釋</td><td>不可含個股買賣建議</td><td>✅ 可</td></tr>
+          <tr><td>e-book《總體經濟分析》</td><td><span class="badge badge-green">🟢低</span></td><td>幾乎無風險</td><td>總經指標、歷史案例分析</td><td>不可預測未來走勢當作建議</td><td>✅ 可</td></tr>
+          <tr><td>旗艦課《MBA眼光選股》</td><td><span class="badge badge-amber">🟡中</span></td><td>若含「現在該買哪支股」= 個別化投資建議</td><td>財報分析框架、商業模式拆解、歷史已公開案例教學</td><td>不可推薦「現在」買賣特定股票、不可给price target</td><td>🟡 改文案後可</td></tr>
+          <tr><td>財富流體驗工作坊</td><td><span class="badge badge-green">🟢低</span></td><td>桌遊模擬，非真實投資</td><td>財務觀念、現金流遊戲</td><td>不可承諾遊戲結果=真實報酬</td><td>✅ 可</td></tr>
+          <tr><td>VIP付費社群（原設計）</td><td><span class="badge badge-red">🔴高</span></td><td>若做即時個股喊單=未經許可投顧業務；訂閱付費+投資建議是監理重點對象</td><td>教育文章、讀書會、Q&A（不涉及個股買賣時機）</td><td>不可即時報明牌、不可回覆「現在能不能買」</td><td>❌ 需重新定位</td></tr>
+          <tr><td>ICT系統交易課</td><td><span class="badge badge-red">🔴高</span></td><td>展示自己交易紀錄易被視為績效承諾/招攬</td><td>系統邏輯教學、風險管理觀念</td><td>不可秀獲利截圖當招生素材、不可保證勝率</td><td>❌ 暫緩，需6個月穩定+強免責</td></tr>
+          <tr><td>CFP財務規劃諮詢</td><td><span class="badge badge-green">🟢低（證照後）</span></td><td>需確認是否涉及保險/證券商品推介需另外證照</td><td>財務規劃流程、現金流/預算/目標設定</td><td>推介特定保單/基金需對應證照</td><td>⏳ 待證照</td></tr>
+          <tr><td>財報課</td><td><span class="badge badge-green">🟢低</span></td><td>低，屬於分析方法論教學</td><td>財報結構、商業模式解讀</td><td>不可直接下單建議</td><td>✅ 可</td></tr>
+          <tr><td>資產配置課</td><td><span class="badge badge-amber">🟡中</span></td><td>若給「你應該配置多少%」=個人化建議</td><td>通用風險屬性框架、ETF基礎知識</td><td>不可依學員個人財務狀況客製配置比例</td><td>🟡 改為通用框架後可</td></tr>
+          <tr><td>Newsletter/Blog/YouTube</td><td><span class="badge badge-green">🟢低</span></td><td>需注意用詞</td><td>教育性分析</td><td>不可下標「必漲/必買」</td><td>✅ 可</td></tr>
+          <tr><td>Live Q&A</td><td><span class="badge badge-amber">🟡中</span></td><td>現場容易被問「這支能不能買」</td><td>用框架回應提問</td><td>不可當場給個別建議</td><td>🟡 需SOP話術</td></tr>
+          <tr><td>Weekly Market/Company/Industry Report</td><td><span class="badge badge-amber">🟡中</span></td><td>公開發布「個股報告+目標價」屬投顧受規範行為</td><td>總經/產業趨勢分析</td><td>不可给個股價位目標</td><td>🟡 需拿掉price target</td></tr>
+          <tr><td>Notion/Excel/Calculator/Templates</td><td><span class="badge badge-green">🟢低</span></td><td>工具類，風險極低</td><td>記帳、規劃、追蹤模板</td><td>不可內嵌具體投資建議公式</td><td>✅ 可</td></tr>
+        </table></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>Product Decision 分類</h2></div>
+        <div class="grid grid-3">
+          <div class="card" style="border-top:5px solid var(--green);">
+            <h4 style="color:var(--green);">🟢 可以立即開始做</h4>
+            <ul class="tight" style="font-size:12.5px;"><li>Lead Magnet PDF</li><li>e-book《總體經濟分析》</li><li>財富流體驗工作坊</li><li>財報課</li><li>Notion/Excel/Templates</li><li>Newsletter/Blog/YouTube/Podcast</li></ul>
+          </div>
+          <div class="card" style="border-top:5px solid var(--amber);">
+            <h4 style="color:var(--amber);">🟡 修改後可以做</h4>
+            <ul class="tight" style="font-size:12.5px;"><li>旗艦課（去除即時個股建議，改框架教學）</li><li>資產配置課（去個人化，改通用框架）</li><li>Live Q&A（建立話術SOP）</li><li>Weekly/Industry/Company Report（移除price target）</li></ul>
+          </div>
+          <div class="card" style="border-top:5px solid var(--red);">
+            <h4 style="color:var(--red);">🔴 暫時不要做</h4>
+            <ul class="tight" style="font-size:12.5px;"><li>VIP付費社群（原設計，即時喊單型）</li><li>ICT系統交易課（未滿6個月穩定績效前）</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>必用 Disclaimer 標準文案</h2></div>
+        <div class="card-soft">
+          <p style="font-size:13px;"><b>短版（社群貼文用）：</b>「以上內容為教育分享，非投資建議，投資前請自行判斷風險。」</p>
+          <p style="font-size:13px;"><b>長版（課程/工作坊/e-book 開頭必放）：</b>「本課程/內容僅提供分析方法論與教育知識，不構成個別化投資建議，亦不保證任何投資績效。所有投資決策請自行評估風險並負完全責任。過去績效不代表未來表現。」</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 05 PRODUCT LADDER ============ -->
+    <div class="panel" id="panel-ladder">
+      <div class="page-head">
+        <div class="eyebrow">Phase 3 · Safe Product Ladder + Product Design</div>
+        <h1>產品階梯設計</h1>
+        <div class="page-sub">已排除高風險產品後的安全產品階梯，每一層都設計了明確的升級路徑（Upsell Path）。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>Product Ecosystem Map</h2></div>
+        <div class="svg-wrap">
+          <svg viewBox="0 0 1080 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+            <g font-family="Inter, sans-serif" font-size="10.5" text-anchor="middle">
+              __ECOSYSTEM_NODES__
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="tabbtn-row subtabs">
+          <button class="tabbtn active" data-sub="pd-lm">① Lead Magnet</button>
+          <button class="tabbtn" data-sub="pd-eb">② e-book</button>
+          <button class="tabbtn" data-sub="pd-fc">③ 財報課</button>
+          <button class="tabbtn" data-sub="pd-fs">④ 旗艦課</button>
+          <button class="tabbtn" data-sub="pd-aa">⑤ 資產配置課</button>
+          <button class="tabbtn" data-sub="pd-ws">⑥ Workshop</button>
+          <button class="tabbtn" data-sub="pd-mb">⑦ Membership</button>
+        </div>
+
+        <div class="subpanel active" id="pd-lm">
+          <div class="card">
+            <h3>Lead Magnet PDF《看新聞做投資的框架》</h3>
+            <p style="font-size:13px;">定位：把「新聞→分析→決策」的邏輯拆成可複製步驟，讓讀者第一次接觸就感受到「原來市場是有邏輯的」。目標受眾：理財小白，完全沒有分析框架的人。</p>
+            <div class="tbl-wrap"><table>
+              <tr><th>頁</th><th>標題</th><th>內容重點</th></tr>
+              <tr><td>P1</td><td>封面 + 一句話承諾</td><td>「3分鐘看懂：新聞怎麼變成投資決策」</td></tr>
+              <tr><td>P2</td><td>為什麼多數人看新聞卻做錯投資決策</td><td>痛點共鳴，情緒鉤子</td></tr>
+              <tr><td>P3</td><td>框架介紹：Why-What-How 三層分析法</td><td>Amanda 核心方法論首次曝光</td></tr>
+              <tr><td>P4</td><td>案例①：一則總經新聞的拆解示範</td><td>用歷史已公開新聞，非即時個股建議</td></tr>
+              <tr><td>P5</td><td>案例②：一則產業新聞的拆解示範</td><td>強化框架可複製性</td></tr>
+              <tr><td>P6</td><td>自我練習表格</td><td>讀者可用框架分析下一則新聞</td></tr>
+              <tr><td>P7</td><td>CTA + 下一步</td><td>導向 Email 清單 + 預告 e-book</td></tr>
+            </table></div>
+            <div class="callout gold" style="margin-top:10px;"><b>CTA 設計：</b>「想要更完整的總體經濟分析架構？e-book《如何分析總體經濟》7/18 上架，訂閱名單享早鳥優惠。」→ 導向 MailerLite 表單 → 進入 7 封 Email Nurture Sequence（見第08頁）。</div>
+          </div>
+        </div>
+
+        <div class="subpanel" id="pd-eb">
+          <div class="card">
+            <h3>e-book①《如何分析總體經濟》— NT$499</h3>
+            <div class="grid grid-3" style="margin-top:8px;">
+              <div class="card-soft"><b>定位</b><p style="font-size:12.5px;">總經分析入門手冊，是Lead Magnet的「加深版」，測試讀者付費意願的第一個產品。</p></div>
+              <div class="card-soft"><b>售價策略評估</b><p style="font-size:12.5px;">NT$499 <span class="badge badge-green">合理</span>：低於500元心理門檻，適合首次付費測試。但建議設「早鳥 NT$399（前100名）→ 正式 NT$499」製造急迫感與名單獎勵。</p></div>
+              <div class="card-soft"><b>目標</b><p style="font-size:12.5px;">7/18上架，7月底前售出 ≥60本（毛利率90%+，約NT$27,000+進帳）。</p></div>
+            </div>
+            <div class="tbl-wrap" style="margin-top:12px;"><table>
+              <tr><th>章節</th><th>學習目標</th><th>案例</th><th>作業</th></tr>
+              <tr><td>Ch1 總經是什麼</td><td>建立總經思考地圖</td><td>GDP/CPI/利率基礎</td><td>畫出你認識的總經指標地圖</td></tr>
+              <tr><td>Ch2 利率如何牽動市場</td><td>理解升降息傳導機制</td><td>歷史升息週期案例</td><td>找一則近期升降息新聞練習分析</td></tr>
+              <tr><td>Ch3 通膨與消費</td><td>理解物價與企業獲利關聯</td><td>CPI公布案例</td><td>分析一份CPI報告</td></tr>
+              <tr><td>Ch4 匯率與貿易</td><td>理解匯率對產業的影響</td><td>出口導向產業案例</td><td>找一支受匯率影響的產業</td></tr>
+              <tr><td>Ch5 景氣循環定位</td><td>判斷目前處於循環哪個階段</td><td>景氣燈號解讀</td><td>用框架判斷當前階段</td></tr>
+              <tr><td>Ch6 從總經到選股（預告）</td><td>銜接旗艦課</td><td>—</td><td>CTA：了解旗艦課</td></tr>
+            </table></div>
+            <div class="callout" style="margin-top:10px;"><b>7月中上架倒排時程：</b> 7/5 大綱定稿 → 7/8-7/12 內文撰寫 → 7/13 排版設計 → 7/15 校對 → 7/16 上架頁面+金流設定 → 7/17 Email預告信 → <b>7/18 正式上架</b>。</div>
+          </div>
+        </div>
+
+        <div class="subpanel" id="pd-fc">
+          <div class="card">
+            <h3>財報課《如何透過財報，看懂一家公司的商業》— 建議 NT$3,600</h3>
+            <p style="font-size:13px;"><b>差異化：</b>市場上多數財報課教「怎麼算比率」，The Money Bloomer 教「怎麼從數字看懂管理層在想什麼」——結合MBA管理思維與商業模式分析，是財報課賽道少見的角度。</p>
+            <div class="tbl-wrap"><table>
+              <tr><th>章節</th><th>內容</th><th>案例類型</th></tr>
+              <tr><td>Ch1 財報是商業故事，不是數字</td><td>三大報表關聯全貌</td><td>已下市/歷史公開財報教學案例</td></tr>
+              <tr><td>Ch2 損益表：商業模式的鏡子</td><td>毛利率/營益率透露的策略</td><td>不同商業模式比較（不做即時買賣建議）</td></tr>
+              <tr><td>Ch3 資產負債表：管理層的選擇</td><td>負債結構、資本配置邏輯</td><td>擴張型 vs 保守型公司對比</td></tr>
+              <tr><td>Ch4 現金流量表：說謊比較難的報表</td><td>營運/投資/融資活動解讀</td><td>經典案例（歷史已公開事件）</td></tr>
+              <tr><td>Ch5 MBA管理層思維框架</td><td>從財報反推公司策略意圖</td><td>個案研討</td></tr>
+              <tr><td>Ch6 建立你的財報分析SOP</td><td>可重複使用的分析檢核表</td><td>學員自選一家公司練習（自行決策，非老師推薦）</td></tr>
+            </table></div>
+            <div class="grid grid-2" style="margin-top:10px;">
+              <div class="card-soft"><b>售價建議</b><p style="font-size:12.5px;">NT$3,600（介於e-book與旗艦課之間，補齊產品階梯缺口）</p></div>
+              <div class="card-soft"><b>上線時程</b><p style="font-size:12.5px;">2026/10/01，作為旗艦課後的第二個中價產品，用旗艦課學員名單交叉銷售</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subpanel" id="pd-fs">
+          <div class="card">
+            <h3>旗艦課《用 MBA 眼光選股》— NT$9,999 Early Bird / NT$12,999 正式</h3>
+            <div class="callout warn"><b>批判性建議：</b>原價格帶 NT$8,999-15,000 區間過寬，會讓早鳥定價策略失焦。建議收斂為「Early Bird NT$9,999（限量+限時）→ 正式 NT$12,999」，並將курс定位從「選股」調整為「用MBA框架評估一家公司」——避免品牌承諾「教你選股=保證獲利」的誤解，同時更貼近實際教學內容（框架而非明牌）。</div>
+            <div class="tbl-wrap" style="margin-top:10px;"><table>
+              <tr><th>模組</th><th>標題</th><th>學習目標</th><th>作業/輸出</th></tr>
+              <tr><td>M1</td><td>MBA思維入門：企業如何創造價值</td><td>建立商業模式分析視角</td><td>拆解一家公司的價值主張</td></tr>
+              <tr><td>M2</td><td>產業分析框架（五力/護城河）</td><td>判斷產業競爭格局</td><td>產業護城河評分表</td></tr>
+              <tr><td>M3</td><td>財報轉譯：從數字到策略</td><td>銜接財報課精華版</td><td>財報健檢表</td></tr>
+              <tr><td>M4</td><td>總經環境對公司的影響</td><td>連結總經框架到個股評估</td><td>總經敏感度分析</td></tr>
+              <tr><td>M5</td><td>估值邏輯基礎（教育性質，非目標價）</td><td>理解估值方法論差異</td><td>估值方法比較表</td></tr>
+              <tr><td>M6</td><td>建立你自己的選股檢核清單</td><td>把框架系統化、可重複使用</td><td>個人化SOP checklist</td></tr>
+              <tr><td>M7</td><td>案例實戰工作坊（歷史案例研討）</td><td>綜合應用</td><td>完整分析報告一份</td></tr>
+            </table></div>
+            <div class="callout" style="margin-top:10px;"><b>法律風險規避：</b>全程使用「已公開歷史案例」進行教學示範，明確標示「教學案例非目前投資建議」；不在課程中對「現在該不該買」做出回答；QA環節使用第08頁的QA SOP話術。<br><b>2026/09/01 Early Bird 倒排：</b> 7月完成大綱→8月完成錄製與講義→8/15開放候補名單→8/25 Email預售倒數→<b>9/1 Early Bird開賣（限量50名/限7天）</b>→9/8正式開賣。</div>
+          </div>
+        </div>
+
+        <div class="subpanel" id="pd-aa">
+          <div class="card">
+            <h3>資產配置課（ETF/風險屬性/財務目標）— 建議 NT$5,800</h3>
+            <div class="callout warn"><b>批判性建議：</b>此課程最容易誤觸法遵紅線——絕對不能出現「你應該配置多少%股票/債券」這種針對個人的建議。建議課程設計聚焦在「通用風險屬性框架」與「ETF知識教育」，讓學員自己套用框架做決策，而非老師代為決策。</div>
+            <div class="tbl-wrap" style="margin-top:10px;"><table>
+              <tr><th>章節</th><th>內容</th><th>作業</th></tr>
+              <tr><td>Ch1 什麼是資產配置</td><td>分散風險的原理</td><td>自我風險屬性測驗（通用工具）</td></tr>
+              <tr><td>Ch2 ETF基礎知識</td><td>指數化投資邏輯、費用率</td><td>比較3檔ETF費用結構</td></tr>
+              <tr><td>Ch3 風險屬性框架（通用型）</td><td>保守/穩健/積極的通用區間（非個人建議）</td><td>套用框架，自行填入配置</td></tr>
+              <tr><td>Ch4 財務目標對應配置邏輯</td><td>短中長期目標的通用原則</td><td>設定個人財務目標時間軸</td></tr>
+              <tr><td>Ch5 再平衡與長期紀律</td><td>定期檢視的方法論</td><td>建立個人再平衡SOP</td></tr>
+            </table></div>
+            <div class="callout" style="margin-top:10px;"><b>法規安全包裝：</b>所有配置比例呈現為「教育示範區間」，並附加「此為通用教育示範，非個人化投資建議，請依自身狀況調整或諮詢專業顧問」。上線時程：2027 Q1（待旗艦課驗證市場後）。</div>
+          </div>
+        </div>
+
+        <div class="subpanel" id="pd-ws">
+          <div class="card">
+            <h3>財富流體驗工作坊</h3>
+            <div class="grid grid-3">
+              <div class="card-soft"><b>個人場 NT$800</b><p style="font-size:12.5px;">2.5小時，線上/實體，8-12人小班，桌遊模擬+框架講解，結尾CTA導向旗艦課早鳥。</p></div>
+              <div class="card-soft"><b>個人場 NT$1,500</b><p style="font-size:12.5px;">4小時進階版，含個人財務健檢引導（通用工具，非個別建議）+ 小組討論，導向財報課/資產配置課。</p></div>
+              <div class="card-soft"><b>企業場 NT$30,000+</b><p style="font-size:12.5px;">半天/全天客製，財商培訓角度切入，導向企業年度合作與轉介紹。</p></div>
+            </div>
+            <div class="callout" style="margin-top:10px;">流程：開場破冰(15min)→框架講解(30min)→桌遊體驗(90min)→反思與QA(30min)→CTA收單(15min)。講義為PDF電子版，內含Email收集QR code。</div>
+          </div>
+        </div>
+
+        <div class="subpanel" id="pd-mb">
+          <div class="card">
+            <h3>Bloom Club 教育社群（原VIP付費社群，已重新定位）</h3>
+            <div class="callout warn"><b>批判性建議：</b>原規劃「VIP付費社群 NT$999/月」若定位為即時投資建議社群，屬於高法遵風險（詳見第04頁）。建議重新定位為「教育型學習社群」，且<b>不要在第90天就推出</b>——應延後至旗艦課驗證後（2027 Q1），此時才有足夠的信任資產與內容庫支撐訂閱留存率。</div>
+            <div class="grid grid-2" style="margin-top:10px;">
+              <div class="card-soft"><b>推出條件</b><ul class="tight" style="font-size:12.5px;"><li>Email名單≥3,000</li><li>已有≥2個付費課程驗證</li><li>已建立QA話術SOP（第08頁）</li><li>月費建議調整為 NT$599-999（測試定價）</li></ul></div>
+              <div class="card-soft"><b>可以提供</b><ul class="tight" style="font-size:12.5px;"><li>每週市場總經解讀（教育性）</li><li>會員專屬讀書會</li><li>框架應用練習與回饋</li><li>月度Live Q&A（依SOP話術）</li></ul></div>
+            </div>
+            <div class="callout warn" style="margin-top:10px;"><b>不能提供：</b>即時個股買賣訊號、進出場點位、「現在能不能買」的直接回答、保證報酬承諾。<b>留存策略：</b>內容日曆化+社群歸屬感（讀書會/夥伴制），而非依賴明牌吸引力，才能長期合法且穩定。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 06 TAX & COMPANY ============ -->
+    <div class="panel" id="panel-tax">
+      <div class="page-head">
+        <div class="eyebrow">公司組織與稅務規劃（一般性教育整理，非正式稅務/法律意見）</div>
+        <h1>公司與稅務</h1>
+        <div class="page-sub">建議：<b>2026下半年先以「個人工作室/獨資商號」經營</b>，待年營收規模與B2B合約需求成長後，於 2027年中評估轉為「有限公司」。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>成立公司決策樹</h2></div>
+        <div class="svg-wrap">
+          <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+            <g font-family="Inter, sans-serif" font-size="11.5">
+              <rect x="380" y="15" width="240" height="52" rx="10" fill="#1B4332" opacity="0.1" stroke="#1B4332" stroke-width="1.5"/>
+              <text x="500" y="37" text-anchor="middle" font-weight="700" fill="#1B4332">現在就開始收費營運？</text>
+              <text x="500" y="55" text-anchor="middle" fill="#5B5C53" font-size="10.5">(e-book / 工作坊 / 課程)</text>
+              <line x1="500" y1="67" x2="500" y2="100" stroke="#9A9B8F" stroke-width="1.4" marker-end="url(#arrow3)"/>
+
+              <rect x="150" y="100" width="260" height="60" rx="10" fill="#74A98C" opacity="0.15" stroke="#74A98C" stroke-width="1.5"/>
+              <text x="280" y="125" text-anchor="middle" font-weight="700" fill="#1B4332">年營收 &lt; 500萬</text>
+              <text x="280" y="142" text-anchor="middle" fill="#5B5C53" font-size="10.5">B2B合約少，責任風險低</text>
+              <text x="280" y="155" text-anchor="middle" fill="#1B4332" font-size="10.5" font-weight="700">→ 個人工作室/獨資商號</text>
+
+              <rect x="610" y="100" width="260" height="60" rx="10" fill="#B8892B" opacity="0.15" stroke="#B8892B" stroke-width="1.5"/>
+              <text x="740" y="125" text-anchor="middle" font-weight="700" fill="#8a6a1f">年營收 500-3000萬</text>
+              <text x="740" y="142" text-anchor="middle" fill="#5B5C53" font-size="10.5">有B2B合約/需開發票/責任隔離</text>
+              <text x="740" y="155" text-anchor="middle" fill="#8a6a1f" font-size="10.5" font-weight="700">→ 有限公司</text>
+
+              <line x1="470" y1="67" x2="280" y2="100" stroke="#9A9B8F" stroke-width="1.4" marker-end="url(#arrow3)"/>
+              <line x1="530" y1="67" x2="740" y2="100" stroke="#9A9B8F" stroke-width="1.4" marker-end="url(#arrow3)"/>
+
+              <line x1="280" y1="160" x2="280" y2="200" stroke="#9A9B8F" stroke-width="1.4" marker-end="url(#arrow3)"/>
+              <rect x="150" y="200" width="260" height="56" rx="10" fill="#EAF3EC" stroke="#74A98C" stroke-width="1.2"/>
+              <text x="280" y="222" text-anchor="middle" font-size="10.8" fill="#1B4332">✔ 行政成本最低</text>
+              <text x="280" y="240" text-anchor="middle" font-size="10.8" fill="#1B4332">✔ 適合驗證期，快速啟動</text>
+
+              <line x1="740" y1="160" x2="740" y2="200" stroke="#9A9B8F" stroke-width="1.4" marker-end="url(#arrow3)"/>
+              <rect x="610" y="200" width="260" height="72" rx="10" fill="#FBF1DA" stroke="#B8892B" stroke-width="1.2"/>
+              <text x="740" y="222" text-anchor="middle" font-size="10.8" fill="#8a6a1f">✔ 責任有限（風險隔離）</text>
+              <text x="740" y="240" text-anchor="middle" font-size="10.8" fill="#8a6a1f">✔ 可扣抵費用項目較多</text>
+              <text x="740" y="258" text-anchor="middle" font-size="10.8" fill="#8a6a1f">✔ 適合簽B2B合約/品牌資產保護</text>
+
+              <line x1="740" y1="272" x2="740" y2="310" stroke="#9A9B8F" stroke-width="1.4" marker-end="url(#arrow3)"/>
+              <rect x="610" y="310" width="260" height="72" rx="10" fill="#E9EFF6" stroke="#3A5A8C" stroke-width="1.2"/>
+              <text x="740" y="332" text-anchor="middle" font-weight="700" fill="#3A5A8C" font-size="11.5">若需對外募資 / 團隊&gt;10人</text>
+              <text x="740" y="352" text-anchor="middle" font-size="10.8" fill="#3A5A8C">→ 股份有限公司</text>
+              <text x="740" y="368" text-anchor="middle" font-size="10.2" fill="#5B5C53">（適合股權激勵/未來上市櫃可能性）</text>
+            </g>
+            <defs><marker id="arrow3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9A9B8F"/></marker></defs>
+          </svg>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>設立公司時機判斷標準</h2></div>
+        <div class="grid grid-3">
+          <div class="card"><div class="kpi-num" style="font-size:20px;">500-800萬</div><div class="kpi-label">年營收門檻，觸發評估轉公司</div></div>
+          <div class="card"><div class="kpi-num" style="font-size:20px;">≥2份</div><div class="kpi-label">B2B企業合約需求（需開發票）</div></div>
+          <div class="card"><div class="kpi-num" style="font-size:20px;">商標/品牌保護</div><div class="kpi-label">需要將品牌資產登記在公司名下</div></div>
+        </div>
+        <div class="callout" style="margin-top:12px;">額外觸發條件：需要對外募資或找股東、開始有法律糾紛風險升高的產品（如VIP社群/課程退費爭議增加）、需要正式雇用全職員工。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>稅務規劃比較</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>項目</th><th>個人工作室（執行業務所得）</th><th>有限公司（營利事業所得）</th></tr>
+          <tr><td>稅率結構</td><td>併入個人綜所稅，累進稅率5%-40%（>452萬部分達40%）</td><td>營所稅20% + 盈餘分配時股東再繳個人所得稅</td></tr>
+          <tr><td>費用列支彈性</td><td>較低，僅特定業務費用可減除</td><td>較高，行銷/軟體/租金/薪資等費用皆可列支</td></tr>
+          <tr><td>行政成本</td><td>低，會計簡單</td><td>較高，需記帳/申報營所稅/工商登記</td></tr>
+          <tr><td>責任歸屬</td><td>無限責任（個人資產可能被追償）</td><td>有限責任（以出資額為限）</td></tr>
+          <tr><td>適合階段</td><td>Year 1-2 驗證期</td><td>Year 2-3 規模化期</td></tr>
+        </table></div>
+        <div class="callout gold" style="margin-top:12px;"><b>稅金蓄水池建議：</b>每次收到課程/產品收入，立即提撥 <b>15-20%</b> 存入獨立「稅金專戶」，避免年底稅款壓力影響現金流。CFP考照與品牌相關進修費用、軟體訂閱、行銷廣告費均可保留單據，未來作為費用列支依據。</div>
+      </div>
+    </div>
+
+    <!-- ============ 07 CFP ============ -->
+    <div class="panel" id="panel-cfp">
+      <div class="page-head">
+        <div class="eyebrow">Phase 5 · CFP 備考與品牌整合</div>
+        <h1>CFP 整合系統</h1>
+        <div class="page-sub">FPAT 六科不只是讀書計畫，每一科都要轉化為內容、Email、課程素材與未來服務。第一科「財務規劃概論」目標考期：<b>2026年7月</b>。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>CFP Study Roadmap — 六科順序</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>順序</th><th>科目</th><th>目標考期</th><th>讀書時程</th></tr>
+          <tr><td>1</td><td>財務規劃概論</td><td><span class="badge badge-green">2026/07</span></td><td>2026/06-07（進行中）</td></tr>
+          <tr><td>2</td><td>投資規劃</td><td>2026/11</td><td>2026/08-11</td></tr>
+          <tr><td>3</td><td>風險管理與保險規劃</td><td>2027/03</td><td>2026/12-2027/03</td></tr>
+          <tr><td>4</td><td>租稅與財產移轉規劃</td><td>2027/07</td><td>2027/04-07</td></tr>
+          <tr><td>5</td><td>退休金規劃</td><td>2027/11</td><td>2027/08-11</td></tr>
+          <tr><td>6</td><td>全方位財務規劃案例分析（整合科）</td><td>2028/03</td><td>2027/12-2028/03</td></tr>
+        </table></div>
+        <div class="grid grid-2" style="margin-top:12px;">
+          <div class="card"><h4>平日讀書時段</h4><p style="font-size:13px;">12:30-14:00（每次90分鐘），對應第11頁 Daily OS 固定時段。</p></div>
+          <div class="card"><h4>週複習</h4><p style="font-size:13px;">週日 19:00-21:00，整理當週筆記＋錯題，同步產出內容素材（見下方）。</p></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>CFP × Content Map（第一科示範）</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>內容渠道</th><th>轉化方式</th><th>發布頻率</th></tr>
+          <tr><td>IG 貼文</td><td>把當週讀的一個概念轉成3張圖卡（如「財務規劃6步驟」）</td><td>每週1篇</td></tr>
+          <tr><td>Threads</td><td>備考心得+概念破解，展現「邊考照邊教學」的真實感</td><td>每週2-3則</td></tr>
+          <tr><td>Blog</td><td>深度文章「CFP教我的財務規劃框架」系列</td><td>每月1篇</td></tr>
+          <tr><td>Newsletter</td><td>「CFP筆記」專欄，讀書進度+應用案例</td><td>每月1封</td></tr>
+          <tr><td>YouTube</td><td>「陪你一起考CFP」系列影片，概念講解</td><td>雙週1支</td></tr>
+          <tr><td>Lead Magnet</td><td>未來可做「財務規劃概論懶人包」延伸磁鐵</td><td>科目結束後製作</td></tr>
+          <tr><td>課程素材</td><td>財務規劃流程直接成為未來「資產配置課」「CFP財務健檢」教材骨架</td><td>持續累積</td></tr>
+        </table></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>CFP × Product Map</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>CFP科目</th><th>對應未來產品</th></tr>
+          <tr><td>財務規劃概論</td><td>財務健檢服務</td></tr>
+          <tr><td>投資規劃</td><td>資產配置課、投資規劃工具</td></tr>
+          <tr><td>風險管理與保險規劃</td><td>保險健檢服務（需另確認保險證照要求）</td></tr>
+          <tr><td>租稅與財產移轉規劃</td><td>稅務與財務規劃內容系列</td></tr>
+          <tr><td>退休金規劃</td><td>退休規劃工作坊</td></tr>
+          <tr><td>全方位財務規劃</td><td>CFP 1:1 Advisory 諮詢服務（旗艦服務）</td></tr>
+        </table></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>CFP × 金融證照關係圖</h2></div>
+        <div class="card-soft">
+          <p style="font-size:13px;"><b>建議考照順序邏輯：</b>CFP（財務規劃整合能力）是品牌定位核心，優先完成。之後依商業需求評估：若要合法推介保險商品 → 考「理財規劃人員／保險業務員」相關證照；若要合法推介證券商品 → 考「證券商業務員／投信投顧業務員」。<b>CFA 屬投資分析專業證照，與CFP互補但非必要</b>，可在CFP完成後、品牌進入機構化階段時評估。</p>
+          <div class="grid grid-3" style="margin-top:10px;">
+            <div class="card"><b>優先（品牌核心）</b><p style="font-size:12px;">CFP（FPAT六科）</p></div>
+            <div class="card"><b>次要（依業務需求）</b><p style="font-size:12px;">理財規劃人員、證券商業務員</p></div>
+            <div class="card"><b>長期（機構化階段）</b><p style="font-size:12px;">CFA、投信投顧業務員</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 08 QA SYSTEM ============ -->
+    <div class="panel" id="panel-qa">
+      <div class="page-head">
+        <div class="eyebrow">Phase 4 · Content / Email / ManyChat / QA 閉環系統</div>
+        <h1>社群 QA 規劃</h1>
+        <div class="page-sub">把每週固定內容節奏，透過 Email 與 ManyChat 自動化，收斂成一套可規模化的轉換系統。</div>
+      </div>
+
+      <div class="section">
+        <div class="tabbtn-row subtabs">
+          <button class="tabbtn active" data-sub="qa-content">週內容Dashboard</button>
+          <button class="tabbtn" data-sub="qa-email">Email Funnel</button>
+          <button class="tabbtn" data-sub="qa-mc">ManyChat</button>
+          <button class="tabbtn" data-sub="qa-loop">QA 閉環設計</button>
+        </div>
+
+        <div class="subpanel active" id="qa-content">
+          <div class="tbl-wrap"><table>
+            <tr><th>星期</th><th>主題</th><th>渠道</th><th>目的</th><th>導流</th></tr>
+            <tr><td>週一</td><td>本週數據預告</td><td>Threads / IG Story</td><td>建立每週固定期待感</td><td>Threads留言互動</td></tr>
+            <tr><td>週二</td><td>反直覺觀點</td><td>IG Reels / Threads</td><td>提高觸及、打破迷思</td><td>導向Threads深度討論</td></tr>
+            <tr><td>週三</td><td>書中觀點</td><td>YouTube / IG Post / Threads</td><td>深度內容，建立專業感</td><td>導向Blog/Email訂閱</td></tr>
+            <tr><td>週四</td><td>理財小白教學</td><td>IG Reels / Blog / Email</td><td>教育轉譯，最強Email素材</td><td>導向Lead Magnet</td></tr>
+            <tr><td>週五</td><td>股票分析（框架示範）</td><td>IG Post / Blog / Threads</td><td>展現方法論可信度</td><td>導向旗艦課早鳥名單</td></tr>
+            <tr><td>週六</td><td>覆盤+週規劃+PDF領取</td><td>IG Post / Threads / IG Story</td><td>總結＋主動導流</td><td>直接導向Lead Magnet表單</td></tr>
+            <tr><td>週日</td><td>市場總結</td><td>Threads / IG Story</td><td>收尾，建立下週期待</td><td>導向CFP筆記/Newsletter</td></tr>
+          </table></div>
+          <div class="callout gold" style="margin-top:12px;">每篇內容素材皆需標記「可再利用標籤」（如：#總經框架 #財報案例 #CFP筆記），累積3個月後可直接彙整成e-book/課程章節草稿，達到「內容→產品」資產化。</div>
+        </div>
+
+        <div class="subpanel" id="qa-email">
+          <div class="tbl-wrap"><table>
+            <tr><th>Email#</th><th>主題</th><th>目的</th><th>CTA</th><th>對應產品</th><th>發送時間</th></tr>
+            <tr><td>1</td><td>歡迎信＋框架介紹</td><td>建立第一印象與期待</td><td>回覆這封信告訴我你的投資困擾</td><td>—</td><td>訂閱後立即</td></tr>
+            <tr><td>2</td><td>Amanda的故事：為什麼做The Money Bloomer</td><td>建立信任與共鳴</td><td>追蹤IG看更多</td><td>—</td><td>Day 2</td></tr>
+            <tr><td>3</td><td>深度乾貨：一個總經案例拆解</td><td>展示專業度</td><td>下載更多框架</td><td>—</td><td>Day 4</td></tr>
+            <tr><td>4</td><td>常見迷思破解</td><td>降低對「投資很難」的恐懼</td><td>了解e-book</td><td>e-book預告</td><td>Day 6</td></tr>
+            <tr><td>5</td><td>e-book搶先看＋早鳥優惠</td><td>轉換測試</td><td>立即購買 NT$399早鳥</td><td>e-book</td><td>Day 8</td></tr>
+            <tr><td>6</td><td>學員/讀者見證（初期可用工作坊回饋）</td><td>社會證明</td><td>加入下一場工作坊</td><td>Workshop</td><td>Day 10</td></tr>
+            <tr><td>7</td><td>總結＋長期陪伴訊息</td><td>轉為長期訂閱關係</td><td>持續關注每週Newsletter</td><td>—</td><td>Day 13</td></tr>
+          </table></div>
+        </div>
+
+        <div class="subpanel" id="qa-mc">
+          <div class="tbl-wrap"><table>
+            <tr><th>觸發關鍵字</th><th>自動回覆</th><th>Tag</th><th>Follow-up</th></tr>
+            <tr><td>「新聞」/「框架」/「PDF」</td><td>私訊自動送出Lead Magnet連結</td><td>lead_magnet_ig</td><td>24hr後追問「有看完嗎？想聊聊你的想法」</td></tr>
+            <tr><td>「ebook」/「電子書」</td><td>送出e-book介紹+購買連結</td><td>interest_ebook</td><td>48hr未購買→送早鳥倒數提醒</td></tr>
+            <tr><td>「課程」/「旗艦課」</td><td>送出旗艦課介紹+候補名單連結</td><td>interest_flagship</td><td>Early Bird開賣前3天提醒</td></tr>
+            <tr><td>「工作坊」</td><td>送出近期場次時間+報名連結</td><td>interest_workshop</td><td>場次前1天提醒</td></tr>
+          </table></div>
+          <div class="callout" style="margin-top:12px;">所有ManyChat自動回覆需在<b>7/18前完成剩餘50%設定</b>（因應7/18-8/3出國排程需求），並串接MailerLite確保私訊名單同步進Email清單。</div>
+        </div>
+
+        <div class="subpanel" id="qa-loop">
+          <div class="svg-wrap">
+            <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+              <g font-family="Inter, sans-serif" font-size="11" text-anchor="middle">
+                <rect x="10" y="70" width="120" height="50" rx="9" fill="#1B4332" opacity="0.12" stroke="#1B4332" stroke-width="1.3"/><text x="70" y="99" fill="#1B4332" font-weight="700">Trigger</text>
+                <rect x="150" y="70" width="120" height="50" rx="9" fill="#74A98C" opacity="0.15" stroke="#74A98C" stroke-width="1.3"/><text x="210" y="99" fill="#1B4332" font-weight="700">Response</text>
+                <rect x="290" y="70" width="120" height="50" rx="9" fill="#74A98C" opacity="0.15" stroke="#74A98C" stroke-width="1.3"/><text x="350" y="99" fill="#1B4332" font-weight="700">Follow-up</text>
+                <rect x="430" y="70" width="120" height="50" rx="9" fill="#B8892B" opacity="0.15" stroke="#B8892B" stroke-width="1.3"/><text x="490" y="99" fill="#8a6a1f" font-weight="700">Lead Magnet</text>
+                <rect x="570" y="70" width="120" height="50" rx="9" fill="#B8892B" opacity="0.15" stroke="#B8892B" stroke-width="1.3"/><text x="630" y="99" fill="#8a6a1f" font-weight="700">Email</text>
+                <rect x="710" y="70" width="120" height="50" rx="9" fill="#3A5A8C" opacity="0.15" stroke="#3A5A8C" stroke-width="1.3"/><text x="770" y="99" fill="#3A5A8C" font-weight="700">Product</text>
+                <rect x="850" y="70" width="140" height="50" rx="9" fill="#3A5A8C" opacity="0.15" stroke="#3A5A8C" stroke-width="1.3"/><text x="920" y="92" fill="#3A5A8C" font-weight="700">Community /</text><text x="920" y="108" fill="#3A5A8C" font-weight="700">Course Material</text>
+                <g stroke="#9A9B8F" stroke-width="1.3" marker-end="url(#arrow4)">
+                  <line x1="130" y1="95" x2="148" y2="95"/><line x1="270" y1="95" x2="288" y2="95"/><line x1="410" y1="95" x2="428" y2="95"/>
+                  <line x1="550" y1="95" x2="568" y2="95"/><line x1="690" y1="95" x2="708" y2="95"/><line x1="830" y1="95" x2="848" y2="95"/>
+                </g>
+              </g>
+              <defs><marker id="arrow4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9A9B8F"/></marker></defs>
+            </svg>
+          </div>
+          <div class="tbl-wrap" style="margin-top:14px;"><table>
+            <tr><th>#</th><th>使用者提問類型</th><th>回應方式（安全話術）</th><th>下一步追問</th><th>轉化素材</th></tr>
+            <tr><td>1</td><td>「這支股票能不能買？」</td><td>「我不做個股買賣建議，但可以用框架陪你一起拆解～你想看哪個角度？」</td><td>引導到框架練習</td><td>累積成QA內容集</td></tr>
+            <tr><td>2</td><td>「新手該怎麼開始投資？」</td><td>提供Lead Magnet連結+基礎框架</td><td>詢問投資目標與時間軸</td><td>Lead Magnet導流案例</td></tr>
+            <tr><td>3</td><td>「這則新聞代表什麼？」</td><td>用Why-What-How框架簡短拆解</td><td>邀請看完整版Blog文章</td><td>Blog SEO內容</td></tr>
+            <tr><td>4</td><td>「你自己有買什麼？」</td><td>「品牌定位是教方法論，不分享個人持股，避免誤導」</td><td>轉回框架教學</td><td>強化品牌定位素材</td></tr>
+            <tr><td>5</td><td>「課程值得上嗎？」</td><td>分享課程設計邏輯+適合對象說明</td><td>引導看候補名單</td><td>銷售頁FAQ素材</td></tr>
+            <tr><td>6</td><td>「怎麼看財報？」</td><td>簡答一個切入點+財報課連結</td><td>詢問是否想深入學</td><td>財報課招生素材</td></tr>
+            <tr><td>7</td><td>「CFP在幹嘛？」</td><td>分享備考進度+財務規劃的價值</td><td>邀請訂閱CFP筆記Newsletter</td><td>CFP內容系列</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 09 ROADMAP ============ -->
+    <div class="panel" id="panel-roadmap">
+      <div class="page-head">
+        <div class="eyebrow">Phase 6 · Execution Roadmap</div>
+        <h1>10 年成長路線圖</h1>
+        <div class="page-sub">用「年輪」呈現 The Money Bloomer 的十年成長 — 品牌像植物一樣，每一年都在原本的基礎上長出新的一圈。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>Growth Rings — 十年成長年輪圖</h2></div>
+        <div class="svg-wrap" style="text-align:center;">
+          <svg viewBox="0 0 560 560" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;height:auto;">
+            <g id="ringsGroup"></g>
+          </svg>
+        </div>
+        <div class="grid grid-4" style="margin-top:14px;">
+          <div class="card"><h4>Year 1（2026/07-2027/06）</h4><p style="font-size:12.5px;">收入40-60萬｜個人工作室｜產品：Lead Magnet/e-book/工作坊/財報課/旗艦課上線｜團隊：Amanda 1人｜里程碑：Email名單3,000</p></div>
+          <div class="card"><h4>Year 3</h4><p style="font-size:12.5px;">收入300-500萬｜有限公司｜產品：全產品階梯完整+Membership上線｜團隊：1-2位外包(剪輯/客服)｜里程碑：CFP六科完成</p></div>
+          <div class="card"><h4>Year 5</h4><p style="font-size:12.5px;">收入800-1200萬｜有限公司規模化｜產品：CFP Advisory+B2B規模化｜團隊：3-5人｜里程碑：品牌成為台灣MBA式財經教育代表品牌</p></div>
+          <div class="card"><h4>Year 10</h4><p style="font-size:12.5px;">收入2000萬+｜可能評估股份有限公司｜產品：英語/華語圈擴展、多產品線｜團隊：小型專業團隊｜里程碑：品牌資產可授權/國際化</p></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>1 / 3 / 5 年分季路線圖</h2></div>
+        <div class="tabbtn-row subtabs">
+          <button class="tabbtn active" data-sub="rm-y1">Year 1</button>
+          <button class="tabbtn" data-sub="rm-y3">Year 3</button>
+          <button class="tabbtn" data-sub="rm-y5">Year 5</button>
+        </div>
+        <div class="subpanel active" id="rm-y1">
+          <div class="tbl-wrap"><table>
+            <tr><th>季度</th><th>主要目標</th><th>產品</th><th>名單目標</th><th>收入目標</th><th>CFP</th></tr>
+            <tr><td>Q1(7-9月)</td><td>建立資產(Email+SEO)＋首兩個產品上線</td><td>Lead Magnet/e-book/旗艦課EarlyBird</td><td>3,000</td><td>15-25萬</td><td>科目1完成</td></tr>
+            <tr><td>Q2(10-12月)</td><td>擴充中價產品＋B2B開發</td><td>財報課上線＋工作坊常態化</td><td>6,000</td><td>15-20萬</td><td>科目2進行中</td></tr>
+            <tr><td>Q3(1-3月)</td><td>驗證Membership可行性</td><td>資產配置課上線</td><td>9,000</td><td>10-18萬</td><td>科目2完成</td></tr>
+            <tr><td>Q4(4-6月)</td><td>系統優化＋團隊化準備</td><td>Membership正式上線</td><td>12,000</td><td>10-17萬</td><td>科目3進行中</td></tr>
+          </table></div>
+        </div>
+        <div class="subpanel" id="rm-y3">
+          <div class="tbl-wrap"><table>
+            <tr><th>階段</th><th>主要目標</th><th>產品/系統</th><th>收入重點</th></tr>
+            <tr><td>Year2</td><td>轉為有限公司評估＋外包首位協作者</td><td>內容SOP化、財報課/資產配置課穩定銷售</td><td>150-250萬</td></tr>
+            <tr><td>Year3</td><td>B2B業務常態化、CFP證照完成</td><td>企業培訓每季≥1場、Advisory籌備</td><td>300-500萬</td></tr>
+          </table></div>
+        </div>
+        <div class="subpanel" id="rm-y5">
+          <div class="tbl-wrap"><table>
+            <tr><th>階段</th><th>主要目標</th><th>產品/系統</th><th>收入重點</th></tr>
+            <tr><td>Year4</td><td>Advisory服務規模化、團隊擴編</td><td>CFP財務健檢常態化、B2B簽約制</td><td>500-800萬</td></tr>
+            <tr><td>Year5</td><td>品牌權威地位確立</td><td>多元收入結構成熟、國際化評估啟動</td><td>800-1200萬</td></tr>
+          </table></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ 10 MONTHLY ============ -->
+    <div class="panel" id="panel-monthly">
+      <div class="page-head">
+        <div class="eyebrow">Phase 6 · 月計畫（含檢核清單）</div>
+        <h1>1-3 年月曆目標</h1>
+        <div class="page-sub">第一年（2026/07-12）為完整月計畫，特別注意 <span class="badge badge-red">2026/7/18-8/3 出國</span> 必須提前完成排程與自動化。<b>勾選完成的項目會自動更新總覽頁「五大模組健康度」與「品牌資產現況」。</b></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>整體達成率 Progress Tracker</h2></div>
+        <div class="grid grid-4">
+          <div class="card"><div class="kpi-num" id="mp_overall" style="font-size:26px;">0%</div><div class="kpi-label">1-3年計畫整體完成率</div><div class="hbar"><div class="hbar-fill" id="mp_overall_bar" style="width:0%;background:var(--red);"></div></div></div>
+          <div class="card"><div class="kpi-num" id="mp_y1" style="font-size:22px;">0%</div><div class="kpi-label">Year 1 完成率</div><div class="hbar"><div class="hbar-fill" id="mp_y1_bar" style="width:0%;background:var(--red);"></div></div></div>
+          <div class="card"><div class="kpi-num" id="mp_y2" style="font-size:22px;">0%</div><div class="kpi-label">Year 2 完成率</div><div class="hbar"><div class="hbar-fill" id="mp_y2_bar" style="width:0%;background:var(--red);"></div></div></div>
+          <div class="card"><div class="kpi-num" id="mp_y3" style="font-size:22px;">0%</div><div class="kpi-label">Year 3 完成率</div><div class="hbar"><div class="hbar-fill" id="mp_y3_bar" style="width:0%;background:var(--red);"></div></div></div>
+        </div>
+        <div class="callout" style="margin-top:10px;">💡 勾選狀態儲存在你目前使用的瀏覽器（localStorage）。清除瀏覽器資料會重置勾選紀錄，建議定期截圖存檔進度。<button class="tabbtn" id="mp_reset" style="margin-left:10px;">重置所有勾選</button></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>Year 1 月計畫（2026 下半年）</h2></div>
+        <div class="grid grid-3">
+          <div class="card" style="border-top:4px solid var(--forest);">
+            <h4>2026年7月</h4>
+            <ul class="tight check-list" style="font-size:12px;">
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0701" data-module="content"> 7/5 Lead Magnet 正式上線</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0702" data-module="product"> 7/18 e-book上架（NT$499）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0703" data-module="content"> 7/18前完成ManyChat 100%設定（出國前）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0704" data-module="content"> 7/17前排好出國期間全部內容排程</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0705" data-module="compliance"> 套用Disclaimer模板到所有內容/產品頁</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0706" data-module="none"> 📚 CFP科目1考試</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0707" data-module="brand"> Email名單達成 300</label></li>
+            </ul>
+            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：300</span> <span class="badge badge-gold">收入目標：3-5萬</span></div>
+          </div>
+          <div class="card" style="border-top:4px solid var(--sage);">
+            <h4>2026年8月</h4>
+            <ul class="tight check-list" style="font-size:12px;">
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0801" data-module="none"> 8/3 回國，檢視出國期間成效</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0802" data-module="revenue"> 財富流工作坊第1場（8月下旬）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0803" data-module="product"> 旗艦課錄製與講義製作啟動</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0804" data-module="content"> Blog正式啟動週更</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0805" data-module="compliance"> 依法遵矩陣修改旗艦課/資產配置課文案</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0806" data-module="brand"> Email名單達成 1,000</label></li>
+            </ul>
+            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：1,000</span> <span class="badge badge-gold">收入目標：5-8萬</span></div>
+          </div>
+          <div class="card" style="border-top:4px solid var(--gold);">
+            <h4>2026年9月</h4>
+            <ul class="tight check-list" style="font-size:12px;">
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0901" data-module="revenue"> 🚀 9/1 旗艦課 Early Bird 開賣（限50名/7天）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0902" data-module="revenue"> 9/8 正式開賣</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0903" data-module="none"> CFP科目2讀書啟動</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0904" data-module="brand"> Email名單達成 1,800</label></li>
+            </ul>
+            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：1,800</span> <span class="badge badge-gold">收入目標：25-40萬</span></div>
+          </div>
+          <div class="card" style="border-top:4px solid var(--forest);">
+            <h4>2026年10月</h4>
+            <ul class="tight check-list" style="font-size:12px;">
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1001" data-module="product"> 旗艦課第一梯開課</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1002" data-module="product"> 10/1 財報課上線</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1003" data-module="revenue"> B2B開發：主動聯繫3家企業窗口</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1004" data-module="brand"> Email名單達成 2,300</label></li>
+            </ul>
+            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：2,300</span> <span class="badge badge-gold">收入目標：8-12萬</span></div>
+          </div>
+          <div class="card" style="border-top:4px solid var(--sage);">
+            <h4>2026年11月</h4>
+            <ul class="tight check-list" style="font-size:12px;">
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1101" data-module="revenue"> 財富流工作坊第2場</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1102" data-module="content"> 年末回顧內容系列策劃</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1103" data-module="none"> CFP科目2複習衝刺</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1104" data-module="brand"> Email名單達成 2,700</label></li>
+            </ul>
+            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：2,700</span> <span class="badge badge-gold">收入目標：6-10萬</span></div>
+          </div>
+          <div class="card" style="border-top:4px solid var(--gold);">
+            <h4>2026年12月</h4>
+            <ul class="tight check-list" style="font-size:12px;">
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1201" data-module="content"> 年末總結內容＋隔年目標公開分享</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1202" data-module="none"> CFP科目2考試</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1203" data-module="none"> Year1成效總結＋Year2規劃</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1204" data-module="brand"> Email名單達成 3,000</label></li>
+            </ul>
+            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：3,000</span> <span class="badge badge-gold">收入目標：8-13萬</span></div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:14px;"><b>每月完成標準（通用）：</b>當月Email名單達標±10%內、當月收入達Base Case下限、內容7篇/週無斷更（出國期間除外，已用排程處理）、CFP進度符合讀書計畫。</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>Year 2 月度重點（2027）</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>完成</th><th>月份</th><th>主要任務</th><th>產品重點</th><th>系統重點</th></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-01" data-module="product"></td><td>1月</td><td>資產配置課上線準備</td><td>資產配置課錄製</td><td>SOP文件化啟動</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-02" data-module="product"></td><td>2月</td><td>資產配置課上線</td><td>交叉銷售旗艦課學員</td><td>客服流程優化</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-03" data-module="none"></td><td>3月</td><td>CFP科目3考試</td><td>—</td><td>內容外包評估（剪輯）</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-04" data-module="revenue"></td><td>4月</td><td>Membership前期驗證問卷</td><td>Bloom Club企劃定案</td><td>社群平台選型</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-05" data-module="revenue"></td><td>5月</td><td>B2B案例累積</td><td>企業培訓標準化簡報</td><td>合約範本建立</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-06" data-module="none"></td><td>6月</td><td>Year1回顧＋Year2 Q3規劃</td><td>—</td><td>財務健檢初版工具</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-07" data-module="compliance"></td><td>7月</td><td>公司登記評估（個人工作室→有限公司）</td><td>—</td><td>會計師諮詢</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-08" data-module="revenue"></td><td>8月</td><td>Bloom Club教育社群上線</td><td>Membership正式營運</td><td>訂閱金流串接</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-09" data-module="product"></td><td>9月</td><td>旗艦課二版優化（依回饋迭代）</td><td>旗艦課V2</td><td>學員成效追蹤系統</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-10" data-module="none"></td><td>10月</td><td>CFP科目4考試</td><td>—</td><td>—</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-11" data-module="revenue"></td><td>11月</td><td>年末B2B衝刺</td><td>企業培訓2場</td><td>—</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-12" data-module="none"></td><td>12月</td><td>Year2總結</td><td>—</td><td>Year3系統規劃</td></tr>
+        </table></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>Year 3 月度重點（2028）</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>完成</th><th>月份</th><th>主要任務</th><th>產品重點</th><th>系統重點</th></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y3-01" data-module="none"></td><td>1月</td><td>CFP科目5考試</td><td>—</td><td>—</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y3-02" data-module="product"></td><td>2月</td><td>第一位全職/兼職協作者招募</td><td>—</td><td>團隊SOP交接</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y3-03" data-module="none"></td><td>3月</td><td>CFP整合科準備</td><td>—</td><td>—</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y3-04" data-module="revenue"></td><td>4-5月</td><td>Advisory服務籌備</td><td>財務健檢服務定價</td><td>1:1諮詢流程設計</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y3-05" data-module="none"></td><td>6月</td><td>CFP整合科考試（六科完成）</td><td>—</td><td>CFP證照公開＋PR</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y3-06" data-module="revenue"></td><td>7月</td><td>CFP Advisory正式上線</td><td>財務健檢/VIP Consulting</td><td>預約系統建立</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y3-07" data-module="revenue"></td><td>8-9月</td><td>B2B規模化（簽約制）</td><td>企業年約產品化</td><td>業務開發SOP</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y3-08" data-module="brand"></td><td>10月</td><td>英語/華語圈市場評估啟動</td><td>—</td><td>市場調查</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y3-09" data-module="none"></td><td>11-12月</td><td>Year3總結＋Year4-5規劃</td><td>—</td><td>國際化路徑決策</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ============ 11 DAILY OS ============ -->
+    <div class="panel" id="panel-dailyos">
+      <div class="page-head">
+        <div class="eyebrow">Phase 7 · Daily Operating System</div>
+        <h1>Daily OS</h1>
+        <div class="page-sub">嚴格遵守：平日 7:00-10:00、假日 7:00-14:00 不排品牌任務；平日 12:30-14:00 CFP讀書；平日14:00固定籌碼面紀錄；週日19:00-21:00 CFP週複習。</div>
+      </div>
+
+      <div class="section">
+        <div class="tabbtn-row subtabs">
+          <button class="tabbtn active" data-sub="os-weekday">平日行程</button>
+          <button class="tabbtn" data-sub="os-weekend">假日行程</button>
+          <button class="tabbtn" data-sub="os-travel">出國期間</button>
+          <button class="tabbtn" data-sub="os-weekly">Weekly Dashboard</button>
+          <button class="tabbtn" data-sub="os-checklist">Daily Checklist</button>
+          <button class="tabbtn" data-sub="os-journal">📔 日曆日記</button>
+        </div>
+
+        <div class="subpanel active" id="os-weekday">
+          <div class="tbl-wrap"><table>
+            <tr><th>時間</th><th>任務</th><th>目的</th><th>輸出成果</th><th>完成標準</th><th>可替代方案</th></tr>
+            <tr><td class="mono">07:00-10:00</td><td>個人晨間時間</td><td>不可排品牌任務</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td class="mono">10:00-12:00</td><td>彈性A：游泳 或 內容拍攝/剪輯</td><td>運動或內容產出（二選一）</td><td>當日內容素材 或 運動紀錄</td><td>完成1支拍攝/剪輯 或 完成游泳</td><td>身體疲憊→改安排輕量社群回覆</td></tr>
+            <tr><td class="mono">12:00-12:30</td><td>午餐休息</td><td>恢復精力</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td class="mono">12:30-14:00</td><td>CFP讀書（固定90分鐘）</td><td>FPAT備考</td><td>當日讀書筆記</td><td>完成當日進度表章節</td><td>身體不適→改為複習舊筆記(30min)</td></tr>
+            <tr><td class="mono">14:00-15:00</td><td>籌碼面紀錄＋每日規劃更新（固定）</td><td>市場觀察習慣化</td><td>籌碼面筆記＋當日任務清單</td><td>完成紀錄表單</td><td>—</td></tr>
+            <tr><td class="mono">15:00-17:00</td><td>產品開發／課程製作（深度工作）</td><td>推進課程/e-book/財報課等</td><td>課程章節草稿/講義</td><td>完成當日產出目標(如1章節)</td><td>精力不足→改處理行政/排程</td></tr>
+            <tr><td class="mono">17:00-18:00</td><td>內容撰寫＋社群互動回覆</td><td>維持週節奏＋粉絲關係</td><td>1篇貼文草稿+留言回覆</td><td>當日排程內容完成</td><td>—</td></tr>
+            <tr><td class="mono">18:00-19:30</td><td>彈性B：游泳（若上午未游）或自由運用</td><td>運動或休息</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td class="mono">19:30-21:00</td><td>晚餐／休息／彈性內容微調</td><td>恢復＋收尾</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td class="mono">21:00後</td><td>個人時間</td><td>不排工作</td><td>—</td><td>—</td><td>—</td></tr>
+          </table></div>
+        </div>
+
+        <div class="subpanel" id="os-weekend">
+          <div class="tbl-wrap"><table>
+            <tr><th>時間</th><th>任務</th><th>目的</th><th>輸出成果</th><th>完成標準</th><th>可替代方案</th></tr>
+            <tr><td class="mono">07:00-14:00</td><td>個人時間（固定，不可排品牌任務）</td><td>休息與生活</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td class="mono">14:00-16:00</td><td>週內容衝刺／工作坊準備</td><td>補齊下週內容缺口</td><td>下週內容排程表</td><td>下週7篇內容排定</td><td>—</td></tr>
+            <tr><td class="mono">16:00-18:00</td><td>產品開發／複盤數據</td><td>推進課程或檢視KPI</td><td>週報表更新</td><td>Weekly Dashboard填寫完成</td><td>—</td></tr>
+            <tr><td class="mono">18:00-19:00</td><td>社群互動／回覆整理</td><td>維持社群關係</td><td>留言/私訊回覆</td><td>當週未回覆訊息清空</td><td>—</td></tr>
+            <tr><td class="mono">19:00-21:00</td><td><b>週日限定：CFP週複習</b>（六則安排自由運用）</td><td>整理當週CFP筆記</td><td>週複習筆記</td><td>完成當週錯題整理</td><td>—</td></tr>
+            <tr><td class="mono">21:00後</td><td>個人時間</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          </table></div>
+        </div>
+
+        <div class="subpanel" id="os-travel">
+          <div class="callout warn">📅 2026/7/18 - 2026/8/3 出國期間，採「低負擔維持版」，避免打斷品牌節奏但不增加壓力。</div>
+          <div class="tbl-wrap" style="margin-top:12px;"><table>
+            <tr><th>項目</th><th>安排</th></tr>
+            <tr><td>每日最低維持任務</td><td>檢查ManyChat/Email是否正常運作（5-10分鐘/天）</td></tr>
+            <tr><td>自動排程內容</td><td>出國前（7/17前）完成全部7/18-8/3內容排程，使用IG/Threads排程工具+Buffer或原生排程</td></tr>
+            <tr><td>Email自動化</td><td>7封Nurture Sequence持續自動發送，無需人工介入</td></tr>
+            <tr><td>社群維持</td><td>每2-3天用手機簡短回覆重要留言/私訊即可，非全部回覆</td></tr>
+            <tr><td>不需要做的事</td><td>不需產出新內容、不需開發新產品、CFP讀書可暫停或減量（依旅行狀況彈性）</td></tr>
+          </table></div>
+        </div>
+
+        <div class="subpanel" id="os-weekly">
+          <div class="grid grid-4">
+            <div class="card"><h4>Brand</h4><p style="font-size:12px;">本週品牌形象/定位是否一致？內容語氣有無偏離？</p></div>
+            <div class="card"><h4>Product</h4><p style="font-size:12px;">本週產品進度：完成章節數/錄製進度</p></div>
+            <div class="card"><h4>Content</h4><p style="font-size:12px;">7篇內容是否全數發布？觸及/互動率</p></div>
+            <div class="card"><h4>Email</h4><p style="font-size:12px;">新增名單數、開信率、點擊率</p></div>
+            <div class="card"><h4>CFP</h4><p style="font-size:12px;">本週讀書時數（目標7.5hr）/進度%</p></div>
+            <div class="card"><h4>Health</h4><p style="font-size:12px;">運動次數（目標5次/週）</p></div>
+            <div class="card"><h4>Review</h4><p style="font-size:12px;">本週最大成就／最大卡點</p></div>
+            <div class="card"><h4>Revenue</h4><p style="font-size:12px;">本週實際營收 vs 目標</p></div>
+          </div>
+        </div>
+
+        <div class="subpanel" id="os-checklist">
+          <div class="tabbtn-row subtabs">
+            <button class="tabbtn active" data-sub="cl-must">Must Do</button>
+            <button class="tabbtn" data-sub="cl-should">Should Do</button>
+            <button class="tabbtn" data-sub="cl-opt">Optional</button>
+            <button class="tabbtn" data-sub="cl-tired">If Tired</button>
+            <button class="tabbtn" data-sub="cl-travel">Travel Version</button>
+          </div>
+          <div class="subpanel active" id="cl-must"><div class="card-soft"><ul class="tight" style="font-size:13px;">
+            <li>☐ 14:00 籌碼面紀錄＋每日規劃更新</li><li>☐ 12:30-14:00 CFP讀書90分鐘</li><li>☐ 當日排程內容準時發布</li><li>☐ 檢查Email/ManyChat是否正常運作</li>
+          </ul></div></div>
+          <div class="subpanel" id="cl-should"><div class="card-soft"><ul class="tight" style="font-size:13px;">
+            <li>☐ 回覆當日重要留言/私訊</li><li>☐ 產品開發推進至少1個小任務</li><li>☐ 運動1次（游泳）</li>
+          </ul></div></div>
+          <div class="subpanel" id="cl-opt"><div class="card-soft"><ul class="tight" style="font-size:13px;">
+            <li>☐ 提前準備下週內容草稿</li><li>☐ 瀏覽同業/市場動態做靈感筆記</li><li>☐ 整理內容素材庫標籤</li>
+          </ul></div></div>
+          <div class="subpanel" id="cl-tired"><div class="card-soft"><ul class="tight" style="font-size:13px;">
+            <li>☐ 只完成Must Do四項</li><li>☐ CFP讀書縮短為30分鐘複習</li><li>☐ 內容改用備用素材庫發布</li>
+          </ul></div></div>
+          <div class="subpanel" id="cl-travel"><div class="card-soft"><ul class="tight" style="font-size:13px;">
+            <li>☐ 檢查自動化是否正常（5-10分鐘）</li><li>☐ 每2-3天回覆重點訊息</li><li>☐ 其餘任務全部暫停，無需焦慮</li>
+          </ul></div></div>
+        </div>
+
+        <div class="subpanel" id="os-journal">
+          <div class="card-soft" style="margin-bottom:12px;">
+            <p style="font-size:12.5px; margin:0;">📔 點擊任一日期記錄當天的每日檢核清單、心得與感恩日記。資料儲存在<b>此瀏覽器本機</b>（localStorage），僅你自己看得到，換裝置或清除瀏覽器資料會遺失，建議定期用「匯出」備份。</p>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+            <button class="tabbtn" id="calPrev">← 上個月</button>
+            <div id="calLabel" style="font-family:'Fraunces',serif; font-weight:700; font-size:16px; color:var(--forest-deep);"></div>
+            <button class="tabbtn" id="calNext">下個月 →</button>
+            <button class="tabbtn" id="calExport" style="margin-left:auto;">匯出全部日記(.txt)</button>
+          </div>
+          <div class="cal-grid" id="calDow"></div>
+          <div class="cal-grid" id="calGrid" style="margin-top:6px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ JOURNAL MODAL ============ -->
+    <div id="journalOverlay" class="journal-overlay">
+      <div class="journal-modal">
+        <div class="journal-modal-head">
+          <div>
+            <div class="eyebrow" style="color:var(--sage);">📔 品牌日記</div>
+            <h3 id="jmDate" style="margin:2px 0 0 0;">—</h3>
+          </div>
+          <button class="journal-close" id="jmClose">✕</button>
+        </div>
+        <div class="journal-modal-body">
+          <div class="jm-section">
+            <h4>✅ 今日檢核清單</h4>
+            <ul class="check-list" id="jmChecklist"></ul>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <input type="text" id="jmNewItem" placeholder="新增今日事項…按 Enter 或點新增" style="flex:1;">
+              <button class="tabbtn" id="jmAddItem">＋ 新增</button>
+            </div>
+          </div>
+          <div class="jm-section">
+            <h4>🙏 感恩日記（今天感謝的三件事）</h4>
+            <input type="text" class="jm-gratitude" id="jmG0" placeholder="1. 我很感謝…">
+            <input type="text" class="jm-gratitude" id="jmG1" placeholder="2. 我很感謝…">
+            <input type="text" class="jm-gratitude" id="jmG2" placeholder="3. 我很感謝…">
+          </div>
+          <div class="jm-section">
+            <h4>📝 今日心得 / 品牌日記</h4>
+            <textarea id="jmDiary" rows="5" placeholder="今天發生了什麼？學到什麼？卡在哪裡？" style="width:100%; font-family:'Inter',sans-serif; font-size:13px; border:1px solid var(--line); border-radius:8px; padding:10px;"></textarea>
+          </div>
+        </div>
+        <div class="journal-modal-foot">
+          <button class="tabbtn" id="jmDelete" style="color:var(--red); border-color:var(--red);">🗑 刪除本日紀錄</button>
+          <button class="nav-final" id="jmSave" style="margin:0; padding:10px 20px;"><span class="txt">💾 儲存</span></button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ============ FINAL DECISION SUMMARY ============ -->
+    <div class="panel" id="panel-final">
+      <div class="page-head" style="border-bottom-color:var(--gold);">
+        <div class="eyebrow" style="color:var(--gold);">🎯 Final Decision Summary</div>
+        <h1>最終決策摘要</h1>
+        <div class="page-sub">整份策略系統的結論，獨立於各分頁之外，方便隨時查看核心決策。</div>
+      </div>
+
+      <div class="section">
+        <div class="card" style="border-left:6px solid var(--forest);">
+          <h3>① The Money Bloomer 最合理的 Business Model 是什麼？</h3>
+          <p style="font-size:13.5px;"><b>教育信任漏斗（Education Trust Funnel）</b>：免費內容建立信任 → Email名單資產化 → 低價產品（e-book/工作坊）驗證付費意願 → 中高價課程（財報課/旗艦課/資產配置課）建立主要利潤 → 教育型訂閱社群建立現金流穩定度 → CFP Advisory與B2B企業培訓建立高毛利天花板。核心原則：<b>賣方法論，不賣明牌；賣框架，不賣保證。</b></p>
+        </div>
+      </div>
+
+      <div class="grid grid-3" style="margin-bottom:20px;">
+        <div class="card" style="border-top:5px solid var(--green);">
+          <h3 style="color:var(--green);">② 🟢 可立即開始做</h3>
+          <ul class="tight" style="font-size:13px;"><li>Lead Magnet PDF</li><li>e-book《總體經濟分析》</li><li>財富流體驗工作坊</li><li>財報課</li><li>Notion/Excel/Templates</li><li>Newsletter/Blog/YouTube/Podcast</li><li>企業財商培訓（用工作坊框架）</li></ul>
+        </div>
+        <div class="card" style="border-top:5px solid var(--amber);">
+          <h3 style="color:var(--amber);">③ 🟡 需修改後才能做</h3>
+          <ul class="tight" style="font-size:13px;"><li>旗艦課（去除即時個股建議）</li><li>資產配置課（去個人化配置）</li><li>Live Q&A（建立話術SOP）</li><li>Weekly/Industry/Company Report（移除price target）</li></ul>
+        </div>
+        <div class="card" style="border-top:5px solid var(--red);">
+          <h3 style="color:var(--red);">④ 🔴 暫時不要做</h3>
+          <ul class="tight" style="font-size:13px;"><li>VIP付費社群（原「即時喊單」設計）</li><li>ICT系統交易課（未滿6個月穩定績效前）</li></ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>⑤ 2026年7月-12月最重要的10件事</h2></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>優先序</th><th>任務</th><th>日期</th><th>完成標準</th></tr>
+          <tr><td>1</td><td>Lead Magnet PDF正式上線＋開始收Email名單</td><td>7/5</td><td>表單可正常運作，7月底達300名單</td></tr>
+          <tr><td>2</td><td>ManyChat自動化完成100%</td><td>7/17前</td><td>4組關鍵字自動回覆全數測試通過</td></tr>
+          <tr><td>3</td><td>出國期間內容排程與自動化完成</td><td>7/17前</td><td>7/18-8/3內容全數排定</td></tr>
+          <tr><td>4</td><td>e-book《如何分析總體經濟》上架</td><td>7/18</td><td>售出≥60本</td></tr>
+          <tr><td>5</td><td>CFP科目1「財務規劃概論」考試</td><td>7月</td><td>通過考試</td></tr>
+          <tr><td>6</td><td>依第04頁法遵矩陣，重寫旗艦課/資產配置課文案</td><td>8月</td><td>移除所有個別化投資建議措辭</td></tr>
+          <tr><td>7</td><td>財富流體驗工作坊首場</td><td>8月下旬</td><td>≥15人報名</td></tr>
+          <tr><td>8</td><td>旗艦課Early Bird開賣</td><td>9/1</td><td>≥30人購買</td></tr>
+          <tr><td>9</td><td>財報課上線</td><td>10/1</td><td>正式開賣</td></tr>
+          <tr><td>10</td><td>主動開發B2B企業培訓窗口</td><td>10-12月</td><td>接觸≥3家企業，成交≥1場</td></tr>
+        </table></div>
+      </div>
+
+      <div class="section">
+        <div class="callout gold" style="font-size:15px;">
+          <b>⑥ 今天（2026/07/03）開始，第一步應該做什麼？</b><br><br>
+          <b>把 Lead Magnet PDF 的 MailerLite 表單串接到 IG/Threads bio 連結，並發一則貼文正式宣布免費領取《看新聞做投資的框架》。</b><br>
+          理由：這是整個商業模式的第一個齒輪——沒有Email名單，後面所有產品的轉換漏斗都無法運作。7 頁PDF已完成、表單已建立，唯一缺的是「正式對外發布」這個動作。今天就能做，且零成本、零法遵風險。
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title"><span class="dot"></span><h2>⚠️ 貫穿全系統的風險提醒</h2></div>
+        <div class="grid grid-2">
+          <div class="card"><p style="font-size:13px;">所有金融/投資內容一律避免：保證獲利、明確買賣建議、即時喊單、個別化配置比例、未揭露假設的報酬預測、誤導性績效宣稱。</p></div>
+          <div class="card"><p style="font-size:13px;">VIP社群與ICT交易課是全系統法遵風險最高的兩項，正式推出前務必諮詢金融法規專業律師做個案確認。</p></div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="note">The Money Bloomer 商業作業系統｜建立於 2026/07/03｜本報告所有金融/投資相關內容僅供教育參考，不構成個別化投資建議。設計原則：低法律風險、可持續、可擴張、可累積資產。</footer>
+  </div>
+</div>
+
+<script>
+// ---- Module health bars ----
+const moduleBaseline = {
+  brand:{name:'品牌定位', pct:60, note:'方向明確，需文件化'},
+  product:{name:'產品階梯', pct:40, note:'需依法遵重整'},
+  revenue:{name:'收入系統', pct:15, note:'尚無實際收入'},
+  compliance:{name:'法遵基礎', pct:20, note:'尚未做風險審查'},
+  content:{name:'內容/名單', pct:35, note:'Email 名單=0'}
+};
+function colorFor(pct){ if(pct>=60) return 'var(--green)'; if(pct>=35) return 'var(--amber)'; return 'var(--red)'; }
+
+function ckKey(id){ return 'tmb_check_'+id; }
+function isChecked(id){ try{ return localStorage.getItem(ckKey(id))==='1'; }catch(e){ return false; } }
+function setChecked(id,val){ try{ localStorage.setItem(ckKey(id), val?'1':'0'); }catch(e){} }
+
+// Email milestone tracking (id -> target list value)
+const emailMilestones = [
+  {id:'y1-0707', val:300},{id:'y1-0806', val:1000},{id:'y1-0904', val:1800},
+  {id:'y1-1004', val:2300},{id:'y1-1104', val:2700},{id:'y1-1204', val:3000}
+];
+
+function recalcAll(){
+  const checks = document.querySelectorAll('.mod-check');
+  // restore state
+  checks.forEach(cb=>{ cb.checked = isChecked(cb.dataset.id); });
+
+  // module ratios
+  const totals = {brand:0,product:0,revenue:0,compliance:0,content:0};
+  const done = {brand:0,product:0,revenue:0,compliance:0,content:0};
+  checks.forEach(cb=>{
+    const mod = cb.dataset.module;
+    if(mod && mod!=='none' && totals.hasOwnProperty(mod)){
+      totals[mod]++;
+      if(cb.checked) done[mod]++;
+    }
+  });
+  const healthGrid = document.getElementById('healthGrid');
+  if(healthGrid){
+    healthGrid.innerHTML = Object.keys(moduleBaseline).map(k=>{
+      const base = moduleBaseline[k];
+      const ratio = totals[k] ? done[k]/totals[k] : 0;
+      const pct = Math.round(base.pct + ratio*(100-base.pct));
+      return `<div class="card">
+        <h4>${base.name}</h4>
+        <div class="kpi-num" style="font-size:22px;color:${colorFor(pct)}">${pct}%</div>
+        <div class="hbar"><div class="hbar-fill" style="width:${pct}%;background:${colorFor(pct)}"></div></div>
+        <div style="font-size:11.5px;color:var(--ink-soft);margin-top:6px;">${totals[k]?`已完成${done[k]}/${totals[k]}項執行任務`:base.note}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Email milestone -> asset card
+  let latestEmail = 0;
+  emailMilestones.forEach(m=>{ if(isChecked(m.id) && m.val>latestEmail) latestEmail = m.val; });
+  const assetEmail = document.getElementById('asset_email');
+  const assetEmailBadge = document.getElementById('asset_email_badge');
+  if(assetEmail){
+    assetEmail.textContent = latestEmail.toLocaleString('en-US');
+    if(latestEmail===0){ assetEmailBadge.textContent='尚未開始收集'; assetEmailBadge.className='badge badge-red'; assetEmailBadge.id='asset_email_badge'; }
+    else if(latestEmail<1800){ assetEmailBadge.textContent='累積中'; assetEmailBadge.className='badge badge-amber'; assetEmailBadge.id='asset_email_badge'; }
+    else{ assetEmailBadge.textContent='穩定成長'; assetEmailBadge.className='badge badge-green'; assetEmailBadge.id='asset_email_badge'; }
+  }
+
+  // ManyChat -> asset card
+  const mc = document.getElementById('asset_manychat');
+  const mcBadge = document.getElementById('asset_manychat_badge');
+  if(mc){
+    if(isChecked('y1-0703')){ mc.textContent='100%'; mcBadge.textContent='已完成'; mcBadge.className='badge badge-green'; mcBadge.id='asset_manychat_badge'; }
+    else{ mc.textContent='50%'; mcBadge.textContent='需於 7 月完成'; mcBadge.className='badge badge-amber'; mcBadge.id='asset_manychat_badge'; }
+  }
+
+  // Year / overall progress trackers
+  function yearProgress(prefix){
+    const items = Array.from(checks).filter(cb=>cb.dataset.id.startsWith(prefix));
+    if(items.length===0) return 0;
+    const c = items.filter(cb=>cb.checked).length;
+    return Math.round(c/items.length*100);
+  }
+  const y1 = yearProgress('y1-'), y2 = yearProgress('y2-'), y3 = yearProgress('y3-');
+  const allItems = Array.from(checks);
+  const overall = allItems.length ? Math.round(allItems.filter(cb=>cb.checked).length/allItems.length*100) : 0;
+  const setBar = (numId,barId,val)=>{
+    const n=document.getElementById(numId), b=document.getElementById(barId);
+    if(n){ n.textContent=val+'%'; }
+    if(b){ b.style.width=val+'%'; b.style.background=colorFor(val); }
+  };
+  setBar('mp_overall','mp_overall_bar',overall);
+  setBar('mp_y1','mp_y1_bar',y1);
+  setBar('mp_y2','mp_y2_bar',y2);
+  setBar('mp_y3','mp_y3_bar',y3);
+}
+
+document.addEventListener('change', (e)=>{
+  if(e.target.classList && e.target.classList.contains('mod-check')){
+    setChecked(e.target.dataset.id, e.target.checked);
+    recalcAll();
+  }
+});
+const mpResetBtn = document.getElementById('mp_reset');
+if(mpResetBtn){
+  mpResetBtn.addEventListener('click', ()=>{
+    if(!confirm('確定要重置所有月曆目標的勾選紀錄嗎？此動作無法復原。')) return;
+    document.querySelectorAll('.mod-check').forEach(cb=>{ setChecked(cb.dataset.id,false); });
+    recalcAll();
+  });
+}
+recalcAll();
+
+// ---- Strategy map nodes ----
+const steps = [
+  ['1','品牌藍圖','#1B4332'],['2','商業模式','#1B4332'],['3','收入模型','#1B4332'],
+  ['4','法遵審核','#B3413A'],['5','安全產品階梯','#B8892B'],['6','產品設計','#B8892B'],
+  ['7','CFP整合','#3A5A8C'],['8','內容系統','#3A5A8C'],['9','執行Roadmap','#74A98C'],['10','Daily OS','#74A98C']
+];
+const gap = 1000/steps.length; let svgStr='';
+steps.forEach((s,i)=>{
+  const cx = 50 + i*gap + gap/2 - 40;
+  svgStr += `<g>
+    <rect x="${cx}" y="70" width="80" height="46" rx="10" fill="${s[2]}" opacity="0.12" stroke="${s[2]}" stroke-width="1.4"/>
+    <text x="${cx+40}" y="90" fill="${s[2]}" font-weight="700" font-family="IBM Plex Mono, monospace">STEP ${s[0]}</text>
+    <text x="${cx+40}" y="105" fill="#1C1C1E" font-weight="600">${s[1]}</text>
+  </g>`;
+  if(i<steps.length-1){
+    const x1 = cx+80, x2 = cx+gap;
+    svgStr += `<line x1="${x1}" y1="93" x2="${x2}" y2="93" stroke="#9A9B8F" stroke-width="1.4" marker-end="url(#arrow)"/>`;
+  }
+});
+document.querySelector('#panel-overview svg g').innerHTML = svgStr;
+
+// ---- Revenue Calculator ----
+function fmtNT(n){ return 'NT$' + Math.round(n).toLocaleString('en-US'); }
+function rcUpdate(){
+  const list = +document.getElementById('rc_list').value;
+  const open = +document.getElementById('rc_open').value;
+  const ctr = +document.getElementById('rc_ctr').value;
+  const cvr = +document.getElementById('rc_cvr').value;
+  const aov = +document.getElementById('rc_aov').value;
+  const refund = +document.getElementById('rc_refund').value;
+  document.getElementById('rc_list_v').textContent = list.toLocaleString('en-US');
+  document.getElementById('rc_open_v').textContent = open+'%';
+  document.getElementById('rc_ctr_v').textContent = ctr+'%';
+  document.getElementById('rc_cvr_v').textContent = cvr+'%';
+  document.getElementById('rc_aov_v').textContent = fmtNT(aov);
+  document.getElementById('rc_refund_v').textContent = refund+'%';
+  const buyers = list*(open/100)*(ctr/100)*(cvr/100);
+  const revenue = buyers*aov*(1-refund/100);
+  document.getElementById('rc_buyers').textContent = Math.round(buyers).toLocaleString('en-US')+' 人';
+  document.getElementById('rc_revenue').textContent = fmtNT(revenue);
+  document.getElementById('rc_monthly').textContent = fmtNT(revenue*2)+' /月';
+}
+['rc_list','rc_open','rc_ctr','rc_cvr','rc_aov','rc_refund'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', rcUpdate);
+});
+rcUpdate();
+
+// ---- Ecosystem map ----
+const eco = [
+  ['免費內容','#74A98C'],['Lead Magnet','#74A98C'],['Email','#B8892B'],['e-book','#B8892B'],
+  ['Workshop','#B8892B'],['財報課','#3A5A8C'],['旗艦課','#3A5A8C'],['資產配置課','#3A5A8C'],
+  ['Membership','#1B4332'],['Advisory/B2B','#1B4332']
+];
+const ecoWrap = document.querySelector('#panel-ladder svg g');
+if(ecoWrap){
+  const gap2 = 1040/eco.length; let s2='';
+  eco.forEach((e,i)=>{
+    const cx = 20 + i*gap2 + gap2/2 - 42;
+    s2 += `<g><rect x="${cx}" y="55" width="84" height="42" rx="9" fill="${e[1]}" opacity="0.13" stroke="${e[1]}" stroke-width="1.3"/>
+    <text x="${cx+42}" y="80" fill="${e[1]}" font-weight="700">${e[0]}</text></g>`;
+    if(i<eco.length-1){
+      s2 += `<line x1="${cx+84}" y1="76" x2="${cx+gap2}" y2="76" stroke="#9A9B8F" stroke-width="1.3" marker-end="url(#arrow2)"/>`;
+    }
+  });
+  ecoWrap.innerHTML = `<defs><marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9A9B8F"/></marker></defs>` + s2;
+}
+
+// ---- 10-year growth rings ----
+const ringsGroup = document.getElementById('ringsGroup');
+if(ringsGroup){
+  const cx=280, cy=280;
+  const revenueTiers = [40,60,90,150,300,500,800,1200,1600,2000]; // illustrative NT$萬 per year (base-ish growth path)
+  const maxR = 255, minR = 40;
+  let html='';
+  for(let y=1;y<=10;y++){
+    const r = minR + (maxR-minR)*(y/10);
+    const t = y/10;
+    // color interpolate sage -> forest deep
+    const col = y<=3?'#A9CDB6':(y<=6?'#74A98C':(y<=8?'#3F7A5C':'#1B4332'));
+    html += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="${8+ y*0.6}" opacity="${0.35+ y*0.05}"/>`;
+  }
+  // labels for Y1,3,5,10 on the rings at angle -90 (top)
+  [1,3,5,10].forEach(y=>{
+    const r = minR + (maxR-minR)*(y/10);
+    html += `<text x="${cx}" y="${cy-r+4}" text-anchor="middle" font-size="11" font-weight="700" fill="#0F2A1F" font-family="IBM Plex Mono, monospace">Y${y}</text>`;
+  });
+  html += `<circle cx="${cx}" cy="${cy}" r="18" fill="#1B4332"/><text x="${cx}" y="${cy+4}" text-anchor="middle" fill="#fff" font-size="10" font-weight="700" font-family="Fraunces, serif">2026</text>`;
+  ringsGroup.innerHTML = html;
+}
+
+// ---- Journal calendar (with Daily Checklist + Gratitude modal) ----
+(function(){
+  const dowEl = document.getElementById('calDow');
+  const gridEl = document.getElementById('calGrid');
+  const labelEl = document.getElementById('calLabel');
+  if(!gridEl) return;
+  let cur = new Date(2026,6,1); // July 2026
+  let activeKey = null;
+  const dows = ['日','一','二','三','四','五','六'];
+  dowEl.innerHTML = dows.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+
+  const defaultChecklist = [
+    '14:00 籌碼面紀錄＋每日規劃更新',
+    '12:30-14:00 CFP讀書90分鐘',
+    '當日排程內容準時發布',
+    '檢查Email/ManyChat是否正常運作',
+    '回覆當日重要留言/私訊',
+    '產品開發推進至少1個小任務',
+    '運動1次（游泳）'
+  ];
+
+  function key(y,m,d){ return 'tmb_journal_'+y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
+
+  function loadEntry(k){
+    try{
+      const raw = localStorage.getItem(k);
+      if(raw){ return JSON.parse(raw); }
+    }catch(e){}
+    return { diary:'', gratitude:['','',''], checklist: defaultChecklist.map(t=>({text:t, done:false})) };
+  }
+  function saveEntry(k, entry){
+    try{ localStorage.setItem(k, JSON.stringify(entry)); }catch(e){}
+  }
+  function hasContent(entry){
+    return !!(entry.diary && entry.diary.trim()) ||
+      entry.gratitude.some(g=>g && g.trim()) ||
+      entry.checklist.some(c=>c.done);
+  }
+
+  function render(){
+    const y = cur.getFullYear(), m = cur.getMonth();
+    labelEl.textContent = y+'年 '+(m+1)+'月';
+    const firstDow = new Date(y,m,1).getDay();
+    const daysInMonth = new Date(y,m+1,0).getDate();
+    let html='';
+    for(let i=0;i<firstDow;i++){ html += `<div></div>`; }
+    for(let d=1; d<=daysInMonth; d++){
+      const k = key(y,m,d);
+      const entry = loadEntry(k);
+      const has = hasContent(entry);
+      const doneCount = entry.checklist.filter(c=>c.done).length;
+      html += `<div class="cal-cell ${has?'has-entry':''}" data-y="${y}" data-m="${m}" data-d="${d}"><div class="d">${d}</div>${has?`<div style="font-size:9.5px;margin-top:4px;line-height:1.3;">✅${doneCount}/${entry.checklist.length}${entry.gratitude.some(g=>g&&g.trim())?' 🙏':''}${entry.diary&&entry.diary.trim()?' 📝':''}</div>`:''}</div>`;
+    }
+    gridEl.innerHTML = html;
+    gridEl.querySelectorAll('.cal-cell').forEach(cell=>{
+      cell.addEventListener('click', ()=>{
+        openModal(+cell.dataset.y, +cell.dataset.m, +cell.dataset.d);
+      });
+    });
+  }
+
+  // ---- Modal logic ----
+  const overlay = document.getElementById('journalOverlay');
+  const jmDate = document.getElementById('jmDate');
+  const jmChecklist = document.getElementById('jmChecklist');
+  const jmNewItem = document.getElementById('jmNewItem');
+  const jmAddItem = document.getElementById('jmAddItem');
+  const jmDiary = document.getElementById('jmDiary');
+  const jmG = [document.getElementById('jmG0'), document.getElementById('jmG1'), document.getElementById('jmG2')];
+  const jmSave = document.getElementById('jmSave');
+  const jmDelete = document.getElementById('jmDelete');
+  const jmClose = document.getElementById('jmClose');
+  let currentEntry = null;
+
+  function renderChecklist(){
+    jmChecklist.innerHTML = currentEntry.checklist.map((item,i)=>`
+      <li class="${item.done?'jm-done':''}" data-i="${i}">
+        <input type="checkbox" ${item.done?'checked':''}>
+        <span class="jm-item-text">${item.text}</span>
+        <button class="jm-item-del" title="刪除此項">✕</button>
+      </li>`).join('');
+    jmChecklist.querySelectorAll('li').forEach(li=>{
+      const idx = +li.dataset.i;
+      li.querySelector('input').addEventListener('change', (e)=>{
+        currentEntry.checklist[idx].done = e.target.checked;
+        li.classList.toggle('jm-done', e.target.checked);
+      });
+      li.querySelector('.jm-item-del').addEventListener('click', ()=>{
+        currentEntry.checklist.splice(idx,1);
+        renderChecklist();
+      });
+    });
+  }
+
+  function openModal(y,m,d){
+    activeKey = key(y,m,d);
+    currentEntry = loadEntry(activeKey);
+    jmDate.textContent = `${y}年${m+1}月${d}日`;
+    renderChecklist();
+    jmDiary.value = currentEntry.diary || '';
+    jmG.forEach((el,i)=>{ el.value = (currentEntry.gratitude && currentEntry.gratitude[i]) || ''; });
+    overlay.classList.add('open');
+  }
+  function closeModal(){ overlay.classList.remove('open'); activeKey=null; currentEntry=null; }
+
+  jmAddItem.addEventListener('click', ()=>{
+    const v = jmNewItem.value.trim();
+    if(!v) return;
+    currentEntry.checklist.push({text:v, done:false});
+    jmNewItem.value='';
+    renderChecklist();
+  });
+  jmNewItem.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter'){ e.preventDefault(); jmAddItem.click(); }
+  });
+  jmSave.addEventListener('click', ()=>{
+    if(!activeKey) return;
+    currentEntry.diary = jmDiary.value;
+    currentEntry.gratitude = jmG.map(el=>el.value);
+    saveEntry(activeKey, currentEntry);
+    closeModal();
+    render();
+  });
+  jmDelete.addEventListener('click', ()=>{
+    if(!activeKey) return;
+    if(!confirm('確定要刪除這一天的所有紀錄嗎？')) return;
+    try{ localStorage.removeItem(activeKey); }catch(e){}
+    closeModal();
+    render();
+  });
+  jmClose.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeModal(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.classList.contains('open')) closeModal(); });
+
+  document.getElementById('calPrev').addEventListener('click', ()=>{ cur.setMonth(cur.getMonth()-1); render(); });
+  document.getElementById('calNext').addEventListener('click', ()=>{ cur.setMonth(cur.getMonth()+1); render(); });
+  document.getElementById('calExport').addEventListener('click', ()=>{
+    let out='The Money Bloomer 品牌日記匯出\n\n';
+    try{
+      const keys = Object.keys(localStorage).filter(k=>k.startsWith('tmb_journal_')).sort();
+      keys.forEach(k=>{
+        const e = loadEntry(k);
+        out += '=== ' + k.replace('tmb_journal_','') + ' ===\n';
+        out += '檢核清單：\n' + e.checklist.map(c=>`  [${c.done?'x':' '}] ${c.text}`).join('\n') + '\n';
+        out += '感恩日記：\n' + e.gratitude.map((g,i)=>`  ${i+1}. ${g||''}`).join('\n') + '\n';
+        out += '心得：\n  ' + (e.diary||'') + '\n\n';
+      });
+    }catch(e){}
+    const blob = new Blob([out], {type:'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download='money_bloomer_journal.txt'; a.click();
+    URL.revokeObjectURL(url);
+  });
+  render();
+})();
+
+// ---- Sidebar collapse toggle ----
+(function(){
+  const appRoot = document.getElementById('appRoot');
+  const toggle = document.getElementById('sidebarToggle');
+  if(!toggle) return;
+  let collapsed = false;
+  try{ collapsed = localStorage.getItem('tmb_sidebar_collapsed') === '1'; }catch(e){}
+  if(collapsed) appRoot.classList.add('collapsed');
+  toggle.addEventListener('click', ()=>{
+    appRoot.classList.toggle('collapsed');
+    try{ localStorage.setItem('tmb_sidebar_collapsed', appRoot.classList.contains('collapsed') ? '1' : '0'); }catch(e){}
+  });
+})();
+
+document.querySelectorAll('.nav-btn, .nav-final').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.nav-btn, .nav-final').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.getAttribute('data-tab');
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-'+tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'instant'});
+  });
+});
+document.querySelectorAll('.tabbtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const group = btn.closest('.subtabs');
+    group.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const target = btn.getAttribute('data-sub');
+    group.parentElement.querySelectorAll('.subpanel').forEach(p=>p.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
