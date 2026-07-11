@@ -190,6 +190,17 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
 .cal-cell.has-entry{background:var(--gold-bg); border-color:var(--gold);}
 .cal-dow{font-size:10.5px; text-align:center; color:var(--ink-faint); font-weight:700; text-transform:uppercase;}
 
+.year-accordion{ margin-bottom:16px; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; }
+.year-accordion summary{
+  cursor:pointer; padding:14px 20px; background:var(--bg-soft); font-family:'Fraunces',serif; font-weight:700;
+  font-size:16px; color:var(--forest-deep); list-style:none; display:flex; justify-content:space-between; align-items:center;
+}
+.year-accordion summary::-webkit-details-marker{ display:none; }
+.year-accordion summary::after{ content:'▾ 展開'; font-size:11.5px; color:var(--ink-soft); font-family:'Inter',sans-serif; font-weight:600; }
+.year-accordion[open] summary::after{ content:'▴ 收合'; }
+.year-accordion[open] summary{ border-bottom:1px solid var(--line); }
+.year-accordion .year-body{ padding:18px 20px; }
+
 /* ---------- Journal modal ---------- */
 .journal-overlay{
   display:none; position:fixed; inset:0; background:rgba(15,42,31,0.55); z-index:100;
@@ -309,11 +320,11 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
         <div class="section-title"><span class="dot"></span><h2>產品階梯總覽（詳見 05）</h2></div>
         <div class="tbl-wrap"><table>
           <tr><th>層級</th><th>產品</th><th>價格</th><th>法遵狀態</th><th>建議時程</th></tr>
-          <tr><td>免費</td><td>Lead Magnet《看新聞做投資的框架》</td><td>免費</td><td><span class="badge badge-green">🟢 可立即做</span></td><td>2026/07/05 上線</td></tr>
-          <tr><td>入門</td><td>e-book《如何分析總體經濟》</td><td>NT$499</td><td><span class="badge badge-green">🟢 可立即做</span></td><td>2026/07/18 上架</td></tr>
+          <tr><td>免費</td><td>Lead Magnet《看新聞做投資的框架》</td><td>免費</td><td><span class="badge badge-green">🟢 可立即做</span></td><td>2026/08/06 上線</td></tr>
+          <tr><td>入門</td><td>e-book《如何分析總體經濟》</td><td>NT$499</td><td><span class="badge badge-green">🟢 可立即做</span></td><td>2026/08/17 上架</td></tr>
           <tr><td>體驗</td><td>財富流體驗工作坊</td><td>NT$800 / NT$1,500</td><td><span class="badge badge-green">🟢 可立即做</span></td><td>2026/08 起每月 1 場</td></tr>
-          <tr><td>核心</td><td>財報課（重新命名）</td><td>NT$3,000-4,500（暫定）</td><td><span class="badge badge-green">🟢 修改文案後可做</span></td><td>2026/10 上架</td></tr>
-          <tr><td>旗艦</td><td>《用 MBA 眼光選股》（改為框架課）</td><td>NT$9,999 Early Bird / NT$12,999</td><td><span class="badge badge-amber">🟡 需重新包裝</span></td><td>2026/09/01 Early Bird</td></tr>
+          <tr><td>核心</td><td>財報課（重新命名）</td><td>NT$3,000-4,500（暫定）</td><td><span class="badge badge-green">🟢 修改文案後可做</span></td><td>2026/10/19 上架（8/24起內容鋪陳6週，自學型）</td></tr>
+          <tr><td>旗艦</td><td>《用 MBA 眼光選股》（改為框架課）</td><td>NT$9,999 Early Bird / NT$12,999</td><td><span class="badge badge-amber">🟡 需重新包裝</span></td><td>2026/11/24 Early Bird，12/7開課</td></tr>
           <tr><td>旗艦</td><td>資產配置課（去個人化）</td><td>NT$5,000-7,000（暫定）</td><td><span class="badge badge-amber">🟡 需重新包裝</span></td><td>2027 Q1</td></tr>
           <tr><td>訂閱</td><td>Bloom Club 教育社群（重新定位）</td><td>NT$599-999/月</td><td><span class="badge badge-red">🔴 需大幅修改才可推</span></td><td>2027 Q1 後評估</td></tr>
           <tr><td>高單價</td><td>ICT 系統交易課</td><td>待定</td><td><span class="badge badge-red">🔴 暫緩</span></td><td>需 6 個月穩定績效後</td></tr>
@@ -384,7 +395,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
           <div class="card"><h4>① 獨特方法論（Why 驅動總經框架）</h4><p style="font-size:13px;">競爭對手可以複製「內容主題」，但不易複製「思考框架」。框架需要長期驗證 + 教學轉譯能力，是時間累積的能力護城河。<br><span class="badge badge-forest" style="margin-top:6px;">複製難度：高</span></p></div>
           <div class="card"><h4>② Email 名單（私有流量資產）</h4><p style="font-size:13px;">IG/Threads 演算法隨時可能改變觸及率，Email 名單是唯一 100% 由 Amanda 擁有、不受平台演算法影響的資產。<b>這是最優先要建立的資產，目前是 0，必須立刻啟動。</b><br><span class="badge badge-red" style="margin-top:6px;">現況：極弱，需立即補強</span></p></div>
           <div class="card"><h4>③ CFP 證照信任背書</h4><p style="font-size:13px;">證照建立「專業可信度」，是財經內容賽道少數可被驗證的差異化，也是進入 Advisory 高單價服務的合法門票。<br><span class="badge badge-amber" style="margin-top:6px;">狀態：備考中，2026/07 第一科</span></p></div>
-          <div class="card"><h4>④ 內容 SEO 資產複利</h4><p style="font-size:13px;">Blog + YouTube 長期累積會形成搜尋流量護城河，越早開始，複利效果越大，晚做成本越高（追趕曲線陡）。<br><span class="badge badge-red" style="margin-top:6px;">現況：尚未啟動 Blog / SEO</span></p></div>
+          <div class="card"><h4>④ 內容 SEO 資產複利</h4><p style="font-size:13px;">Blog + YouTube 長期累積會形成搜尋流量護城河，越早開始，複利效果越大，晚做成本越高（追趕曲線陡）。2026/8/24起加入Podcast渠道（見第08頁），是Apple/Spotify Podcast搜尋的另一個獨立發現入口，用同一份內容槓桿雙渠道。<br><span class="badge badge-red" style="margin-top:6px;">現況：尚未啟動 Blog / SEO</span></p></div>
         </div>
       </div>
 
@@ -472,11 +483,11 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
         <div class="tbl-wrap"><table>
           <tr><th>階段</th><th>機制</th><th>目標轉換率</th><th>KPI</th></tr>
           <tr><td>① 免費內容吸引</td><td>週更 7 篇內容建立觸及與信任</td><td>觸及→追蹤 3-5%</td><td>IG+Threads 週觸及 ≥ 15,000</td></tr>
-          <tr><td>② Lead Magnet 換信箱</td><td>PDF《看新聞做投資的框架》</td><td>追蹤→Email 3-6%</td><td>7月底 Email 名單 ≥ 300</td></tr>
+          <tr><td>② Lead Magnet 換信箱</td><td>PDF《看新聞做投資的框架》</td><td>追蹤→Email 3-6%</td><td>8月底 Email 名單 ≥ 1,000</td></tr>
           <tr><td>③ Email 培育信任</td><td>7 封 Nurture Sequence（見 08）</td><td>開信率 35-45%</td><td>點擊率 ≥ 5%</td></tr>
-          <tr><td>④ e-book 測試付費意願</td><td>NT$499 低摩擦入門產品</td><td>名單→購買 3-8%</td><td>7月底售出 ≥ 60 本</td></tr>
+          <tr><td>④ e-book 測試付費意願</td><td>NT$499 低摩擦入門產品</td><td>名單→購買 3-8%</td><td>8月底售出 ≥ 60 本</td></tr>
           <tr><td>⑤ 低價產品成交</td><td>工作坊 NT$800-1,500</td><td>名單→報名 2-5%</td><td>8月 1 場 ≥ 15 人</td></tr>
-          <tr><td>⑥ 中高價課程建立利潤</td><td>財報課／旗艦課／資產配置課</td><td>暖名單→購買 5-12%</td><td>9月 Early Bird ≥ 30 人</td></tr>
+          <tr><td>⑥ 中高價課程建立利潤</td><td>財報課／旗艦課／資產配置課</td><td>暖名單→購買 5-12%</td><td>10月 Early Bird ≥ 30 人</td></tr>
           <tr><td>⑦ Membership 建立 Recurring</td><td>教育社群（重新定位後）</td><td>學員→訂閱 10-20%</td><td>2027 Q1 目標 100 會員</td></tr>
           <tr><td>⑧ CFP/Advisory 高單價</td><td>財務健檢／VIP諮詢</td><td>不適用（一對一）</td><td>證照後每月 8-12 場</td></tr>
           <tr><td>⑨ B2B 企業場成長引擎</td><td>企業財商培訓 NT$30,000+</td><td>不適用（B2B業務）</td><td>2026 Q4 起每季 ≥ 1 場</td></tr>
@@ -669,6 +680,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
           <button class="tabbtn" data-sub="pd-aa">⑤ 資產配置課</button>
           <button class="tabbtn" data-sub="pd-ws">⑥ Workshop</button>
           <button class="tabbtn" data-sub="pd-mb">⑦ Membership</button>
+          <button class="tabbtn" data-sub="pd-cfp">⑧ CFP財務規劃諮詢</button>
         </div>
 
         <div class="subpanel active" id="pd-lm">
@@ -685,7 +697,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <tr><td>P6</td><td>自我練習表格</td><td>讀者可用框架分析下一則新聞</td></tr>
               <tr><td>P7</td><td>CTA + 下一步</td><td>導向 Email 清單 + 預告 e-book</td></tr>
             </table></div>
-            <div class="callout gold" style="margin-top:10px;"><b>CTA 設計：</b>「想要更完整的總體經濟分析架構？e-book《如何分析總體經濟》7/18 上架，訂閱名單享早鳥優惠。」→ 導向 MailerLite 表單 → 進入 7 封 Email Nurture Sequence（見第08頁）。</div>
+            <div class="callout gold" style="margin-top:10px;"><b>CTA 設計：</b>「想要更完整的總體經濟分析架構？e-book《如何分析總體經濟》8/17 上架，訂閱名單享早鳥優惠。」→ 導向 MailerLite 表單 → 進入 7 封 Email Nurture Sequence（見第08頁）。</div>
           </div>
         </div>
 
@@ -695,7 +707,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
             <div class="grid grid-3" style="margin-top:8px;">
               <div class="card-soft"><b>定位</b><p style="font-size:12.5px;">總經分析入門手冊，是Lead Magnet的「加深版」，測試讀者付費意願的第一個產品。</p></div>
               <div class="card-soft"><b>售價策略評估</b><p style="font-size:12.5px;">NT$499 <span class="badge badge-green">合理</span>：低於500元心理門檻，適合首次付費測試。但建議設「早鳥 NT$399（前100名）→ 正式 NT$499」製造急迫感與名單獎勵。</p></div>
-              <div class="card-soft"><b>目標</b><p style="font-size:12.5px;">7/18上架，7月底前售出 ≥60本（毛利率90%+，約NT$27,000+進帳）。</p></div>
+              <div class="card-soft"><b>目標</b><p style="font-size:12.5px;">8/17上架，8月底前售出 ≥60本（毛利率90%+，約NT$27,000+進帳）。</p></div>
             </div>
             <div class="tbl-wrap" style="margin-top:12px;"><table>
               <tr><th>章節</th><th>學習目標</th><th>案例</th><th>作業</th></tr>
@@ -706,7 +718,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <tr><td>Ch5 景氣循環定位</td><td>判斷目前處於循環哪個階段</td><td>景氣燈號解讀</td><td>用框架判斷當前階段</td></tr>
               <tr><td>Ch6 從總經到選股（預告）</td><td>銜接旗艦課</td><td>—</td><td>CTA：了解旗艦課</td></tr>
             </table></div>
-            <div class="callout" style="margin-top:10px;"><b>7月中上架倒排時程：</b> 7/5 大綱定稿 → 7/8-7/12 內文撰寫 → 7/13 排版設計 → 7/15 校對 → 7/16 上架頁面+金流設定 → 7/17 Email預告信 → <b>7/18 正式上架</b>。</div>
+            <div class="callout" style="margin-top:10px;"><b>8月中上架倒排時程：</b> 8/10 大綱定稿 → 8/10-8/12 內文撰寫(Ch1-6) → 8/13 排版設計 → 8/14 校對 → 8/14 上架頁面+金流設定 → 8/16 Email預告信 → <b>8/17 正式上架</b>。</div>
           </div>
         </div>
 
@@ -725,8 +737,17 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
             </table></div>
             <div class="grid grid-2" style="margin-top:10px;">
               <div class="card-soft"><b>售價建議</b><p style="font-size:12.5px;">NT$3,600（介於e-book與旗艦課之間，補齊產品階梯缺口）</p></div>
-              <div class="card-soft"><b>上線時程</b><p style="font-size:12.5px;">2026/10/01，作為旗艦課後的第二個中價產品，用旗艦課學員名單交叉銷售</p></div>
+              <div class="card-soft"><b>上線時程</b><p style="font-size:12.5px;">2026/10/19，改為<b>自學型（無需直播）</b>。8/24起先做6週內容鋪陳（讓讀者知道這件事在發生），10/5-18實際製作，10/19上架，之後靠Email自動化序列持續銷售</p></div>
             </div>
+            <h4 style="margin-top:16px;">📣 內容鋪陳（8/24起，跨水果攤忙碌期暫停，10/5開始實際製作）</h4>
+            <div class="tbl-wrap"><table>
+              <tr><th>週次</th><th>內容主軸</th><th>發布位置</th></tr>
+              <tr><td>第1週</td><td>痛點共鳴：「為什麼多數人看財報卻看不懂管理層在想什麼」，不用案例，純情緒共鳴</td><td>Threads/IG</td></tr>
+              <tr><td>第2週</td><td>框架示範：用<b>一家公司的歷史年報</b>，示範三大報表怎麼串成一個商業故事（損益表→資產負債表→現金流量表）</td><td>YouTube深度影片＋Blog長文（SEO資產）</td></tr>
+              <tr><td>第3週</td><td>案例系列：每週五「股票分析」時段固定發布一次不同公司的財報片段拆解，不同產業各挑一家，展現方法論可複製</td><td>IG Post/Blog</td></tr>
+              <tr><td>第4週</td><td>curriculum 揭露（6章節長怎樣）＋ 9/6上架倒數</td><td>Email＋全平台</td></tr>
+            </table></div>
+            <div class="callout" style="margin-top:10px;">⚠️ 兩個規則：一律用<b>已公開的歷史財報</b>（避免變成「現在該不該買」的暗示）；每篇都要標「教學案例，非投資建議」。</div>
           </div>
         </div>
 
@@ -744,7 +765,15 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <tr><td>M6</td><td>建立你自己的選股檢核清單</td><td>把框架系統化、可重複使用</td><td>個人化SOP checklist</td></tr>
               <tr><td>M7</td><td>案例實戰工作坊（歷史案例研討）</td><td>綜合應用</td><td>完整分析報告一份</td></tr>
             </table></div>
-            <div class="callout" style="margin-top:10px;"><b>法律風險規避：</b>全程使用「已公開歷史案例」進行教學示範，明確標示「教學案例非目前投資建議」；不在課程中對「現在該不該買」做出回答；QA環節使用第08頁的QA SOP話術。<br><b>2026/09/01 Early Bird 倒排：</b> 7月完成大綱→8月完成錄製與講義→8/15開放候補名單→8/25 Email預售倒數→<b>9/1 Early Bird開賣（限量50名/限7天）</b>→9/8正式開賣。</div>
+            <div class="callout" style="margin-top:10px;"><b>法律風險規避：</b>全程使用「已公開歷史案例」進行教學示範，明確標示「教學案例非目前投資建議」；不在課程中對「現在該不該買」做出回答；QA環節使用第08頁的QA SOP話術。<br><b>2026/12/07 開課倒排（第二次調整：加入內容鋪陳優先）：</b> 10/19財報課上線後開始旗艦課內容鋪陳(4大支柱輪流) → 11/2起實際製作M1-M7(3週) → 11/16校對完成 → <b>11/24 Early Bird開賣（限量/限7天）</b> → 12/1正式開賣 → <b>12/7第一梯開課</b>（會跨進2027年1月初結束）。</div>
+            <h4 style="margin-top:16px;">📣 內容鋪陳（四大支柱輪流發布，8月排程、9月忙碌期自動發布、9/28後恢復即時互動）</h4>
+            <div class="grid grid-2">
+              <div class="card-soft"><b>① 商業模式拆解</b><p style="font-size:12.5px;">五力分析／護城河，用相對容易理解的品牌案例建立「MBA思維」的品牌口吻</p></div>
+              <div class="card-soft"><b>② 財報轉譯</b><p style="font-size:12.5px;">承接財報課學員，深化「數字→策略」的連結，交叉導流財報課學員</p></div>
+              <div class="card-soft"><b>③ 總經環境連結</b><p style="font-size:12.5px;">呼應e-book的總經框架，示範怎麼從總經環境推回個股層次的思考</p></div>
+              <div class="card-soft"><b>④ 估值邏輯</b><p style="font-size:12.5px;">只講方法論比較（如本益比vs現金流折現的適用情境），絕不給具體目標價</p></div>
+            </div>
+            <div class="callout" style="margin-top:10px;">四主題從10/19財報課上線後開始輪流發布，此時已脫離水果攤忙碌期，可以即時互動；11/2起邊發內容邊實際製作課程，11/24衝 Early Bird。</div>
           </div>
         </div>
 
@@ -761,6 +790,16 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <tr><td>Ch5 再平衡與長期紀律</td><td>定期檢視的方法論</td><td>建立個人再平衡SOP</td></tr>
             </table></div>
             <div class="callout" style="margin-top:10px;"><b>法規安全包裝：</b>所有配置比例呈現為「教育示範區間」，並附加「此為通用教育示範，非個人化投資建議，請依自身狀況調整或諮詢專業顧問」。上線時程：2027 Q1（待旗艦課驗證市場後）。</div>
+            <div class="callout gold" style="margin-top:10px;"><b>上架判斷條件：</b>不需等CFP六科全部完成（要到2028年，會拖垮節奏），但建議等<b>通過FPAT第2科「投資規劃」</b>（目標2026/11）再上架——這科內容就是本課程核心知識，通過了才有底氣教，剛好與2027 Q1原訂時程吻合，不用改時程，只是正式訂為判斷條件而非單純看日曆。</div>
+            <h4 style="margin-top:16px;">📣 內容鋪陳（通過投資規劃科目後啟動，2026/12起）</h4>
+            <div class="tbl-wrap"><table>
+              <tr><th>內容主軸</th><th>說明</th></tr>
+              <tr><td>「剛在CFP教材學到的資產配置邏輯」系列</td><td>用備考心得包裝專業內容，真實感強，同步累積CFP × 內容整合素材（見第07頁）</td></tr>
+              <tr><td>ETF 101 系列</td><td>費用率、追蹤誤差等基礎知識，破除迷思型內容</td></tr>
+              <tr><td>「為什麼你不需要預測市場」</td><td>破除擇時迷思，鋪陳長期紀律的重要性</td></tr>
+              <tr><td>通用風險屬性框架公開</td><td>只給區間與判斷邏輯，不給個人化配置比例，課前用免費小工具測試需求</td></tr>
+            </table></div>
+            <div class="callout warn" style="margin-top:10px;">⚠️ 全程避免任何「你應該配置多少%」的字眼，連預熱內容都要守住——這是全產品線法遵風險最高的品項。</div>
           </div>
         </div>
 
@@ -785,6 +824,21 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
               <div class="card-soft"><b>可以提供</b><ul class="tight" style="font-size:12.5px;"><li>每週市場總經解讀（教育性）</li><li>會員專屬讀書會</li><li>框架應用練習與回饋</li><li>月度Live Q&A（依SOP話術）</li></ul></div>
             </div>
             <div class="callout warn" style="margin-top:10px;"><b>不能提供：</b>即時個股買賣訊號、進出場點位、「現在能不能買」的直接回答、保證報酬承諾。<b>留存策略：</b>內容日曆化+社群歸屬感（讀書會/夥伴制），而非依賴明牌吸引力，才能長期合法且穩定。</div>
+          </div>
+        </div>
+
+        <div class="subpanel" id="pd-cfp">
+          <div class="card">
+            <h3>CFP財務規劃諮詢（財務健檢 / VIP Consulting）</h3>
+            <p style="font-size:13px;">1:1服務，上線時程綁定 CFP六科全數完成（Roadmap估計2028/06考完，2028/07正式上線），是產品階梯裡等待時間最長的一項——正因為如此，內容鋪陳不是短衝刺，而是<b>長達近2年的信任累積</b>。</p>
+            <h4 style="margin-top:14px;">📣 三階段內容鋪陳</h4>
+            <div class="tbl-wrap"><table>
+              <tr><th>階段</th><th>時間</th><th>內容策略</th></tr>
+              <tr><td>① 長期基礎建設</td><td>現在起~2027年中（貫穿六科備考）</td><td>「CFP筆記」系列持續產出（見第07頁CFP×Content Map），把每一科的學習過程轉譯成內容，讓受眾看著Amanda一步步成為CFP——這個過程本身就是最強的信任資產</td></tr>
+              <tr><td>② 服務預演</td><td>2027年中~2028年初（上線前6-12個月）</td><td>「免費財務健檢」案例分享：用<b>虛構/去識別化的複合人物</b>（不是真實客戶，避免隱私與法遵爭議）示範財務健檢流程長怎樣，讓受眾具體想像服務內容</td></tr>
+              <tr><td>③ 上線前導</td><td>2028年初（上線前3-6個月）</td><td>候補名單開放，優先開放給旗艦課/財報課學員（已驗證的信任關係）；收集課程學員的框架應用心得作為社會證明，鋪陳進Advisory的轉化路徑</td></tr>
+            </table></div>
+            <div class="callout warn" style="margin-top:10px;">⚠️ 案例分享一律使用虛構或高度去識別化的複合人物，絕不揭露真實學員/客戶的財務細節，避免個資法與保密義務爭議。</div>
           </div>
         </div>
       </div>
@@ -961,6 +1015,15 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
             <tr><td>週日</td><td>市場總結</td><td>Threads / IG Story</td><td>收尾，建立下週期待</td><td>導向CFP筆記/Newsletter</td></tr>
           </table></div>
           <div class="callout gold" style="margin-top:12px;">每篇內容素材皆需標記「可再利用標籤」（如：#總經框架 #財報案例 #CFP筆記），累積3個月後可直接彙整成e-book/課程章節草稿，達到「內容→產品」資產化。</div>
+
+          <h4 style="margin-top:20px;">🎙️ Podcast 渠道啟用計畫（週三「書中觀點」格式升級）</h4>
+          <div class="callout gold" style="margin-bottom:10px;">✅ <b>已改為8/24優先啟動</b>（Amanda決定：先鋪陳內容讓讀者知道在做這件事，財報課、旗艦課相應順延——財報課10/19上架、旗艦課12/7開課，詳見第05/10頁最新時程）。</div>
+          <div class="grid grid-3">
+            <div class="card-soft"><b>定位</b><p style="font-size:12.5px;">是渠道不是新產品——一次錄製同時餵飽YouTube＋Podcast兩個發現入口，不佔用產品階梯資源</p></div>
+            <div class="card-soft"><b>選書方向</b><p style="font-size:12.5px;">聚焦MBA/總經/投資類，用自己的話講觀點＋套用品牌框架應用，不逐字唸誦（著作權考量，也更像你的觀點而非搬運）</p></div>
+            <div class="card-soft"><b>產出方式</b><p style="font-size:12.5px;">週三錄製一次完整影片 → YouTube上架完整版 → 同份錄音抽出音檔 → Podcast上架，一次工兩個渠道</p></div>
+          </div>
+          <div class="callout warn" style="margin-top:10px;">⚠️ <b>取捨提醒：</b>財報課上架從9/6延到10/19（晚6週），旗艦課開課從11/9延到12/7（晚4週，第一梯跨進2027年1月）。Year1總收入目標維持40-60萬不變，但11-12月會更集中，代表現金流前鬆後緊，記得預留緩衝。</div>
         </div>
 
         <div class="subpanel" id="qa-email">
@@ -1076,11 +1139,12 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
         <div class="subpanel active" id="rm-y1">
           <div class="tbl-wrap"><table>
             <tr><th>季度</th><th>主要目標</th><th>產品</th><th>名單目標</th><th>收入目標</th><th>CFP</th></tr>
-            <tr><td>Q1(7-9月)</td><td>建立資產(Email+SEO)＋首兩個產品上線</td><td>Lead Magnet/e-book/旗艦課EarlyBird</td><td>3,000</td><td>15-25萬</td><td>科目1完成</td></tr>
-            <tr><td>Q2(10-12月)</td><td>擴充中價產品＋B2B開發</td><td>財報課上線＋工作坊常態化</td><td>6,000</td><td>15-20萬</td><td>科目2進行中</td></tr>
-            <tr><td>Q3(1-3月)</td><td>驗證Membership可行性</td><td>資產配置課上線</td><td>9,000</td><td>10-18萬</td><td>科目2完成</td></tr>
-            <tr><td>Q4(4-6月)</td><td>系統優化＋團隊化準備</td><td>Membership正式上線</td><td>12,000</td><td>10-17萬</td><td>科目3進行中</td></tr>
+            <tr><td>Q1(7-9月)</td><td>建立資產(Email+SEO)＋工作坊＋Podcast上線＋水果攤忙碌期低耗運作</td><td>Lead Magnet/e-book/工作坊/Podcast(8/24)</td><td>1,800</td><td>15-20萬</td><td>科目1完成</td></tr>
+            <tr><td>Q2(10-12月)</td><td>財報課上線＋旗艦課內容鋪陳/製作/開課＋B2B開發</td><td>財報課(10/19)→旗艦課11/24 EarlyBird→12/7開課</td><td>3,000</td><td>40-54萬</td><td>科目2進行中</td></tr>
+            <tr><td>Q3(1-3月)</td><td>驗證Membership可行性</td><td>資產配置課上線</td><td>7,000</td><td>10-18萬</td><td>科目2完成</td></tr>
+            <tr><td>Q4(4-6月)</td><td>系統優化＋團隊化準備</td><td>Membership正式上線</td><td>10,000</td><td>10-17萬</td><td>科目3進行中</td></tr>
           </table></div>
+          <div class="callout" style="margin-top:10px;">⚠️ 名單目標數字已因應旗艦課延後至11月開課而下修——Q1少了旗艦課帶動的名單增長，用工作坊與財報課補位；Q2起旗艦課開課會帶動口碑與轉介紹，Year1整體目標維持40-60萬不變，只是節奏往後移。</div>
         </div>
         <div class="subpanel" id="rm-y3">
           <div class="tbl-wrap"><table>
@@ -1103,14 +1167,14 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
     <div class="panel" id="panel-monthly">
       <div class="page-head">
         <div class="eyebrow">Phase 6 · 月計畫（含檢核清單）</div>
-        <h1>1-3 年月曆目標</h1>
-        <div class="page-sub">第一年（2026/07-12）為完整月計畫，特別注意 <span class="badge badge-red">2026/7/18-8/3 出國</span> 必須提前完成排程與自動化。<b>勾選完成的項目會自動更新總覽頁「五大模組健康度」與「品牌資產現況」。</b></div>
+        <h1>月曆目標（2026/08 - 2030/12）</h1>
+        <div class="page-sub">依年份分組，點年份標題可展開/收合。Year1（2026/08-12）為完整月計畫，Year2-3已有具體任務，Year4-5為方向性規劃。<b>勾選完成的項目會自動更新總覽頁「五大模組健康度」與「品牌資產現況」。</b></div>
       </div>
 
       <div class="section">
         <div class="section-title"><span class="dot"></span><h2>整體達成率 Progress Tracker</h2></div>
         <div class="grid grid-4">
-          <div class="card"><div class="kpi-num" id="mp_overall" style="font-size:26px;">0%</div><div class="kpi-label">1-3年計畫整體完成率</div><div class="hbar"><div class="hbar-fill" id="mp_overall_bar" style="width:0%;background:var(--red);"></div></div></div>
+          <div class="card"><div class="kpi-num" id="mp_overall" style="font-size:26px;">0%</div><div class="kpi-label">2026/08-2030/12 整體完成率</div><div class="hbar"><div class="hbar-fill" id="mp_overall_bar" style="width:0%;background:var(--red);"></div></div></div>
           <div class="card"><div class="kpi-num" id="mp_y1" style="font-size:22px;">0%</div><div class="kpi-label">Year 1 完成率</div><div class="hbar"><div class="hbar-fill" id="mp_y1_bar" style="width:0%;background:var(--red);"></div></div></div>
           <div class="card"><div class="kpi-num" id="mp_y2" style="font-size:22px;">0%</div><div class="kpi-label">Year 2 完成率</div><div class="hbar"><div class="hbar-fill" id="mp_y2_bar" style="width:0%;background:var(--red);"></div></div></div>
           <div class="card"><div class="kpi-num" id="mp_y3" style="font-size:22px;">0%</div><div class="kpi-label">Year 3 完成率</div><div class="hbar"><div class="hbar-fill" id="mp_y3_bar" style="width:0%;background:var(--red);"></div></div></div>
@@ -1118,49 +1182,42 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
         <div class="callout" style="margin-top:10px;">💡 勾選狀態儲存在你目前使用的瀏覽器（localStorage）。清除瀏覽器資料會重置勾選紀錄，建議定期截圖存檔進度。<button class="tabbtn" id="mp_reset" style="margin-left:10px;">重置所有勾選</button></div>
       </div>
 
-      <div class="section">
-        <div class="section-title"><span class="dot"></span><h2>Year 1 月計畫（2026 下半年）</h2></div>
+      <details class="year-accordion" open>
+        <summary>Year 1（2026年8月-12月）月計畫</summary>
+        <div class="year-body">
         <div class="grid grid-3">
-          <div class="card" style="border-top:4px solid var(--forest);">
-            <h4>2026年7月</h4>
-            <ul class="tight check-list" style="font-size:12px;">
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0701" data-module="content"> 7/5 Lead Magnet 正式上線</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0702" data-module="product"> 7/18 e-book上架（NT$499）</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0703" data-module="content"> 7/18前完成ManyChat 100%設定（出國前）</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0704" data-module="content"> 7/17前排好出國期間全部內容排程</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0705" data-module="compliance"> 套用Disclaimer模板到所有內容/產品頁</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0706" data-module="none"> 📚 CFP科目1考試</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0707" data-module="content"> Email名單達成 300</label></li>
-            </ul>
-            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：300</span> <span class="badge badge-gold">收入目標：3-5萬</span></div>
-          </div>
           <div class="card" style="border-top:4px solid var(--sage);">
             <h4>2026年8月</h4>
             <ul class="tight check-list" style="font-size:12px;">
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0801" data-module="none"> 8/3 回國，檢視出國期間成效</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0802" data-module="revenue"> 財富流工作坊第1場（8月下旬）</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0803" data-module="product"> 旗艦課錄製與講義製作啟動</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0804" data-module="content"> Blog正式啟動週更</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0801" data-module="none"> 8/5 回國</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0807" data-module="content"> 🚀 8/6 Lead Magnet正式上線，開始收Email名單</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0808" data-module="content"> ManyChat 100%自動化設定完成</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0809" data-module="product"> 🚀 8/17 e-book《如何分析總體經濟》上架 NT$499</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0810" data-module="product"> 財富流體驗工作坊 講義／流程設計定稿</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0802" data-module="revenue"> 🚀 8/22 財富流工作坊第1場</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0812" data-module="content"> 🎙️ 8/24 Podcast/說書首集上線＋財報課內容鋪陳週1開始</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0805" data-module="compliance"> 依法遵矩陣修改旗艦課/資產配置課文案</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0806" data-module="content"> Email名單達成 1,000</label></li>
             </ul>
-            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：1,000</span> <span class="badge badge-gold">收入目標：5-8萬</span></div>
+            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：1,000</span> <span class="badge badge-gold">收入目標：5-8萬（e-book+工作坊，第一個月）</span></div>
           </div>
           <div class="card" style="border-top:4px solid var(--gold);">
             <h4>2026年9月</h4>
             <ul class="tight check-list" style="font-size:12px;">
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0901" data-module="revenue"> 🚀 9/1 旗艦課 Early Bird 開賣（限50名/7天）</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-0902" data-module="revenue"> 9/8 正式開賣</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0912" data-module="content"> Podcast週更持續＋財報課內容鋪陳週2（水果攤期前）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-0913" data-module="none"> 9/7-9/27 水果攤忙碌期：內容鋪陳暫停/降載</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0903" data-module="none"> CFP科目2讀書啟動</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-0904" data-module="content"> Email名單達成 1,800</label></li>
             </ul>
-            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：1,800</span> <span class="badge badge-gold">收入目標：25-40萬</span></div>
+            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：1,800</span> <span class="badge badge-gold">收入目標：3-5萬（無大型上架，鋪陳期）</span></div>
           </div>
           <div class="card" style="border-top:4px solid var(--forest);">
             <h4>2026年10月</h4>
             <ul class="tight check-list" style="font-size:12px;">
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-1001" data-module="product"> 旗艦課第一梯開課</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-1002" data-module="product"> 10/1 財報課上線</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1011" data-module="content"> 9/27水果攤結束，財報課內容鋪陳週3-4（案例系列＋課綱揭露）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1001" data-module="product"> 財報課 Ch1-6 實際製作（10/5-18）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1002" data-module="revenue"> 🚀 10/19 財報課上線（自學型，NT$3,600）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1012" data-module="content"> 旗艦課內容鋪陳週1開始（商業模式拆解）</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1003" data-module="revenue"> B2B開發：主動聯繫3家企業窗口</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1004" data-module="content"> Email名單達成 2,300</label></li>
             </ul>
@@ -1169,34 +1226,42 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
           <div class="card" style="border-top:4px solid var(--sage);">
             <h4>2026年11月</h4>
             <ul class="tight check-list" style="font-size:12px;">
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-1101" data-module="revenue"> 財富流工作坊第2場</label></li>
-              <li><label><input type="checkbox" class="mod-check" data-id="y1-1102" data-module="content"> 年末回顧內容系列策劃</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1105" data-module="content"> 旗艦課內容鋪陳週2-4（財報轉譯／總經連結／估值邏輯）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1106" data-module="product"> 旗艦課 M1-M7 全模組製作（11/2-23）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1101" data-module="revenue"> 11/14 財富流工作坊第2場</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1107" data-module="revenue"> 🚀 11/24 旗艦課 Early Bird 開賣（限7天）</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1103" data-module="none"> CFP科目2複習衝刺</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1104" data-module="content"> Email名單達成 2,700</label></li>
             </ul>
-            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：2,700</span> <span class="badge badge-gold">收入目標：6-10萬</span></div>
+            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：2,700</span> <span class="badge badge-gold">收入目標：8-12萬（Early Bird預購）</span></div>
           </div>
           <div class="card" style="border-top:4px solid var(--gold);">
             <h4>2026年12月</h4>
             <ul class="tight check-list" style="font-size:12px;">
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1205" data-module="revenue"> 🚀 12/1 旗艦課正式開賣</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1208" data-module="product"> 🚀 12/7 旗艦課第一梯開課，開始每週直播陪伴＋作業批改（跨至2027/1）</label></li>
+              <li><label><input type="checkbox" class="mod-check" data-id="y1-1206" data-module="revenue"> B2B收尾，力拚Year1第一筆企業合約</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1201" data-module="content"> 年末總結內容＋隔年目標公開分享</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1202" data-module="none"> CFP科目2考試</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1203" data-module="none"> Year1成效總結＋Year2規劃</label></li>
               <li><label><input type="checkbox" class="mod-check" data-id="y1-1204" data-module="content"> Email名單達成 3,000</label></li>
             </ul>
-            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：3,000</span> <span class="badge badge-gold">收入目標：8-13萬</span></div>
+            <div style="margin-top:8px;"><span class="badge badge-forest">Email目標：3,000</span> <span class="badge badge-gold">收入目標：20-30萬（Early Bird尾款＋正式開賣＋開課）</span></div>
           </div>
         </div>
-        <div class="callout" style="margin-top:14px;"><b>每月完成標準（通用）：</b>當月Email名單達標±10%內、當月收入達Base Case下限、內容7篇/週無斷更（出國期間除外，已用排程處理）、CFP進度符合讀書計畫。</div>
-      </div>
+        <div class="callout gold" style="margin-top:10px;">📌 時程重排說明（第二次調整）：因應8/24加入Podcast/說書渠道與更完整的內容鋪陳期，財報課、旗艦課製作與上架時程再延後——財報課從9/6延到10/19（先鋪陳6週再花2週實際製作），旗艦課開課從11/9延到12/7（先鋪陳4週再製作3週）。第一梯旗艦課會跨進2027年1月初。Year1總收入目標維持40-60萬不變，只是11-12月更集中。</div>
+        <div class="callout" style="margin-top:14px;"><b>每月完成標準（通用）：</b>當月Email名單達標±10%內、當月收入達Base Case下限、內容7篇/週無斷更（出國期間與水果攤忙碌期除外，已用自動化/降載處理）、CFP進度符合讀書計畫。</div>
+        </div>
+      </details>
 
-      <div class="section">
-        <div class="section-title"><span class="dot"></span><h2>Year 2 月度重點（2027）</h2></div>
+      <details class="year-accordion">
+        <summary>Year 2（2027）月度重點</summary>
+        <div class="year-body">
         <div class="tbl-wrap"><table>
           <tr><th>完成</th><th>月份</th><th>主要任務</th><th>產品重點</th><th>系統重點</th></tr>
           <tr><td><input type="checkbox" class="mod-check" data-id="y2-01" data-module="product"></td><td>1月</td><td>資產配置課上線準備</td><td>資產配置課錄製</td><td>SOP文件化啟動</td></tr>
-          <tr><td><input type="checkbox" class="mod-check" data-id="y2-02" data-module="product"></td><td>2月</td><td>資產配置課上線</td><td>交叉銷售旗艦課學員</td><td>客服流程優化</td></tr>
-          <tr><td><input type="checkbox" class="mod-check" data-id="y2-03" data-module="none"></td><td>3月</td><td>CFP科目3考試</td><td>—</td><td>內容外包評估（剪輯）</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-02" data-module="product"></td><td>2月</td><td>資產配置課上線（已通過FPAT投資規劃科目）</td><td>交叉銷售旗艦課學員</td><td>客服流程優化</td></tr>
+          <tr><td><input type="checkbox" class="mod-check" data-id="y2-03" data-module="none"></td><td>3月</td><td>CFP科目3考試</td><td>—</td><td>內容外包評估（剪輯，含Podcast/說書後製）</td></tr>
           <tr><td><input type="checkbox" class="mod-check" data-id="y2-04" data-module="revenue"></td><td>4月</td><td>Membership前期驗證問卷</td><td>Bloom Club企劃定案</td><td>社群平台選型</td></tr>
           <tr><td><input type="checkbox" class="mod-check" data-id="y2-05" data-module="revenue"></td><td>5月</td><td>B2B案例累積</td><td>企業培訓標準化簡報</td><td>合約範本建立</td></tr>
           <tr><td><input type="checkbox" class="mod-check" data-id="y2-06" data-module="none"></td><td>6月</td><td>Year1回顧＋Year2 Q3規劃</td><td>—</td><td>財務健檢初版工具</td></tr>
@@ -1207,10 +1272,12 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
           <tr><td><input type="checkbox" class="mod-check" data-id="y2-11" data-module="revenue"></td><td>11月</td><td>年末B2B衝刺</td><td>企業培訓2場</td><td>—</td></tr>
           <tr><td><input type="checkbox" class="mod-check" data-id="y2-12" data-module="none"></td><td>12月</td><td>Year2總結</td><td>—</td><td>Year3系統規劃</td></tr>
         </table></div>
-      </div>
+        </div>
+      </details>
 
-      <div class="section">
-        <div class="section-title"><span class="dot"></span><h2>Year 3 月度重點（2028）</h2></div>
+      <details class="year-accordion">
+        <summary>Year 3（2028）月度重點</summary>
+        <div class="year-body">
         <div class="tbl-wrap"><table>
           <tr><th>完成</th><th>月份</th><th>主要任務</th><th>產品重點</th><th>系統重點</th></tr>
           <tr><td><input type="checkbox" class="mod-check" data-id="y3-01" data-module="none"></td><td>1月</td><td>CFP科目5考試</td><td>—</td><td>—</td></tr>
@@ -1223,7 +1290,52 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
           <tr><td><input type="checkbox" class="mod-check" data-id="y3-08" data-module="brand"></td><td>10月</td><td>英語/華語圈市場評估啟動</td><td>—</td><td>市場調查</td></tr>
           <tr><td><input type="checkbox" class="mod-check" data-id="y3-09" data-module="none"></td><td>11-12月</td><td>Year3總結＋Year4-5規劃</td><td>—</td><td>國際化路徑決策</td></tr>
         </table></div>
-      </div>
+        </div>
+      </details>
+
+      <details class="year-accordion">
+        <summary>Year 4（2029）月度重點</summary>
+        <div class="year-body">
+        <div class="callout" style="margin-bottom:10px;">⚠️ Year4-5 屬於方向性規劃，細節會隨 Year1-3 實際成效滾動調整，不建議現在就把任務排太細。</div>
+        <div class="tbl-wrap"><table>
+          <tr><th>月份</th><th>主要方向</th></tr>
+          <tr><td>1月</td><td>CFP六科全數完成後，Advisory服務優化＋進階服務包籌備</td></tr>
+          <tr><td>2月</td><td>Advisory定價與交付流程優化，客戶滿意度追蹤系統建立</td></tr>
+          <tr><td>3月</td><td>B2B企業年約產品化，簽約流程SOP化</td></tr>
+          <tr><td>4月</td><td>團隊擴編：正式雇用第一位全職員工（內容或營運）</td></tr>
+          <tr><td>5月</td><td>旗艦課V3迭代（依三年學員回饋大改版）</td></tr>
+          <tr><td>6月</td><td>Year3回顧＋Year4上半年檢討</td></tr>
+          <tr><td>7月</td><td>財報課/資產配置課內容更新（跟上最新財報週期案例）</td></tr>
+          <tr><td>8月</td><td>Advisory服務規模化：每月穩定8-12場</td></tr>
+          <tr><td>9月</td><td>B2B企業年約續約季＋新客戶開發</td></tr>
+          <tr><td>10月</td><td>品牌口碑資產盤點（案例庫/推薦制度建立）</td></tr>
+          <tr><td>11月</td><td>年末B2B衝刺＋團隊年度回顧</td></tr>
+          <tr><td>12月</td><td>Year4總結＋Year5規劃啟動（含國際化評估前置研究）</td></tr>
+        </table></div>
+        </div>
+      </details>
+
+      <details class="year-accordion">
+        <summary>Year 5（2030）月度重點</summary>
+        <div class="year-body">
+        <div class="callout" style="margin-bottom:10px;">⚠️ Year4-5 屬於方向性規劃，細節會隨 Year1-3 實際成效滾動調整，不建議現在就把任務排太細。</div>
+        <div class="tbl-wrap"><table>
+          <tr><th>月份</th><th>主要方向</th></tr>
+          <tr><td>1月</td><td>國際化/英語市場正式評估啟動（市場調查、競品研究）</td></tr>
+          <tr><td>2月</td><td>英語內容試點：翻譯/改寫現有e-book或Lead Magnet</td></tr>
+          <tr><td>3月</td><td>英語市場Landing Page與Email清單測試</td></tr>
+          <tr><td>4月</td><td>團隊擴編：第二位成員（依需求為客服或內容）</td></tr>
+          <tr><td>5月</td><td>品牌授權/合作可能性評估（教育機構/企業聯名）</td></tr>
+          <tr><td>6月</td><td>Year5上半年回顧＋國際化測試成效檢視</td></tr>
+          <tr><td>7月</td><td>依國際化測試結果決定是否擴大投入</td></tr>
+          <tr><td>8月</td><td>多元收入結構優化（檢視九大收入來源佔比）</td></tr>
+          <tr><td>9月</td><td>進階Advisory服務（機構客戶/財富管理合作評估）</td></tr>
+          <tr><td>10月</td><td>品牌權威地位鞏固：出版/媒體曝光機會開發</td></tr>
+          <tr><td>11月</td><td>年末B2B與國際化衝刺</td></tr>
+          <tr><td>12月</td><td>Year5總結＋Year6-10長期規劃</td></tr>
+        </table></div>
+        </div>
+      </details>
     </div>
 
     <!-- ============ 11 DAILY OS ============ -->
@@ -1241,6 +1353,7 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
           <button class="tabbtn" data-sub="os-travel">出國期間</button>
           <button class="tabbtn" data-sub="os-weekly">Weekly Dashboard</button>
           <button class="tabbtn" data-sub="os-checklist">Daily Checklist</button>
+          <button class="tabbtn" data-sub="os-weeklygoals">🗓️ 每週目標</button>
           <button class="tabbtn" data-sub="os-journal">📔 日曆日記</button>
         </div>
 
@@ -1322,7 +1435,25 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
           </ul></div></div>
         </div>
 
+        <div class="subpanel" id="os-weeklygoals">
+          <div class="callout" style="margin-bottom:14px;">🗓️ 每週目標是把「月目標」切成更小的週目標，最後在下方的日曆日記裡變成每天的任務。近期（2026/08-12）用實際排好的週規劃；2027起用當月目標自動拆解成「啟動→執行→月底盤點」三階段，會隨時間推進持續延伸到2030年底。</div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+            <button class="tabbtn" id="wkPrev">← 上個月</button>
+            <div id="wkLabel" style="font-family:'Fraunces',serif; font-weight:700; font-size:16px; color:var(--forest-deep);"></div>
+            <button class="tabbtn" id="wkNext">下個月 →</button>
+          </div>
+          <div id="wkMonthGoal" class="callout gold" style="margin-bottom:14px;"></div>
+          <div id="wkList"></div>
+        </div>
+
         <div class="subpanel" id="os-journal">
+          <div class="callout gold" style="margin-bottom:12px;">
+            <b>📲 7/12-7/31 每日任務已預先排好</b>，日曆上有 📋 標記的日期打開就會看到當天專屬任務（其餘日期沿用一般每日檢核清單）。
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+              <button class="nav-final" id="icsExport" style="margin:0; padding:9px 16px;"><span class="txt">📥 下載手機/電腦提醒檔 (.ics)</span></button>
+              <span style="font-size:12px; color:var(--ink-soft);">匯入「提醒事項」App，會在指定時間跳通知，打勾才會消失</span>
+            </div>
+          </div>
           <div class="card-soft" style="margin-bottom:12px;">
             <p style="font-size:12.5px; margin:0;">📔 點擊任一日期記錄當天的每日檢核清單、心得與感恩日記。資料儲存在<b>此瀏覽器本機</b>（localStorage），僅你自己看得到，換裝置或清除瀏覽器資料會遺失，建議定期用「匯出」備份。</p>
           </div>
@@ -1334,6 +1465,12 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
           </div>
           <div class="cal-grid" id="calDow"></div>
           <div class="cal-grid" id="calGrid" style="margin-top:6px;"></div>
+          <div style="display:flex; gap:16px; margin-top:12px; font-size:11.5px; color:var(--ink-soft); flex-wrap:wrap;">
+            <span><span style="display:inline-block;width:10px;height:10px;background:var(--forest);border-radius:2px;vertical-align:middle;margin-right:4px;"></span>手寫規劃日(7/12-8/5)</span>
+            <span><span style="display:inline-block;width:10px;height:10px;background:var(--blue);border-radius:2px;vertical-align:middle;margin-right:4px;"></span>旅行模式(7/18-8/4)</span>
+            <span><span style="display:inline-block;width:10px;height:10px;background:var(--amber);border-radius:2px;vertical-align:middle;margin-right:4px;"></span>水果攤模式(9/7-9/27)</span>
+            <span>⭐ 里程碑日</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1407,27 +1544,27 @@ label.field{display:block; font-size:11.5px; color:var(--ink-soft); margin-botto
       </div>
 
       <div class="section">
-        <div class="section-title"><span class="dot"></span><h2>⑤ 2026年7月-12月最重要的10件事</h2></div>
+        <div class="section-title"><span class="dot"></span><h2>⑤ 2026年8月-12月最重要的10件事</h2></div>
         <div class="tbl-wrap"><table>
           <tr><th>優先序</th><th>任務</th><th>日期</th><th>完成標準</th></tr>
-          <tr><td>1</td><td>Lead Magnet PDF正式上線＋開始收Email名單</td><td>7/5</td><td>表單可正常運作，7月底達300名單</td></tr>
-          <tr><td>2</td><td>ManyChat自動化完成100%</td><td>7/17前</td><td>4組關鍵字自動回覆全數測試通過</td></tr>
-          <tr><td>3</td><td>出國期間內容排程與自動化完成</td><td>7/17前</td><td>7/18-8/3內容全數排定</td></tr>
-          <tr><td>4</td><td>e-book《如何分析總體經濟》上架</td><td>7/18</td><td>售出≥60本</td></tr>
-          <tr><td>5</td><td>CFP科目1「財務規劃概論」考試</td><td>7月</td><td>通過考試</td></tr>
+          <tr><td>1</td><td>確認CFP科目1實際考試日期並妥善安排</td><td>立即</td><td>已確定考期，不與其他任務衝突</td></tr>
+          <tr><td>2</td><td>Lead Magnet PDF正式上線＋開始收Email名單</td><td>8/6</td><td>表單可正常運作，8月底達1,000名單</td></tr>
+          <tr><td>3</td><td>ManyChat自動化完成100%</td><td>8/7-8/8</td><td>4組關鍵字自動回覆全數測試通過</td></tr>
+          <tr><td>4</td><td>e-book《如何分析總體經濟》上架</td><td>8/17</td><td>售出≥60本</td></tr>
+          <tr><td>5</td><td>財富流體驗工作坊首場</td><td>8/22</td><td>≥15人報名</td></tr>
           <tr><td>6</td><td>依第04頁法遵矩陣，重寫旗艦課/資產配置課文案</td><td>8月</td><td>移除所有個別化投資建議措辭</td></tr>
-          <tr><td>7</td><td>財富流體驗工作坊首場</td><td>8月下旬</td><td>≥15人報名</td></tr>
-          <tr><td>8</td><td>旗艦課Early Bird開賣</td><td>9/1</td><td>≥30人購買</td></tr>
-          <tr><td>9</td><td>財報課上線</td><td>10/1</td><td>正式開賣</td></tr>
+          <tr><td>7</td><td>🎙️ Podcast/說書首集上線＋財報課內容鋪陳開始</td><td>8/24</td><td>首集發布，開始每週固定產出</td></tr>
+          <tr><td>8</td><td>財報課實際製作＋上線</td><td>10/5-18製作，10/19上線</td><td>正式開賣，靠自動化持續銷售</td></tr>
+          <tr><td>9</td><td>旗艦課內容鋪陳＋製作＋Early Bird＋開課</td><td>10/19起鋪陳，11/2製作，11/24 Early Bird，12/7開課</td><td>Early Bird≥30人購買，開課時有完整心力帶學員</td></tr>
           <tr><td>10</td><td>主動開發B2B企業培訓窗口</td><td>10-12月</td><td>接觸≥3家企業，成交≥1場</td></tr>
         </table></div>
       </div>
 
       <div class="section">
         <div class="callout gold" style="font-size:15px;">
-          <b>⑥ 今天（2026/07/03）開始，第一步應該做什麼？</b><br><br>
-          <b>把 Lead Magnet PDF 的 MailerLite 表單串接到 IG/Threads bio 連結，並發一則貼文正式宣布免費領取《看新聞做投資的框架》。</b><br>
-          理由：這是整個商業模式的第一個齒輪——沒有Email名單，後面所有產品的轉換漏斗都無法運作。7 頁PDF已完成、表單已建立，唯一缺的是「正式對外發布」這個動作。今天就能做，且零成本、零法遵風險。
+          <b>⑥ 回國後（8/5）第一步應該做什麼？</b><br><br>
+          <b>把 Lead Magnet PDF 的 MailerLite 表單串接到 IG/Threads bio 連結，8/6 發一則貼文正式宣布免費領取《看新聞做投資的框架》。</b><br>
+          理由：這是整個商業模式的第一個齒輪——沒有Email名單，後面所有產品的轉換漏斗都無法運作。7 頁PDF已完成、表單已建立，唯一缺的是「正式對外發布」這個動作。回國隔天就能做，且零成本、零法遵風險。
         </div>
       </div>
 
@@ -1482,7 +1619,7 @@ function setChecked(id,val){ try{ localStorage.setItem(ckKey(id), val?'1':'0'); 
 
 // Email milestone tracking (id -> target list value)
 const emailMilestones = [
-  {id:'y1-0707', val:300},{id:'y1-0806', val:1000},{id:'y1-0904', val:1800},
+  {id:'y1-0807', val:300},{id:'y1-0806', val:1000},{id:'y1-0904', val:1800},
   {id:'y1-1004', val:2300},{id:'y1-1104', val:2700},{id:'y1-1204', val:3000}
 ];
 function getManualEmail(){
@@ -1606,7 +1743,7 @@ function recalcAll(){
   const mc = document.getElementById('asset_manychat');
   const mcBadge = document.getElementById('asset_manychat_badge');
   if(mc){
-    if(isChecked('y1-0703')){ mc.textContent='100%'; mcBadge.textContent='已完成'; mcBadge.className='badge badge-green'; mcBadge.id='asset_manychat_badge'; }
+    if(isChecked('y1-0808')){ mc.textContent='100%'; mcBadge.textContent='已完成'; mcBadge.className='badge badge-green'; mcBadge.id='asset_manychat_badge'; }
     else{ mc.textContent='50%'; mcBadge.textContent='需於 7 月完成'; mcBadge.className='badge badge-amber'; mcBadge.id='asset_manychat_badge'; }
   }
 
@@ -1758,14 +1895,212 @@ if(ringsGroup){
     '運動1次（游泳）'
   ];
 
+  // 8/5-8/23 專屬每日任務規劃（回國後由Lead Magnet重新啟動整個時程）
+  const specialDayPlans = {
+    '2026-08-05': ['⚠️ 若尚未確認，請先查FPAT科目1實際考試日期是否已妥善安排','回國後第一天：Lead Magnet PDF最終校對＋MailerLite表單測試','14:00 籌碼面紀錄＋每日規劃更新','16:00-18:00 IG/Threads bio連結串接準備','完成標準：表單測試通過，明天可以正式發文'],
+    '2026-08-06': ['🚀 Lead Magnet正式上線！IG/Threads發文宣布，開始收Email名單','14:00 籌碼面紀錄＋每日規劃更新','16:00-18:00 觀察首日名單成長，微調文案','完成標準：表單可正常運作，當日新增名單>0'],
+    '2026-08-07': ['10:00-12:00 ManyChat關鍵字自動回覆設定啟動','12:30-14:00 CFP讀書90分鐘','14:00-15:00 籌碼面紀錄','15:00-17:00 ManyChat 4組關鍵字測試','17:00-18:00 理財小白教學發布(IG Reels/Blog/Email)','完成標準：ManyChat基本流程設定完成'],
+    '2026-08-08': ['週末彈性：ManyChat最終測試＋覆盤+下週規劃發布(IG Post/Threads/IG Story)','🚀 完成標準：ManyChat 100%測試通過，下週7篇內容排定'],
+    '2026-08-09': ['市場總結內容發布(Threads/IG Story)','19:00-21:00 CFP週複習','完成標準：Lead Magnet上線首週成效檢視(名單數/開信率)'],
+    '2026-08-10': ['10:00-12:00 e-book大綱定稿','12:30-14:00 CFP讀書90分鐘','14:00-15:00 籌碼面紀錄','15:00-17:00 e-book Ch1-2撰寫','17:00-18:00 本週數據預告發布(Threads/IG Story)','完成標準：e-book Ch1-2初稿完成'],
+    '2026-08-11': ['10:00-12:00 e-book Ch3-4撰寫','12:30-14:00 CFP讀書90分鐘','14:00-15:00 籌碼面紀錄','15:00-17:00 e-book Ch3-4撰寫','17:00-18:00 反直覺觀點發布(IG Reels/Threads)','完成標準：e-book Ch3-4初稿完成'],
+    '2026-08-12': ['10:00-12:00 e-book Ch5-6撰寫','12:30-14:00 CFP讀書90分鐘','14:00-15:00 籌碼面紀錄','15:00-17:00 e-book Ch5-6撰寫','17:00-18:00 書中觀點發布(YouTube/IG Post/Threads)','完成標準：e-book全部6章初稿完成'],
+    '2026-08-13': ['10:00-12:00 e-book全文彙整＋排版設計啟動','12:30-14:00 CFP讀書90分鐘','14:00-15:00 籌碼面紀錄','15:00-17:00 e-book排版設計','17:00-18:00 理財小白教學發布(IG Reels/Blog/Email)','完成標準：排版初稿完成'],
+    '2026-08-14': ['10:00-12:00 e-book校對第一輪','12:30-14:00 CFP讀書90分鐘','14:00-15:00 籌碼面紀錄','15:00-17:00 MailerLite上架頁面＋金流設定','17:00-18:00 股票分析框架示範發布(IG Post/Blog/Threads)','完成標準：上架頁面與金流測試完成'],
+    '2026-08-15': ['週末彈性：e-book最終校對','完成標準：無錯字、連結全部可用'],
+    '2026-08-16': ['市場總結發布(Threads/IG Story)','19:00-21:00 CFP週複習','完成標準：e-book上架前最終確認清單跑完'],
+    '2026-08-17': ['🚀 e-book《如何分析總體經濟》正式上架 NT$499','14:00 籌碼面紀錄＋每日規劃更新','16:00-18:00 Email宣布＋社群發文','完成標準：上架成功，當日售出>0本'],
+    '2026-08-18': ['10:00-12:00 財富流工作坊流程設計定稿','12:30-14:00 CFP讀書90分鐘','14:00-15:00 籌碼面紀錄','15:00-17:00 工作坊流程細節','17:00-18:00 反直覺觀點發布(IG Reels/Threads)','完成標準：工作坊流程定案'],
+    '2026-08-19': ['10:00-12:00 工作坊講義/簡報製作','12:30-14:00 CFP讀書90分鐘','14:00-15:00 籌碼面紀錄','15:00-17:00 工作坊講義製作','17:00-18:00 書中觀點發布(YouTube/IG Post/Threads)','完成標準：講義初稿完成'],
+    '2026-08-20': ['10:00-12:00 工作坊報名頁/場地細節確認','12:30-14:00 CFP讀書90分鐘','14:00-15:00 籌碼面紀錄','15:00-17:00 工作坊講義最終定稿','17:00-18:00 理財小白教學發布(IG Reels/Blog/Email)','完成標準：報名頁上線可收單'],
+    '2026-08-21': ['10:00-12:00 工作坊彩排','12:30-14:00 CFP讀書90分鐘','14:00-15:00 籌碼面紀錄','15:00-17:00 物料/器材最終確認','17:00-18:00 股票分析框架示範發布(IG Post/Blog/Threads)','完成標準：明天正式上場前全部就緒'],
+    '2026-08-22': ['🚀 財富流體驗工作坊第1場','完成標準：≥15人報名，活動順利執行'],
+    '2026-08-23': ['工作坊覆盤＋市場總結發布(Threads/IG Story)','19:00-21:00 CFP週複習','完成標準：工作坊回饋整理完成，作為未來場次優化依據']
+  };
+
+  // 8月起不再逐日手寫，改用「模式＋週產品焦點＋每日內容主題」自動組合
+  const contentThemeByDow = {
+    0:'市場總結 (Threads/IG Story)',
+    1:'本週數據預告 (Threads/IG Story)',
+    2:'反直覺觀點 (IG Reels/Threads)',
+    3:'書中觀點 說書影片(YouTube)+Podcast同步上架',
+    4:'理財小白教學 (IG Reels/Blog/Email)',
+    5:'股票分析框架示範 (IG Post/Blog/Threads)',
+    6:'覆盤+週規劃+PDF領取入口 (IG Post/Threads/IG Story)'
+  };
+  const sundayExtra = '19:00-21:00 CFP週複習';
+  const fruitstandChecklist = [
+    '🍎 水果攤忙碌期，品牌工作降到最低，不強求產出',
+    '檢查Email/ManyChat自動化是否正常運作(5分鐘)',
+    '如有餘力可發：{content}（非必要）',
+    'CFP彈性複習(視體力狀況，非強制)'
+  ];
+
+  // 每週產品製作焦點（key=該週一日期），對應重排後的產品階梯時程
+  const weeklyProductFocus = {
+    '2026-08-03': '8/5回國＋Lead Magnet最終校對＋8/6正式上線＋ManyChat設定',
+    '2026-08-10': 'e-book《如何分析總體經濟》Ch1-6製作衝刺',
+    '2026-08-17': '8/17 e-book上架＋財富流工作坊講義製作＋8/22執行＋覆盤',
+    '2026-08-24': '🎙️ Podcast/說書首集上線＋財報課內容鋪陳週1(痛點共鳴)',
+    '2026-08-31': '財報課內容鋪陳週2(一家公司歷史財報框架示範)＋Podcast第2集',
+    '2026-09-28': '財報課內容鋪陳週3-4(案例系列＋課綱揭露)＋Podcast恢復週更',
+    '2026-10-05': '財報課實際製作 Ch1-3（財報是商業故事／損益表／資產負債表）',
+    '2026-10-12': '財報課 Ch4-6 製作＋校對，準備10/19上架',
+    '2026-10-19': '🚀 財報課上線＋旗艦課內容鋪陳週1(商業模式拆解)',
+    '2026-10-26': '旗艦課內容鋪陳週2-3(財報轉譯／總經環境連結)',
+    '2026-11-02': '旗艦課內容鋪陳週4(估值邏輯)＋旗艦課M1-M2製作啟動',
+    '2026-11-09': '旗艦課 M3-M5 製作',
+    '2026-11-16': '旗艦課 M6-M7 製作＋全課程校對，準備11/24 Early Bird',
+    '2026-11-23': '🚀 11/24旗艦課Early Bird開賣（7天）＋11/14工作坊2場覆盤',
+    '2026-11-30': 'Early Bird收尾＋12/1正式開賣準備（歡迎信/班級群組設定）',
+    '2026-12-07': '🚀 旗艦課第一梯開課，每週直播陪伴＋作業批改',
+    '2026-12-14': '旗艦課第2週直播陪伴＋B2B企業窗口開發',
+    '2026-12-21': '旗艦課第3週直播陪伴＋年末總結內容製作',
+    '2026-12-28': '旗艦課第4週直播陪伴（尾聲）＋Year1回顧＋新年內容規劃'
+  };
+
+  // 月目標：2026/08 - 2030/12，Year1詳細、Year2-3具體、Year4-5方向性
+  const monthlyGoals = {
+    '2026-08':'財富流工作坊定稿與執行(8/22)＋財報課Ch1-3製作',
+    '2026-09':'Podcast週更（水果攤忙碌期9/7-27暫停）＋財報課內容鋪陳',
+    '2026-10':'財報課內容鋪陳收尾→10/5製作→10/19上線＋旗艦課內容鋪陳開始',
+    '2026-11':'旗艦課內容鋪陳→11/2製作→11/14工作坊第2場→11/24 Early Bird',
+    '2026-12':'旗艦課12/1正式開賣＋12/7第一梯開課＋Year1總結',
+    '2027-01':'資產配置課上線準備，錄製課程',
+    '2027-02':'資產配置課上線（已通過FPAT投資規劃科目），交叉銷售旗艦課學員',
+    '2027-03':'CFP科目3考試，內容外包評估（含Podcast後製）',
+    '2027-04':'Membership前期驗證問卷，Bloom Club企劃定案',
+    '2027-05':'B2B案例累積，企業培訓標準化簡報',
+    '2027-06':'Year1回顧＋Year2 Q3規劃，財務健檢初版工具',
+    '2027-07':'公司登記評估（個人工作室→有限公司），會計師諮詢',
+    '2027-08':'Bloom Club教育社群上線，Membership正式營運',
+    '2027-09':'旗艦課二版優化，學員成效追蹤系統',
+    '2027-10':'CFP科目4考試',
+    '2027-11':'年末B2B衝刺，企業培訓2場',
+    '2027-12':'Year2總結，Year3系統規劃',
+    '2028-01':'CFP科目5考試',
+    '2028-02':'第一位全職/兼職協作者招募，團隊SOP交接',
+    '2028-03':'CFP整合科準備',
+    '2028-04':'Advisory服務籌備，財務健檢服務定價',
+    '2028-05':'Advisory服務籌備，1:1諮詢流程設計',
+    '2028-06':'CFP整合科考試（六科完成），CFP證照公開＋PR',
+    '2028-07':'CFP Advisory正式上線，預約系統建立',
+    '2028-08':'B2B規模化（簽約制），企業年約產品化',
+    '2028-09':'B2B規模化，業務開發SOP',
+    '2028-10':'英語/華語圈市場評估啟動，市場調查',
+    '2028-11':'Year3總結＋Year4-5規劃，國際化路徑決策',
+    '2028-12':'Year3總結＋Year4-5規劃',
+    '2029-01':'Advisory服務優化＋進階服務包籌備',
+    '2029-02':'Advisory定價與交付流程優化，客戶滿意度追蹤系統',
+    '2029-03':'B2B企業年約產品化，簽約流程SOP化',
+    '2029-04':'團隊擴編：雇用第一位全職員工',
+    '2029-05':'旗艦課V3迭代（依三年學員回饋大改版）',
+    '2029-06':'Year3回顧＋Year4上半年檢討',
+    '2029-07':'財報課/資產配置課內容更新',
+    '2029-08':'Advisory服務規模化：每月8-12場',
+    '2029-09':'B2B企業年約續約季＋新客戶開發',
+    '2029-10':'品牌口碑資產盤點',
+    '2029-11':'年末B2B衝刺＋團隊年度回顧',
+    '2029-12':'Year4總結＋Year5規劃啟動',
+    '2030-01':'國際化/英語市場評估啟動',
+    '2030-02':'英語內容試點：翻譯/改寫e-book',
+    '2030-03':'英語市場Landing Page與Email清單測試',
+    '2030-04':'團隊擴編：第二位成員',
+    '2030-05':'品牌授權/合作可能性評估',
+    '2030-06':'Year5上半年回顧＋國際化測試成效檢視',
+    '2030-07':'依國際化測試結果決定是否擴大投入',
+    '2030-08':'多元收入結構優化',
+    '2030-09':'進階Advisory服務評估',
+    '2030-10':'品牌權威地位鞏固：出版/媒體曝光',
+    '2030-11':'年末B2B與國際化衝刺',
+    '2030-12':'Year5總結＋Year6-10長期規劃'
+  };
+
+  // 里程碑：對應第09/10頁Roadmap與月曆目標頁的重大日期，會自動出現在當天檢核清單最上面
+  const milestones = {
+    '2026-08-06': '⭐ Lead Magnet PDF正式上線，開始收Email名單',
+    '2026-08-17': '⭐ e-book《如何分析總體經濟》上架 NT$499',
+    '2026-08-22': '⭐ 財富流體驗工作坊第1場',
+    '2026-08-24': '🎙️ Podcast/說書首集上線＋財報課內容鋪陳開始',
+    '2026-09-07': '🍎 水果攤忙碌期開始（未來3週，內容鋪陳暫停/低耗）',
+    '2026-09-25': '🎑 中秋節',
+    '2026-09-27': '🍎 水果攤忙碌期結束，明日起恢復內容鋪陳與Podcast週更',
+    '2026-10-05': '⭐ 財報課實際製作開始（Ch1-3）',
+    '2026-10-19': '⭐ 財報課上線＋旗艦課內容鋪陳開始',
+    '2026-11-02': '⭐ 旗艦課實際製作開始（M1-M2）',
+    '2026-11-14': '⭐ 財富流體驗工作坊第2場',
+    '2026-11-24': '⭐ 旗艦課 Early Bird 開賣起（7天）',
+    '2026-12-01': '⭐ 旗艦課正式開賣',
+    '2026-12-07': '⭐ 旗艦課第一梯開課',
+    '2026-12-20': '⭐ Year1總結＋Year2規劃啟動'
+  };
+
+  function dayMode(ds, dow){
+    if(ds>='2026-07-18' && ds<='2026-08-04') return 'travel';
+    if(ds>='2026-09-07' && ds<='2026-09-27') return 'fruitstand';
+    if(dow===0 || dow===6) return 'weekend';
+    return 'weekday';
+  }
+  function mondayOf(ds){
+    const [y,mo,d] = ds.split('-').map(Number);
+    const dt = new Date(y, mo-1, d);
+    const dow = dt.getDay();
+    const diff = dow===0 ? -6 : 1-dow;
+    dt.setDate(dt.getDate()+diff);
+    return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+  }
+  function weekOfMonthNum(ds){ return Math.ceil(Number(ds.split('-')[2])/7); }
+  function weeklyFocusFor(ds){
+    const monday = mondayOf(ds);
+    if(weeklyProductFocus[monday]) return weeklyProductFocus[monday];
+    const goal = monthlyGoals[ds.slice(0,7)];
+    if(!goal) return null;
+    const wk = weekOfMonthNum(monday);
+    const stage = wk<=1 ? '啟動' : (wk>=4 ? '執行／月底盤點' : '執行');
+    return stage+'：'+goal;
+  }
+  function buildAutoChecklist(ds, dow){
+    const mode = dayMode(ds, dow);
+    const content = contentThemeByDow[dow];
+    const focus = weeklyFocusFor(ds);
+    let base;
+    if(mode==='fruitstand'){
+      base = fruitstandChecklist.map(t=>t.replace('{content}', content));
+    } else if(mode==='weekend'){
+      base = [
+        '內容：'+content,
+        focus ? ('本週產品重點：'+focus) : '產品開發／複盤數據',
+        '社群互動／回覆整理'
+      ];
+      if(dow===0) base.push(sundayExtra);
+      base.push('完成標準：下週7篇內容排定＋Weekly Dashboard更新');
+    } else {
+      base = [
+        '14:00 籌碼面紀錄＋每日規劃更新',
+        '12:30-14:00 CFP讀書90分鐘',
+        '內容：'+content,
+        focus ? ('本週產品重點：'+focus) : '產品開發推進至少1個小任務',
+        '檢查Email/ManyChat是否正常運作',
+        '運動1次（游泳，10-12或18-19:30擇一）'
+      ];
+    }
+    if(milestones[ds]) base = [milestones[ds], ...base];
+    return base;
+  }
+
   function key(y,m,d){ return 'tmb_journal_'+y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
+  function dateStr(y,m,d){ return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
 
   function loadEntry(k){
     try{
       const raw = localStorage.getItem(k);
       if(raw){ return JSON.parse(raw); }
     }catch(e){}
-    return { diary:'', gratitude:['','',''], checklist: defaultChecklist.map(t=>({text:t, done:false})) };
+    const ds = k.replace('tmb_journal_','');
+    const parts = ds.split('-').map(Number);
+    const dow = new Date(parts[0], parts[1]-1, parts[2]).getDay();
+    const list = specialDayPlans[ds] || buildAutoChecklist(ds, dow);
+    return { diary:'', gratitude:['','',''], checklist: list.map(t=>({text:t, done:false})) };
   }
   function saveEntry(k, entry){
     try{ localStorage.setItem(k, JSON.stringify(entry)); }catch(e){}
@@ -1785,10 +2120,15 @@ if(ringsGroup){
     for(let i=0;i<firstDow;i++){ html += `<div></div>`; }
     for(let d=1; d<=daysInMonth; d++){
       const k = key(y,m,d);
+      const ds = dateStr(y,m,d);
+      const dow = new Date(y,m,d).getDay();
       const entry = loadEntry(k);
       const has = hasContent(entry);
       const doneCount = entry.checklist.filter(c=>c.done).length;
-      html += `<div class="cal-cell ${has?'has-entry':''}" data-y="${y}" data-m="${m}" data-d="${d}"><div class="d">${d}</div>${has?`<div style="font-size:9.5px;margin-top:4px;line-height:1.3;">✅${doneCount}/${entry.checklist.length}${entry.gratitude.some(g=>g&&g.trim())?' 🙏':''}${entry.diary&&entry.diary.trim()?' 📝':''}</div>`:''}</div>`;
+      const isMilestone = !!milestones[ds];
+      const mode = dayMode(ds, dow);
+      const modeColor = mode==='travel'?'var(--blue)':mode==='fruitstand'?'var(--amber)':(specialDayPlans[ds]?'var(--forest)':'transparent');
+      html += `<div class="cal-cell ${has?'has-entry':''}" data-y="${y}" data-m="${m}" data-d="${d}" style="border-left:3px solid ${modeColor};"><div class="d">${d}${isMilestone?' ⭐':''}</div>${has?`<div style="font-size:9.5px;margin-top:4px;line-height:1.3;">✅${doneCount}/${entry.checklist.length}${entry.gratitude.some(g=>g&&g.trim())?' 🙏':''}${entry.diary&&entry.diary.trim()?' 📝':''}</div>`:''}</div>`;
     }
     gridEl.innerHTML = html;
     gridEl.querySelectorAll('.cal-cell').forEach(cell=>{
@@ -1873,6 +2213,46 @@ if(ringsGroup){
 
   document.getElementById('calPrev').addEventListener('click', ()=>{ cur.setMonth(cur.getMonth()-1); render(); });
   document.getElementById('calNext').addEventListener('click', ()=>{ cur.setMonth(cur.getMonth()+1); render(); });
+
+  document.getElementById('icsExport').addEventListener('click', ()=>{
+    function foldLine(line){
+      // iCalendar 每行建議不超過75 octets，超過需摺行（前面加空格）
+      let out=''; let i=0;
+      while(line.length - i > 74){ out += (i===0?'':'\r\n ') + line.substr(i,74); i+=74; }
+      out += (i===0?'':'\r\n ') + line.substr(i);
+      return out;
+    }
+    const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//The Money Bloomer//Daily Plan//ZH','CALSCALE:GREGORIAN'];
+    const stamp = '20260711T000000';
+    Object.keys(specialDayPlans).sort().forEach(ds=>{
+      const tasks = specialDayPlans[ds];
+      const dueCompact = ds.replace(/-/g,'')+'T150000';
+      const summary = ds.slice(5).replace('-','/') + ' 品牌任務';
+      const desc = tasks.join('\\n');
+      lines.push('BEGIN:VTODO');
+      lines.push('UID:tmb-'+ds+'@themoneybloomer');
+      lines.push('DTSTAMP:'+stamp);
+      lines.push('DUE:'+dueCompact);
+      lines.push(foldLine('SUMMARY:'+summary));
+      lines.push(foldLine('DESCRIPTION:'+desc));
+      lines.push('PRIORITY:1');
+      lines.push('BEGIN:VALARM');
+      lines.push('ACTION:DISPLAY');
+      lines.push(foldLine('DESCRIPTION:'+summary+' 提醒'));
+      lines.push('TRIGGER:PT0M');
+      lines.push('REPEAT:3');
+      lines.push('DURATION:PT3H');
+      lines.push('END:VALARM');
+      lines.push('END:VTODO');
+    });
+    lines.push('END:VCALENDAR');
+    const ics = lines.join('\r\n');
+    const blob = new Blob([ics], {type:'text/calendar'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download='money_bloomer_7to31.ics'; a.click();
+    URL.revokeObjectURL(url);
+  });
+
   document.getElementById('calExport').addEventListener('click', ()=>{
     let out='The Money Bloomer 品牌日記匯出\n\n';
     try{
@@ -1890,6 +2270,61 @@ if(ringsGroup){
     const a = document.createElement('a'); a.href=url; a.download='money_bloomer_journal.txt'; a.click();
     URL.revokeObjectURL(url);
   });
+
+  // ---- 每週目標 page (2026-08 ~ 2030-12) ----
+  const wkLabel = document.getElementById('wkLabel');
+  const wkMonthGoal = document.getElementById('wkMonthGoal');
+  const wkList = document.getElementById('wkList');
+  let wkCur = new Date(2026,7,1); // Aug 2026
+  const WK_MIN = '2026-08', WK_MAX = '2030-12';
+  function renderWeekly(){
+    if(!wkLabel) return;
+    const y = wkCur.getFullYear(), m = wkCur.getMonth();
+    const ym = y+'-'+String(m+1).padStart(2,'0');
+    wkLabel.textContent = y+'年 '+(m+1)+'月';
+    const goal = monthlyGoals[ym];
+    wkMonthGoal.innerHTML = '<b>本月目標：</b>' + (goal || '（尚無資料）');
+    const daysInMonth = new Date(y,m+1,0).getDate();
+    const weeks = [];
+    let d = 1;
+    while(d<=daysInMonth){
+      const startD = d;
+      const startDs = ym+'-'+String(startD).padStart(2,'0');
+      const startDow = new Date(y,m,startD).getDay();
+      const forward = startDow===0 ? 0 : 7-startDow;
+      let endD = Math.min(startD+forward, daysInMonth);
+      weeks.push([startD, endD]);
+      d = endD+1;
+    }
+    wkList.innerHTML = weeks.map((w,i)=>{
+      const startDs = ym+'-'+String(w[0]).padStart(2,'0');
+      const focus = weeklyFocusFor(startDs);
+      return `<div class="card" style="margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h4 style="margin:0;">第${i+1}週　${m+1}/${w[0]} - ${m+1}/${w[1]}</h4>
+        </div>
+        <p style="font-size:13px; margin:8px 0 0 0;">${focus || '（此週沿用當月目標）'}</p>
+      </div>`;
+    }).join('');
+  }
+  const wkPrevBtn = document.getElementById('wkPrev');
+  const wkNextBtn = document.getElementById('wkNext');
+  if(wkPrevBtn){
+    wkPrevBtn.addEventListener('click', ()=>{
+      const ym = wkCur.getFullYear()+'-'+String(wkCur.getMonth()+1).padStart(2,'0');
+      if(ym<=WK_MIN) return;
+      wkCur.setMonth(wkCur.getMonth()-1);
+      renderWeekly();
+    });
+    wkNextBtn.addEventListener('click', ()=>{
+      const ym = wkCur.getFullYear()+'-'+String(wkCur.getMonth()+1).padStart(2,'0');
+      if(ym>=WK_MAX) return;
+      wkCur.setMonth(wkCur.getMonth()+1);
+      renderWeekly();
+    });
+  }
+  renderWeekly();
+
   render();
 })();
 
